@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			return `${val} billion kms`
 		}
 	}
+	options1.yaxis.labels.formatter = function (val) {
+		return val
+	}
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -36,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		},
 		methods: {
-			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? "" }
+			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" }
 		}
 	})
 })
