@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// chart 1. carbon monoxide
 	const coSeries = soefinding.findingJson.data.map(d => {
 		return {
+			name: "Kilometres",
 			data: soefinding.yearKeys.map(y => d[y])
 		}
 	})
@@ -16,9 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = soefinding.yearKeys
 	options1.yaxis.title.text = "Kilometres travelled (billions)"
 	options1.tooltip.y = {
-		formatter: function (val) {
-			return `${val} billion kms`
-		}
+		formatter: val => (val*1000000000).toLocaleString()
 	}
 	options1.yaxis.labels.formatter = function (val) {
 		return val
