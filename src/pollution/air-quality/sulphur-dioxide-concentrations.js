@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// chart 1. maximum 1 hour average
 	const hourAverage = soefinding.findingJson.data.filter(d => {
-		return d.Measure == "Annual maximum 1 hour average nitrogen dioxide concentrations"
+		return d.Measure == "Annual maximum 1 hour average sulfur dioxide concentrations"
 	})
 	const hourAverageSeries = hourAverage.map(d => {
 		return {
@@ -20,10 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = soefinding.yearKeys
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Parts per million"
-	options1.yaxis.tickAmount = 10
+	options1.yaxis.tickAmount = 6
 	options1.yaxis.min = 0
-	options1.yaxis.max = .1
-    options1.tooltip.y = {
+	options1.yaxis.max = 1.5
+
+	options1.tooltip.y = {
     	formatter: val => `${val} ppm`
     }
     options1.yaxis.labels.formatter = val =>  val.toFixed(2)
@@ -36,9 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	// chart 2, annual average
+	// chart 2, days exceeding
 	const annualAverage = soefinding.findingJson.data.filter(d => {
-		return d.Measure == "Annual average nitrogen dioxide concentrations"
+		return d.Measure == "Days when the 1 hour sulfur dioxide concentrations exceed the air NEPM standards"
 	})
 	const annualAverageSeries = annualAverage.map(d => {
 		return {
@@ -48,8 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options2 = JSON.parse(JSON.stringify(options1))
-	options2.yaxis.max = .01
-    options2.yaxis.labels.formatter = val => val.toFixed(3)
+	delete options2.yaxis.tickAmount
+	delete options2.yaxis.min
+	delete options2.yaxis.max
     	
 
 	// create the vue instance for second chart, 
@@ -65,12 +67,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function () { return `Annual maximum 1–hour average nitrogen dioxide concentrations` },
-			heading2: function () { return `Annual average nitrogen dioxide concentrations` },
+			heading1: function () { return `Annual maximum 1–hour average sulphur dioxide concentrations` },
+			heading2: function () { return `Number of days when the 1–hour sulphur dioxide concentrations exceed the air NEPM standards` },
 		},
 		methods: {
 		    formatter1: function(val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" },
-		    formatter2: function(val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 4 }) ?? "" }
+		    formatter2: function(val) { return val?.toLocaleString() }
 		}
 	});
 
