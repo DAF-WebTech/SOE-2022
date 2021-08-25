@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     const options2 = soefinding.getDefaultLineChartOptions()
     options2.xaxis.categories = yearKeys
+    options2.xaxis.title.text = "Year"
     options2.yaxis.title.text = "Registered Vehicles %"
     options2.yaxis.labels.formatter = val =>  `${Math.round(val)}`
     options2.tooltip.y = {
@@ -91,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
     const options3 = JSON.parse(JSON.stringify(options2))
+    options3.xaxis.title.text = "Year"
     options3.yaxis.title.text = "Registrations"
     options3.yaxis.labels.formatter = val =>  `${Math.round(val/1000000)}M`
     options3.tooltip.y = {
@@ -143,7 +145,13 @@ document.addEventListener("DOMContentLoaded", function () {
         fuelTypes[d["Fuel Type"]].rawData.push(d)
     })
     Object.keys(fuelTypes).forEach(function(ftkey) {
-        fuelTypes[ftkey].data = yearKeys.reduce( (acc, curr) => { return acc + fuelTypes[ftkey][curr]}, 0)
+        // eg 1st iter is diesel
+        yearKeys.forEach(function(year) {
+            const sum = fuelTypes[ftkey].rawData.reduce( function(acc, d) { 
+                return acc + d[year]
+            }, 0)
+            fuelTypes[ftkey].data.push(sum)
+        })
     })
 
     const fuelTypeSeries = Object.keys(fuelTypes).map(ft => {
@@ -152,22 +160,25 @@ document.addEventListener("DOMContentLoaded", function () {
             data: fuelTypes[ft].data
         }
     })
-    const options5 = soefinding.getDefaultChartOptions()
+    console.log(fuelTypeSeries)
+    const options5 = soefinding.getDefaultBarChartOptions()
+    options5.chart.stacked = true
+    options5.xaxis.categories = yearKeys
+    options5.xaxis.title.text = "Year"
     options5.yaxis.title.text = "Registrations"
-    options5.stacked = true
-    options5.xaxis.categories = soefinding.yearKeys
-//     options5.yaxis.labels.formatter = val =>  `${Math.round(val/1000000)}M`
-//     options5.tooltip.y = {
-//         formatter: function (val) {
-//             return `${val.toLocaleString()}`;
-//         }
-//     }
+    //options5.yaxis.labels.formatter = val =>  `${Math.round(val/1000000)}M`
+    options5.tooltip.y = {
+        formatter: val => `${val.toLocaleString()}`
+    }
 
     soefinding.state.chart5 = {
         options: options5,
         series: fuelTypeSeries,
         chartactive: true,
+        extra: "extra checkboxes and shit"
     };
+
+
 
 
 
