@@ -12,15 +12,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultPieChartOptions()
 	// the pie charts uses labels, but the table vue is looking for categories
 	options1.labels = qldSectors.map(d => d.Sector)
-	// options1.tooltip = { y: { formatter: (val, options) => {
-	// 	const percent = options.globals.seriesPercent[options.seriesIndex][0]
-	// 	return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
-	// }}}
+	options1.tooltip = {
+		y: {
+			formatter: (val, options) => {
+				const percent = options.globals.seriesPercent[options.seriesIndex][0]
+				return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+			}
+		}
+	}
 	options1.xaxis.categories = ["Sector", "Emissions (million tonnes)"] // not needed for chart, but vue uses them for table headings
 
 	soefinding.state.chart1 = {
 		options: options1,
-		series: series,
+		series: proportionSeries,
 		chartactive: true,
 	};
 
@@ -29,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Proportion of Queensland’s emissions by sector, 2018`,
+			heading1: () => `Proportion of Queensland’s emissions by sector, ${latestYear}`,
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
