@@ -37,10 +37,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	qldItems.sort(function (a, b) {
 		return b[latestYear] - a[latestYear]
 	})
-	const qldSeries = qldItems.map(d => d[latestYear])
+	const qldSeries = qldItems.filter(d => d[latestYear] != "Data is confidential")
+	  .map(d => d[latestYear])
 
 	const options2 = JSON.parse(JSON.stringify(options1))
-	options2.labels = qldItems.map(d => d.Category)
+	options2.labels = qldItems.filter(d => d[latestYear] != "Data is confidential").map(d => d.Category)
 
 	soefinding.state.chart2 = {
 		options: options2, // reüse
