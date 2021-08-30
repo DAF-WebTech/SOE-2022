@@ -51,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
-
 	const options3 = soefinding.getDefaultAreaChartOptions()
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
@@ -68,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	// 4 queensland totals table
+	// 4. queensland totals table
 	const qldTotalItem = allStates[0]
 	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
 
@@ -81,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		options: options4,
 		series: qldTotalSeries
 	};
+
 
 	new Vue({
 		el: "#chartContainer",
