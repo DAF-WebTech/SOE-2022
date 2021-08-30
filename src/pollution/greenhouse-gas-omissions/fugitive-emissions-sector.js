@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
-	const options3 = soefinding.getDefaultLineChartOptions()
+	const options3 = soefinding.getDefaultAreaChartOptions()
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
