@@ -6,12 +6,22 @@ document.addEventListener("DOMContentLoaded", function () {
 	const latestYear = yearKeys[yearKeys.length - 1]
 
 	// 1. bar chart each state total
-	const stateTotals = soefinding.findingJson.data.filter(d => d.Category == "All")
-	const stateComparisonSeries = stateTotals.map(d => d[latestYear])
+	const stateTotals = soefinding.findingJson.data.filter(d => d.Sector == "All")
+	const stateComparisonSeries = [{ data: stateTotals.map(d => d[latestYear]) }]
 
 
 	const options1 = soefinding.getDefaultBarChartOptions()
-	options1.xaxis.categories = stateTotals.map(d => d.Category)
+	options1.xaxis.categories = ["Queensland", ["New South", "Wales"], "Victoria", ["Western", "Australia"], ["South", "Australia"], ["Northern", "Territory"], "Tasmania", ["Australian", "Capital", "Territory"]]
+	options1.xaxis.title.text = "State"
+	options1.yaxis.title.text = "Tonnes of carbon dioxide equivalent"
+	options1.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	// there isn't a way of putting an inbetween line, so we don't need these
+	// options1.yaxis.tickAmount = 6
+	// options1.yaxis.min = -20
+	// options1.yaxis.max = 30
+	options1.tooltip.y = {
+		formatter: val => `${(val * 1000000).toLocaleString()}`
+	}
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -20,6 +30,44 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
+	//2. qld sectors
+	const qldItems = soefinding.findingJson.data.filter(d => d.State == "Queensland" && d.Sector != "All")
+	const stateSectorSeries = qldItems.map(d => {
+		return {
+			name: d.Sector,
+			data: yearKeys.map(y => d[y])
+		}
+	})
+
+	const options2 = soefinding.getDefaultAreaChartOptions()
+	options2.xaxis.categories = yearKeys
+	options2.xaxis.title.text = "Year"
+	options2.yaxis.title.text = "Tonnes of carbon dioxide equivalent (million)"
+	options2.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options2.tooltip.y = {
+		formatter: val => `${(val * 1000000).toLocaleString()}`
+	}
+
+	soefinding.state.chart2 = {
+		options: options2,
+		series: stateSectorSeries,
+		chartactive: true,
+	};
+
+
+	// 3. table only, qld yearly totals
+	const qldTotalItem = soefinding.findingJson.data.find(d => d.State == "Queensland" && d.Sector == "All")
+	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
+
+	const options3 = {
+		xaxis: { categories: ["Year", "Emissions (million tonnes)"] },
+		labels: yearKeys
+	}
+
+	soefinding.state.chart3 = {
+		options: options3,
+		series: qldTotalSeries
+	};
 
 
 	new Vue({
