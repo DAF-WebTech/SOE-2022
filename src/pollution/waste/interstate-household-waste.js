@@ -3,9 +3,13 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 	const yearKeys = soefinding.findingJson.meta.fields.slice(1, 6)
+	const latestYear = yearKeys[yearKeys.length - 1]
 
 	// 1. stacked column, waste type yearly
 	const sectorItems = soefinding.findingJson.data.filter(d => d["Waste type"] !== "All")
+	sectorItems.sort(function(a, b) {
+	  return b[latestYear] - a[latestYear]
+	})
 	const wasteTypeSeries = sectorItems.map(d => {
 		return {
 			name: d["Waste type"],
@@ -81,19 +85,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 4 stacked columns, latest year, other and landfill
-	const latestOtherLandfillSeries = sectorItems.map(d => {
-		return {
-			name: d["Waste type"],
-			data: [d["2018-19 Received by Landfill"], d["2018-19 Other"]]
-		}
+	const keys = ["2018-19 Received by Landfill", "2018-19 Other"]   
+	const latestOtherLandfillSeries = keys.map(k =>
+	{
+      return {
+      	name: k,
+      	data: sectorItems.map(d => d[k])
+      }
 	})
+
 
 	const options4 = soefinding.getDefaultBarChartOptions()
 	options4.chart.stacked = true
-	options4.xaxis.categories = ["2018-19 Received by Landfill", "2018-19 Other"]
+	options4.xaxis.categories = sectorItems.map(d => d["Waste type"].split(" ")) //keys
 	options4.xaxis.title.text = "Type of interstate household waste received"
-	options4.yaxis.title.text = "Tonnes"
-	options4.yaxis.labels.formatter = val => val
+	options4.yaxis.title.text = "Tonnes (million)"
+	options4.yaxis.labels.formatter = val => `${val / 1000000}M`
 	options4.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
