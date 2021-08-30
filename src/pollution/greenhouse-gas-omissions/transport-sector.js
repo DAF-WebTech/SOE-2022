@@ -2,16 +2,19 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	const yearKeys = soefinding.findingJson.meta.fields.slice(1)
+	const yearKeys = soefinding.findingJson.meta.fields.slice(2)
 	const latestYear = yearKeys[yearKeys.length - 1]
 
 	// 1. pie, proportion by state, latest year
-	const allStates = soefinding.findingJson.data.filter(d => d.Category.includes("All"))
+	const allStates = soefinding.findingJson.data.filter(d => d.Category == "All")
+	allStates.sort(function (a, b) {
+		return b[latestYear] - a[latestYear]
+	})
 	const allStatesSeries = allStates.map(d => d[latestYear])
 
 	const options1 = soefinding.getDefaultPieChartOptions()
 	// the pie charts uses labels, but the table vue is looking for categories
-	options1.labels = allStates.map(d => d.Category.replace(" All", ""))
+	options1.labels = allStates.map(d => d.State)
 	options1.tooltip = {
 		y: {
 			formatter: (val, options) => {
@@ -30,7 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 2. pie qld proportion of sectors, latest year
-	const qldItems = soefinding.findingJson.data.filter(d => !d.Category.includes("All"))
+	const qldItems = soefinding.findingJson.data.filter(d => d.State == "Queensland" && d.Category != "All")
+	qldItems.sort(function (a, b) {
+		return b[latestYear] - a[latestYear]
+	})
 	const qldSeries = qldItems.map(d => d[latestYear])
 
 	const options2 = JSON.parse(JSON.stringify(options1))
@@ -68,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 4. queensland totals table
-	const qldTotalItem = allStates[0]
+	const qldTotalItem = soefinding.findingJson.data.find(d => d.State == "Queensland" && d.Category == "All")
 	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
 
 	const options4 = {
