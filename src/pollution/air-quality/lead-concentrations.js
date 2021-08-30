@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// create the vue instance for first chart, our column chart
 	const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 	const options1 = soefinding.getDefaultLineChartOptions()
+	delete options1.markers
 	options1.xaxis.categories = soefinding.findingJson.data.map(d => `${months[d.Month]} ${d.Year}`)
 	options1.xaxis.title.text = "Month/Year"
 	options1.yaxis.title.text = "Lead concentrations (µg/m³)"
