@@ -92,10 +92,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Proportion of agriculture emissions by state, ${latestYear}`,
-			heading2: () => `Proportion of Queensland’s agriculture emissions by category, ${latestYear}`,
-			heading3: () => "Trends in Queensland’s agriculture emissions, by category",
-			heading4: () => "Queensland’s total agriculture emissions"
+			heading1: () => `Proportion of industrial processes emissions by state, ${latestYear}`,
+			heading2: () => `Proportion of Queensland’s industrial processes emissions by category, ${latestYear}`,
+			heading3: () => "Trends in Queensland’s industrial processes emissions, by category",
+			heading4: () => "Queensland’s total industrial processes emissions"
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) //reüse for 2, 3
