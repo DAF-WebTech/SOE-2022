@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	const yearKeys = soefinding.findingJson.meta.fields.slice(1, 6)
+	const yearKeys = soefinding.findingJson.meta.fields.slice(2, 6)
 	const latestYear = yearKeys[yearKeys.length - 1]
 
 	// 1. stacked columns, waste by type
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options1 = soefinding.getDefaultBarChartOptions()
-	options1.chart.stacked = true
+	//options1.chart.stacked = true
 	options1.legend.inverseOrder = true
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
     options1.xaxis.title.text = "Year"
@@ -27,6 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
     options1.tooltip.y = {
         formatter: val => `${val.toLocaleString()}`
     }
+    options1.chart.stacked = true //delete options1.xaxis.tickPlacement, problem with truncations of bar width
+    options1.plotOptions = { bar:  { barHeight: "90%" }}
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -36,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	//2. line chart,yearly trend
-    const wasteConstructionDemolition = soefinding.findingJson.data.find(d => d["Waste type"] == "Construction and demolition")
+    const wasteConstructionDemolition = soefinding.findingJson.data.find(d => d["Waste type"] == "Commercial and industrial")
     const wasteConstructionDemolitionSeries = [{ name: "Tonnes", data:yearKeys.map(y => wasteConstructionDemolition[y])}]
 
 	const options2 = soefinding.getDefaultLineChartOptions()
