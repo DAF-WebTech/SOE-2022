@@ -4,38 +4,74 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const yearKeys = soefinding.findingJson.meta.fields.slice(2)
 	const latestYear = yearKeys[yearKeys.length - 1]
-
-	// 1. column, average litter count by site type
 	const extents = ["Australia", "Queensland"]
-	const averageSeries = extents.map (e => {
+
+	// group sites
+	const sites = {}
+	soefinding.findingJson.data.forEach(d => {
+		if (!sites[d.Site])
+			sites[d.Site] = []
+		sites[d.Site].push(d)
+	})
+
+	// 1 - 8, one line chart for each site
+	const headings = []
+	const options = soefinding.getDefaultLineChartOptions()
+	options.xaxis.categories = yearKeys.map(y => y.replace("-", "–"))
+	options.xaxis.title.text = "Year"
+	options.yaxis.title.text = "Number of items per 100m²"
+	Object.keys(sites).forEach((s, i) => {
+		const series = extents.map((e, i) => {
+			return {
+				name: e,
+				data: yearKeys.map(y => sites[s][i][y])
+			}
+		})
+
+		soefinding.state[`chart${i + 1}`] = {
+			options: options,
+			series: series,
+			chartactive: true,
+		}
+
+		headings.push(`${s} — Comparison of trends in litter count by Queensland and Australia`)
+
+	})
+
+
+
+	// 9. column, average litter count by site type
+	const averageSeries = extents.map(e => {
 		return {
-			name: e, 
+			name: e,
 			data: soefinding.findingJson.data.filter(d => d.Extent == e).map(d => d[latestYear])
 		}
 	})
 
-	const options1 = soefinding.getDefaultBarChartOptions()
-	options1.xaxis.title.text = "Site type"
-	options1.xaxis.categories = soefinding.findingJson.data.filter(d => d.Extent == "Queensland").map(d => d.Site.split(" "))
-	options1.yaxis.title.text = "Number of items per 100m²"
+	const options9 = soefinding.getDefaultBarChartOptions()
+	options9.xaxis.title.text = "Site type"
+	options9.xaxis.categories = soefinding.findingJson.data.filter(d => d.Extent == "Queensland").map(d => d.Site.split(" "))
+	options9.yaxis.title.text = "Number of items per 100m²"
 
-	soefinding.state.chart1 = {
-		options: options1,
+	soefinding.state.chart9 = {
+		options: options9,
 		series: averageSeries,
 		chartactive: true,
 	};
 
 
-  //2. column difference in percentage
-  const sites = soefinding.findingJson.data.filter(d => d.Extent == "Queensland").map(d => d.Site)
-  const percentSeries = [{ name: "Percentage", data: sites.map(s => {
-  	  const extents = soefinding.findingJson.data.filter(d => d.Site == s)
-  	  return Math.round(100.0 - (extents[0][latestYear] / extents[1][latestYear] * 100.0))
-  })  }]
+	// 10. column difference in percentage
+	//const sites = soefinding.findingJson.data.filter(d => d.Extent == "Queensland").map(d => d.Site)
+	const percentSeries = [{
+		name: "Percentage", data: Object.keys(sites).map(s => {
+			//const extents = soefinding.findingJson.data.filter(d => d.Site == s)
+			return Math.round(100.0 - (sites[s][0][latestYear] / sites[s][1][latestYear] * 100.0))
+		})
+	}]
 
-  const options2 = JSON.parse(JSON.stringify(options1))
-  options2.yaxis.title.text = "Percentage difference in count (%)"
-      options2.tooltip = {
+	const options10 = JSON.parse(JSON.stringify(options9))
+	options10.yaxis.title.text = "Percentage difference in count (%)"
+	options10.tooltip = {
 		y: {
 			formatter: function (val) {
 				return `${val < 1 ? '−' : ''}${Math.abs(val)}%` // a better minus sign
@@ -44,8 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	soefinding.state.chart2 = {
-		options: options2,
+	soefinding.state.chart10 = {
+		options: options10,
 		series: percentSeries,
 		chartactive: true,
 	};
@@ -56,8 +92,16 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Average litter count by site type, ${latestYear.replace("-", "–")}`,
-			heading2: () => `Percentage difference between Queensland and Australian counts by site type, ${latestYear.replace("-", "–")}`,
+			heading1: () => headings[0],
+			heading2: () => headings[1],
+			heading3: () => headings[2],
+			heading4: () => headings[3],
+			heading5: () => headings[4],
+			heading6: () => headings[5],
+			heading7: () => headings[6],
+			heading8: () => headings[7],
+			heading9: () => `Average litter count by site type, ${latestYear.replace("-", "–")}`,
+			heading10: () => `Percentage difference between Queensland and Australian counts by site type, ${latestYear.replace("-", "–")}`,
 		},
 		methods: {
 			formatter1: val => val,
