@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const yearKeys = soefinding.findingJson.meta.fields.slice(4)
 	const latestYear = yearKeys[yearKeys.length - 1]
-	const extents = ""
 
 	// groupings
 	const materials = {}
@@ -26,10 +25,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 1. column chart, count by type
-	const countAllSeries = Object.keys(sites).map(s => {
+	const countAllSeries = Object.keys(extents).map(e => {
 		return {
-			name: s,
-			data: sites.filter(e => e.Measure == "Count" && e.site == "All").map(d => d[latestYear])
+			name: e,
+			data: extents[e].filter(d => d.Measure == "Count" && d.Site == "All").map(d => Math.ceil(d[latestYear]))
 		}
 	})
 
@@ -44,6 +43,31 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	};
 
+
+	// 2. column chart, count by volume
+	const volumeAllSeries = Object.keys(extents).map(e => {
+		return {
+			name: e,
+			data: extents[e].filter(d => d.Measure == "Volume" && d.Site == "All").map(d => d[latestYear])
+		}
+	})
+
+	const options2 = JSON.parse(JSON.stringify(options1))
+	options2.yaxis.title.text = "Litres per 100m²"
+	options2.yaxis.tickAmount = 4
+	options2.yaxis.max = 2.0
+    options2.yaxis.labels = {
+        formatter: val => val.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1})
+	}
+
+	soefinding.state.chart2 = {
+		options: options2,
+		series: volumeAllSeries,
+		chartactive: true,
+	};
+
+
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
@@ -53,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val,
-			formatter2: val => val.toLocaleString(undefined, {minimumFractionDigits: 2}),
+			formatter2: val => val.toLocaleString(undefined, {minimumFractionDigits: 3}),
 		}
 	})
 })
