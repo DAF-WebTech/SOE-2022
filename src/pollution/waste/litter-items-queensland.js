@@ -6,17 +6,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	const latestYear = yearKeys[yearKeys.length - 1]
 
 	// 1. line, number
-	const numberItems = soefinding.findingJson.find(d => d.Measure.startsWith("Number"))
+	const numberItems = soefinding.findingJson.data.filter(d => d.Measure.startsWith("Number"))
 	const numberSeries = numberItems.map (d => {
 		return {
 			name: d.Extent, 
-			data: yearKeys.map(y = d[y])
+			data: yearKeys.map(y => d[y])
 		}
 	})
 
 	const options1 = soefinding.getDefaultLineChartOptions()
 	options1.xaxis.title.text = "Year"
+	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options1.yaxis.title.text = "Number of items per 100m²"
+
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -26,17 +28,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 		// 2. line, volume
-		const volumeItems = soefinding.findingJson.find(d => d.Measure.startsWith("Volume"))
+		const volumeItems = soefinding.findingJson.data.filter(d => d.Measure.startsWith("Volume"))
 		const volumeSeries = volumeItems.map (d => {
 			return {
 				name: d.Extent, 
-				data: yearKeys.map(y = d[y])
+				data: yearKeys.map(y => d[y])
 			}
 		})
 	
 		const options2 = JSON.parse(JSON.stringify(options1))
-		options1.xaxis.title.text = "Year"
-		options1.yaxis.title.text = "Volume of items per 100m²"
+		options2.yaxis.title.text = "Volume of items per 100m²"
+		options2.yaxis.labels.formatter = val => `${val}`
 	
 		soefinding.state.chart2 = {
 			options: options2,
@@ -53,7 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => "Trends in volume of litter items per 1000m² by Queensland and Australia",
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString() ?? ""
+			formatter1: val => val,
+			formatter2: val => val.toLocaleString(undefined, {minimumFractionDigits: 2}),
 		}
 	})
 })
