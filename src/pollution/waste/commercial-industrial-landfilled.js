@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => "Commercial and industrial waste landfilled",
 			heading2: () => "Trend in total commercial and industrial waste landfilled (excluding green waste)",
-			heading3: () => `roportion of commercial and industrial waste landfilled by region, ${latestYear.replace("-", "–")}`, //ndash
+			heading3: () => `Proportion of commercial and industrial waste landfilled by region, ${latestYear.replace("-", "–")}`, //ndash
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
