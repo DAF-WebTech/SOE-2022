@@ -17,9 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Tonnes"
-	// options1.yaxis.labels.formatter = val => {
-	// 	return val < 1000000 ? `${val / 1000}K` : `${val / 1000000}M`
-	// }
+	options1.yaxis.labels.formatter = val => {
+		return `${val / 1000}K`
+	}
 	options1.tooltip.y = {
 		formatter: val => val.toLocaleString()
 	}
@@ -45,18 +45,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	const wasteTotalItems = Object.keys(wasteTypes).map(k => {
 		return {
 			name: k,
-			value: wasteTypes(k).forEach.reduce(function (acc, val) {
+			value: wasteTypes[k].reduce(function (acc, val) {
 				return acc + val[latestYear]
 			}, 0)
 		}
-	}
+	})
 	wasteTotalItems.sort(function (a, b) {
-		return b[latestYear] - a[latestYear]
+		return b.value - a.value
 	})
 	const wasteSeries = wasteTotalItems.map(d => d.value)
 
 	const options2 = soefinding.getDefaultPieChartOptions()
-	options2.xaxis.categories = ["Waste description", latestYear]
+	options2.xaxis.categories = ["Waste description", latestYear.replace("-", "–")] //ndash
 	options2.labels = wasteTotalItems.map(d => d.name)
 	options2.tooltip = {
 		y: {
@@ -74,12 +74,77 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
+	//3. pie chart, tonnes from each state
+	const states = {}
+	soefinding.findingJson.data.forEach(d => {
+		if (d.State == "All")
+			return
+		if (!states[d.State])
+			states[d.State] = []
+		states[d.State].push(d)
+	})
+
+	const stateTotalItems = Object.keys(states).map(k => {
+		return {
+			name: k,
+			value: states[k].reduce(function (acc, val) {
+				return acc + val[latestYear]
+			}, 0)
+		}
+	})
+	stateTotalItems.sort(function (a, b) {
+		return b.value - a.value
+	})
+	const stateTotalSeries = stateTotalItems.map(d => d.value)
+
+	const options3 = JSON.parse(JSON.stringify(options2))
+	options3.xaxis.categories[0] = "State"
+	options3.labels = stateTotalItems.map(d => d.name)
+	options3.tooltip.y.formatter = (val, options) => {
+		const percent = options.globals.seriesPercent[options.seriesIndex][0]
+		return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+	}
+
+	soefinding.state.chart3 = {
+		options: options3,
+		series: stateTotalSeries,
+		chartactive: true,
+	};
+
+	// 4. stacked column, every state and waste type in the latest year
+	const stateTypeSeries = Object.keys(states).map(k => {
+		return {
+			name: k,
+			data: states[k].map(d => d[latestYear])
+		}
+	})
+	stateTypeSeries.sort(function (a, b) {
+		return b.data.reduce((a, c) => a + c) - a.data.reduce((a, c) => a + c)
+	})
+
+	const options4 = soefinding.getDefaultBarChartOptions()
+	options4.chart.stacked = true
+	options4.xaxis.categories = Object.keys(wasteTypes)
+	options4.xaxis.title.text = "Tonnes"
+	options4.yaxis.title.text = "Waste description"
+
+	soefinding.state.chart4 = {
+		options: options4,
+		series: stateTypeSeries,
+		chartactive: true,
+	};
+
+
+
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
 			heading1: () => "Trackable waste received from interstate",
 			heading2: () => `Proportion of trackable waste received from interstate by waste type, ${latestYear.replace("-", "–")}`,
+			heading3: () => "Proportion of trackable waste received from interstate by state, 2018–2019",
+			heading4: () => `Trackable waste received from interstate by state and waste type, ${latestYear.replace("-", "–")}`
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
