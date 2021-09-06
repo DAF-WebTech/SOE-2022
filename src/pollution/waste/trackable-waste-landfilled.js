@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const latestYear = yearKeys[yearKeys.length - 1]
 
 	//1. totals for latest year
-	const totals = soefinding.jsonData.meta.find(d => d["Waste description"] == "Total"])
+	const totals = soefinding.jsonData.meta.find(d => d["Waste description"] == "Total")
 
 	const totalSeries = {
 		name: `Total for ${latestYear}`,
