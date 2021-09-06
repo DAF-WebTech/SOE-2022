@@ -31,10 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	// 2. line chart for qld for all years
-	const allYearSeries = [{
-		name: "Queensland",
-		data: yearKeys.map(y => qldItem[y])
+	// 2. line chart for excluding green waste for all years
+	const excludingGreenItem = soefinding.findingJson.data.find(d => d["Waste region"] == "Excluding green waste")
+	const excludingGreenSeries = [{
+		name: "Excluding green waste",
+		data: yearKeys.map(y => excludingGreenItem[y])
 	}]
 
 	const options2 = soefinding.getDefaultLineChartOptions()
@@ -50,13 +51,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.state.chart2 = {
 		options: options2,
-		series: allYearSeries,
+		series: excludingGreenSeries,
 		chartactive: true,
 	}
 
 
 	//3. pie chart for all regions, latest Year
-	const regionItems = soefinding.findingJson.data.filter(d => d["Waste region"] != "Queensland")
+	const regionItems = soefinding.findingJson.data.filter(d => d["Waste region"] != "Queensland" && d["Waste region"] != "Excluding green waste")
 	regionItems.sort(function (a, b) {
 		return b[latestYear] - a[latestYear]
 	})
