@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const totals = soefinding.jsonData.meta.find(d => d["Waste description"] == "Total")
 
 	const totalSeries = {
-		name: `Total for ${latestYear}`,
+		name: `Total for each year`,
 		data: yearKeys.map(y => totals[y])
 	}
 
