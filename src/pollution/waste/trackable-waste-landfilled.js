@@ -2,23 +2,58 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	const yearKeys = soefinding.jsonData.meta.fields.slice(1)
+	const yearKeys = soefinding.findingJson.meta.fields.slice(1)
 	const latestYear = yearKeys[yearKeys.length - 1]
 
-	//1. totals for latest year
-	const totals = soefinding.jsonData.meta.find(d => d["Waste description"] == "Total")
+	//1. totals for each year
+	const totals = soefinding.findingJson.data.find(d => d["Waste description"] == "Total")
 
-	const totalSeries = {
-		name: `Total for each year`,
+	const totalSeries = [{
+		name: `Total`,
 		data: yearKeys.map(y => totals[y])
-	}
+	}]
 
 	const options1 = soefinding.getDefaultBarChartOptions()
+	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
+	options1.xaxis.title.text = "Year"
+	options1.yaxis.title.text = "Tonnes"
+	options1.yaxis.labels.formatter = val => {
+		return val < 1000000 ? `${val / 1000}K` : `${val / 1000000}M`
+	}
+	options1.tooltip.y = {
+		formatter: val => val.toLocaleString()
+	}
 
 	// create vue instance for first chart
 	soefinding.state.chart1 = {
 		options: options1,
 		series: totalSeries,
+		chartactive: true,
+	};
+
+
+	// 2. latest year each waste type
+	const wasteItems = soefinding.findingJson.data.filter(d => d["Waste description"] != "Total")
+	wasteItems.sort(function (a, b) {
+		return b[latestYear] - a[latestYear]
+	})
+	const wasteSeries = wasteItems.map(d => d[latestYear])
+
+	const options2 = soefinding.getDefaultPieChartOptions()
+	options2.xaxis.categories = ["Waste description", latestYear]
+	options2.labels = wasteItems.map(d => d["Waste description"])
+	options2.tooltip = {
+		y: {
+			formatter: (val, options) => {
+				const percent = options.globals.seriesPercent[options.seriesIndex][0]
+				return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+			}
+		}
+	}
+
+	soefinding.state.chart2 = {
+		options: options2,
+		series: wasteSeries,
 		chartactive: true,
 	};
 
@@ -31,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `Proportion of trackable waste landfilled by waste type, ${latestYear.replace("-", "–")}`,
 		},
 		methods: {
-			formatter1: val => val,
+			formatter1: val => val.toLocaleString(),
 		}
 	})
 })
