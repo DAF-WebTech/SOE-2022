@@ -95,9 +95,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => "Household waste landfilled, by collection type",
-			heading2: () => "Trend in total household waste landfilled",
-			heading3: () => `Proportion of household waste landfilled by region, ${latestYear.replace("-", "–")}`, //ndash
+			heading1: () => "Household waste recovered, by collection type",
+			heading2: () => "Trend in total household waste recovered",
+			heading3: () => `Proportion of household waste recovered by region, ${latestYear.replace("-", "–")}`, //ndash
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
