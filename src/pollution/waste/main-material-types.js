@@ -104,6 +104,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	options5.yaxis.labels = {
 		formatter: val => Math.round(val)
 	}
+	options5.tooltip = {
+		y: {
+			formatter: (val, options) => (options.seriesIndex == 0 ? val : val.toFixed(1))
+		}
+	}
+
 
 	Object.keys(extents).forEach((e, i) => {
 		const cigaretteItems = soefinding.findingJson.data.filter(d =>
