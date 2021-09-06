@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	const lastFourYears = yearKeys.slice(yearKeys.length - 4)
 
 	//1. column chart for qld for the last four years
-	const qldItem = soefinding.findingJson.data.find(d => d.Material == "All")
+	const qldItem = soefinding.findingJson.data.find(d => d.Material == "Total")
 	const fourYearSeries = [{
-		name: "All",
+		name: "Total",
 		data: lastFourYears.map(y => qldItem[y])
 	}]
 
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 2. line chart for qld for all years
 	const allYearSeries = [{
-		name: "All",
+		name: "Total",
 		data: yearKeys.map(y => qldItem[y])
 	}]
 
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	//3. pie chart for all regions, latest Year
-	const regionItems = soefinding.findingJson.data.filter(d => d.Material != "All")
+	const regionItems = soefinding.findingJson.data.filter(d => d.Material != "Total")
 	regionItems.sort(function (a, b) {
 		return b[latestYear] - a[latestYear]
 	})
