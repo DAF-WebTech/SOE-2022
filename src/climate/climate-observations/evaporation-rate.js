@@ -25,12 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		name: "Average",
 		data: locationItems.map(d => {
 			let count = 0
-			const sum = yearKeys.reduce(function (acc, val, i, a) {
-				if (d[val]) {
+			const sum = soefinding.yearKeys.reduce(function (acc, curr, i, a) {
+				if (d[curr]) {
 					++count;
-					acc += d[val]
-				}
-				return x;
+					return acc + d[curr]
+				} else return acc
 			}, 0)
 			return sum / count
 		})
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 2. line chart for each region
 
-	for (let region in regions) {
+	for (let region in soefinding.regions) {
 
 		// create a data series for this region
 		const item = soefinding.findingJson.data.filter(d => d.Name == region)
@@ -103,9 +102,13 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `Trend in evaporation rate at ${soefinding.state.currentRegionName}`,
 		},
 		methods: {
-			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 1 }) ?? "" }
+			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1, }) ?? "" }
 		}
 	})
+
+	if (soefinding.state.currentRegionName == "Queensland")
+		soefinding.onRegionChange()
+
 
 })
 
@@ -113,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 soefinding.onRegionChange = function () {
 
-	const regionInfos = document.querySelector("div.region-info")
+	const regionInfos = document.querySelectorAll("div.region-info")
 
 	if (this.state.currentRegionName == "Queensland") {
 		// toggle visibility of first region-info, which is for Queensland
