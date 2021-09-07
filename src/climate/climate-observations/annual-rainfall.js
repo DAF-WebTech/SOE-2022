@@ -24,11 +24,11 @@ soefinding.regions = {
 document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.yearKeys = soefinding.findingJson.meta.fields.slice(2);
-    const regionNames  = Object.keys(soefinding.regions)
-    regionNames.push("Queensland")
+	const regionNames = Object.keys(soefinding.regions)
+	regionNames.push("Queensland")
 
 
-    for (let regionName of regionNames) {
+	for (let regionName of regionNames) {
 
 		// create a data series for this region
 		const item = soefinding.findingJson.data.filter(d => d.Name == regionName)
@@ -47,14 +47,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			app1: series
 		};
 
-  }
+	}
 
-  	const options1 = soefinding.getDefaultLineChartOptions();
+	const options1 = soefinding.getDefaultLineChartOptions();
 	options1.xaxis.categories = soefinding.yearKeys
 	options1.xaxis.title.text = "Year";
 	options1.yaxis.title.text = "Rainfall (millimetres)";
 	options1.yaxis.labels.formatter = function (val) {
-		return val ;
+		return val;
 	}
 
 
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		},
 		methods: {
-			formatter1: function (val) { return val?.toLocaleString(undefined, {minimumFractionDigits: 2}) ?? "" }
+			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? "" }
 		}
 	})
 
