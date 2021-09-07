@@ -35,10 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	const excludingGreenItem = soefinding.findingJson.data.find(d => d.Material == "Excluding green waste")
 	const excludingGreenSeries = [{
 		name: "Excluding green waste",
-		data: yearKeys.map(y => qldItem[y])
+		data: yearKeys.map(y => excludingGreenItem[y])
 	}]
 
-	const options2 = soefinding.getDefaultLineChartOptions()
+	const options2 =  soefinding.getDefaultLineChartOptions()
 	options2.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options2.xaxis.title.text = "Year"
 	options2.yaxis.title.text = "Tonnes (million)"
@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
+			formatter1: val => val?.toLocaleString() ?? "Not recorded",
 		}
 	})
 })
