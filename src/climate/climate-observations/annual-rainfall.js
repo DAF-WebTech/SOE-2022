@@ -19,74 +19,65 @@ soefinding.regions = {
 	"Cunnamulla Post Office": { map: { lat: -28.07, long: 145.68 }, data: {} }
 }
 
-soefinding.regionData = Object.assign({}, soefinding.regions)
-soefinding.regionData.Queensland = { data: {} }
 
 
+document.addEventListener("DOMContentLoaded", function () {
+
+	soefinding.yearKeys = soefinding.findingJson.meta.fields.slice(2);
+    const regionNames  = Object.keys(soefinding.regions)
+    regionNames.push("Queensland")
 
 
-soefinding.findingContent.Queensland = {
-	html: document.getElementById("findingTextContents").innerHTML
-}
+    for (let regionName of regionNames) {
 
-soefinding.yearKeys = soefinding.findingJson.meta.fields.slice(2)
+		// create a data series for this region
+		const item = soefinding.findingJson.data.filter(d => d.Name == regionName)
+		const seriesNames = ["Actual", "Moving average"]
+		const series = seriesNames.map(s => {
+			const regionItem = item.find(d => d.Measure == s)
+			return {
+				name: s,
+				data: soefinding.yearKeys.map(y => regionItem[y])
+			}
+		})
 
-soefinding.findingJson.data.forEach(function (row) {
-	soefinding.regionData[row.Name].data[row.Measure] = row
-});
+		// findingContent holds the html and data series for each region
+		soefinding.findingContent[regionName] = {
+			html: "",
+			app1: series
+		};
 
-Object.keys(soefinding.regionData).forEach(function (name) {
-	soefinding.findingContent[name] = {
-		html: "",
-		app: []
+  }
+
+  	const options1 = soefinding.getDefaultLineChartOptions();
+	options1.xaxis.categories = soefinding.yearKeys
+	options1.xaxis.title.text = "Year";
+	options1.yaxis.title.text = "Rainfall (millimetres)";
+	options1.yaxis.labels.formatter = function (val) {
+		return val ;
 	}
 
-	var series = [{
-		name: "Actual",
-		data: []
-	}, {
-		name: "Moving Average",
-		data: []
-	}];
 
-	soefinding.yearKeys.forEach(function (year) {
-		series[0].data.push(soefinding.regionData[name].data.Actual[year]);
-		series[1].data.push(soefinding.regionData[name].data["Moving average"][year])
+	soefinding.state.chart1 = {
+		options: options1,
+		series: soefinding.findingContent[soefinding.state.currentRegionName].app1,
+		chartactive: true,
+	};
+
+
+	new Vue({
+		el: "#chartContainer",
+		data: soefinding.state,
+		computed: {
+			heading1: function () { return `Annual average rainfall for ${soefinding.state.currentRegionName}` },
+
+		},
+		methods: {
+			formatter1: function (val) { return val?.toLocaleString(undefined, {minimumFractionDigits: 2}) ?? "" }
+		}
 	})
 
-	soefinding.findingContent[name].app = series;
-
 })
-
-var options = soefinding.getDefaultLineChartOptions();
-options.xaxis.categories = soefinding.yearKeys;
-options.xaxis.title.text = "Year";
-options.xaxis.hideOverlappingLabels = true;
-options.xaxis.tickAmount = soefinding.yearKeys.length / 10
-options.yaxis.title.text = "Rainfall (mm)";
-options.yaxis.labels.formatter = function (val, index) {
-	return val.toFixed(0)
-}
-options.tooltip.y = {
-	formatter: function (val) {
-		return val ? val.toLocaleString() + " mm" : "–"
-	}
-}
-
-soefinding.app = new Vue({
-	el: "#app",
-	components: {
-		apexchart: VueApexCharts,
-	},
-	data: {
-		name: soefinding.state.currentRegionName,
-		years: soefinding.yearKeys,
-
-		series: soefinding.findingContent[soefinding.state.currentRegionName].app,
-		chartOptions: options
-	}
-})
-
 
 
 
@@ -94,8 +85,7 @@ soefinding.onRegionChange = function () {
 
 
 	// set the data series in each of the vue apps, for the current region
-	this.app.series = this.findingContent[this.state.currentRegionName].app;
-	this.app.name = this.state.currentRegionName;
+	this.state.chart1.series = this.findingContent[this.state.currentRegionName].app1;
 
 	soefinding.loadFindingHtml();
 }
