@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		// findingContent holds the html and data series for each region
 		soefinding.findingContent[region] = {
 			html: "",
-			app1: series
+			app2: series
 		};
 	}
 
@@ -92,17 +92,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	options2.tooltip = {
 		y: {
-			formatter: val => val.toLocaleString()
+			formatter: val => val?.toLocaleString() ?? "n/a"
 		}
 	}
 
 
 	soefinding.state.chart2 = {
 		options: options2,
-		series: soefinding.findingContent[soefinding.state.currentRegionName].app1, // or do we make an app2
+		series: null,
 		chartactive: true,
 	};
-
+	if (soefinding.state.currentRegionName == "Queensland")
+	  soefinding.state.chart2.series = soefinding.findingContent["Cairns Airport"].app2 // need a default
+	else
+      soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].app2
 
 	new Vue({
 		el: "#chartContainer",
@@ -130,16 +133,20 @@ soefinding.onRegionChange = function () {
 
 	if (this.state.currentRegionName == "Queensland") {
 		// toggle visibility of first region-info, which is for Queensland
+		try {
 		regionInfos[0].style.display = "block"
 		regionInfos[1].style.display = "none"
+		} catch(e) {
+			// i don't know why there's only one sometimes
+		}
 	}
 	else {
-		// toggle visibility of first region-info, which is for Queensland
+		// toggle visibility of second region-info, which is for the current region
 		regionInfos[0].style.display = "none"
 		regionInfos[1].style.display = "block"
 
 		// set the data series in each of the vue apps, for the current region
-		this.state.chart2.series = this.findingContent[this.state.currentRegionName].app1;
+		this.state.chart2.series = this.findingContent[this.state.currentRegionName].app2;
 	}
 
 	soefinding.loadFindingHtml();
