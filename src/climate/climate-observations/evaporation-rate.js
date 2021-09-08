@@ -1,14 +1,6 @@
 "use strict"
 
-soefinding.regions = {
-	"Cairns Airport": { map: { lat: -16.87, long: 145.75 } },
-	"Townsville Airport": { map: { lat: -19.25, long: 146.77 } },
-	"Mount Isa": { map: { lat: -20.68, long: 139.49 } },
-	"Rockhampton Airport": { map: { lat: -23.38, long: 150.48 } },
-	"Longreach Airport": { map: { lat: -23.44, long: 144.28 } },
-	"Brian Pastures": { map: { lat: -25.66, long: 151.75 } },
-	"Charleville Airport": { map: { lat: -26.42, long: 146.25 } }
-}
+soefinding.regions = pinLocations // these should already be set in ssjs
 
 
 document.addEventListener("DOMContentLoaded", function () {
