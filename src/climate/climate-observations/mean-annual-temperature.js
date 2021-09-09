@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `Trend in evaporation rate at ${soefinding.state.currentRegionName}`,
 		},
 		methods: {
-			formatter1: val => val?toLocaleString(undefined, { minimumFractionDigits: 2 })
+			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 2 })
 		}
 	})
 
