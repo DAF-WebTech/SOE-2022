@@ -71,7 +71,7 @@ soefinding.onRegionChange = function () {
 	else {
 		regionInfos[0].style.display = "block"
 
-		// set the data series in each of the vue apps, for the current region
+		// set the data series in the vue apps, for the current region
 		this.state.chart2.series = this.findingContent[this.state.currentRegionName].app1;
 	}
 
