@@ -6,10 +6,10 @@ soefinding.regions = pinLocations // these should already be set in ssjs
 document.addEventListener("DOMContentLoaded", function () {
 
 	const yearKeys = soefinding.findingJson.meta.fields.slice(2);
-	const latestYear = soefinding.yearKeys[soefinding.yearKeys.length - 1]
+	const latestYear = yearKeys[yearKeys.length - 1]
 
 	//1. mean temperature anomaly base, qld only
-	const qldMeanAnomalyItem = soefinding.findingJson.data.find(d=> d.Name == "Queensland" && d.Measure == "Mean anomaly (Base 1961-1990")
+	const qldMeanAnomalyItem = soefinding.findingJson.data.find(d=> d.Name == "Queensland" && d.Measure == "Mean anomaly (Base 1961-1990)")
 	const qldMeanAnomalySeries = [{
 		name: "Temperature anomaly",
 		data: yearKeys.map(y => qldMeanAnomalyItem[y])
@@ -24,14 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = yearKeys
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Temperature anomaly (degrees celsius)";
-	// options1.yaxis.labels.formatter = function (val) {
-	// 	return `${(val / 1000).toFixed(1)}k`;
-	// }
-	// options1.tooltip = {
-	// 	y: {
-	// 		formatter: val => val.toLocaleString()
-	// 	}
-	// }
+	options1.tooltip = {
+		y: {
+	 		formatter: val => val >= 0 ? val : `-${Math.abs(val)}`
+ 	}
+  }
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -40,61 +37,59 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	// 2. line chart for each region
-	// for (let region in soefinding.regions) {
+	// 2. line chart qld, actual mean and 10 year moving average
+	const qldMeanItem = soefinding.findingJson.data.find(d=> d.Name == "Queensland" && d.Measure == "Actual mean")
+	const qldMeanSeries = [{
+		name: "Actual Mean",
+		data: yearKeys.map(y => qldMeanItem[y])
+	},
+	{ 
+	  name: "10-year moving average",
+	  data: yearKeys.map((y, i) => getTenYearMovingAverage(i))
+	}]
 
-	// 	// create a data series for this region
-	// 	const item = soefinding.findingJson.data.filter(d => d.Name == region)
-	// 	const seriesNames = ["Actual", "Moving average"]
-	// 	const series = seriesNames.map(s => {
-	// 		const regionItem = item.find(d => d.Measure == s)
-	// 		return {
-	// 			name: s,
-	// 			data: soefinding.yearKeys.map(y => regionItem[y])
-	// 		}
-	// 	})
+function getTenYearMovingAverage(index) {
+	if (index < 9)
+	  return null
+	const values = yearKeys.slice(index - 9, index+1)
+	if (values.every(v => qldMeanItem[v] != null)){
+		const sum = values.reduce(function(acc, curr)  {
+			return (acc + qldMeanItem[curr])
+		}, 0)
+		return sum / 10.0
+	}
+	else
+	  return null
+}
 
-	// 	// findingContent holds the html and data series for each region
-	// 	soefinding.findingContent[region] = {
-	// 		html: "",
-	// 		app2: series
-	// 	};
-	// }
-
-
-	// const options2 = soefinding.getDefaultLineChartOptions();
-	// options2.xaxis.categories = soefinding.yearKeys
-	// options2.xaxis.title.text = "Year";
-	// options2.yaxis.title.text = "Annual pan evaporation (millimetres)";
-	// options2.yaxis.labels.formatter = function (val) {
-	// 	return `${(val / 1000).toFixed(1)}k`;
-	// }
-	// options2.tooltip = {
-	// 	y: {
-	// 		formatter: val => val?.toLocaleString() ?? "n/a"
-	// 	}
-	// }
+	const options2 = soefinding.getDefaultLineChartOptions();
+	options2.xaxis.categories = yearKeys
+	options2.xaxis.title.text = "Year";
+	options2.yaxis.title.text = "Temperature (degrees celsius)";
+	options2.yaxis.labels.formatter = val => Math.round(val) 
+	options2.tooltip.y = {
+    	formatter: val => (val == null ? "n/a" : val.toFixed(2))
+    } 	
+  
 
 
-	// soefinding.state.chart2 = {
-	// 	options: options2,
-	// 	series: null,
-	// 	chartactive: true,
-	// };
-	// if (soefinding.state.currentRegionName == "Queensland")
-	//   soefinding.state.chart2.series = soefinding.findingContent["Cairns Airport"].app2 // need a default
-	// else
-  //     soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].app2
+	soefinding.state.chart2 = {
+		options: options2,
+		series: qldMeanSeries,
+		chartactive: true,
+	};
 
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
 			heading1: () => `Annual mean temperature anomaly, base ${yearKeys[0]}–${latestYear}`,
-			heading2: () => `Trend in evaporation rate at ${soefinding.state.currentRegionName}`,
+			heading2: () => `Trend in annual mean temperature`,
 		},
 		methods: {
-			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 2 })
+			formatter1: val => val >= 0 ? val.toFixed(2) : `-${Math.abs(val).toFixed(2)}`,
+			formatter2: val => val?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) ?? ""
+			
 		}
 	})
 
