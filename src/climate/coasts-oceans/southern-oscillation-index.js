@@ -1,20 +1,36 @@
 "use strict"
-
+// to get the date series on y working properly, we had to 
+// use a different method of passing in data,
+// which affected the table render,
+// so we should make up a new component for this page,
+// on this page only.
+// to be done another time
 document.addEventListener("DOMContentLoaded", function () {
+
+	const items = soefinding.findingJson.data
 
 	const series = [{
 		name: "Six month mean",
-		data: soefinding.findingJson.data.map(d => d["Six month mean"])
-	},
-	{
-		name: "SOI",
-		data: soefinding.findingJson.data.map(d => d.SOI)
+		data: items.map(d => {
+			return { x: `${d.Year}-${d.Month.toString().padStart(2, "0")}-01`, y: d["Six month mean"] }
+		})
 	}]
 
 	const options = soefinding.getDefaultLineChartOptions()
-	options.xaxis.categories = soefinding.findingJson.data.map(d => `${d.Month}/${d.Year}`)
+	options.chart.animations = {
+		initialAnimation: {
+			enabled: false
+		}
+	}
+	options.tooltip.y = {
+		formatter: val => val < 0 ? `−${Math.abs(val).toFixed(1)}` : val.toFixed(1)
+	}
+	delete options.xaxis.categories
 	options.xaxis.title.text = "Year"
+	options.xaxis.type = "datetime"
 	options.yaxis.title.text = "Index"
+	options.yaxis.labels.formatter = val => val < 0 ? `−${Math.abs(val).toFixed(0)}` : val.toFixed(0)
+
 
 	soefinding.state.chart1 = {
 		options: options,
@@ -30,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: function () { return `Southern Oscillation Index 1876–2020` },
 		},
 		methods: {
-			formatter1: val => val
-		}
+			formatter1: val => val?.toFixed(2) ?? ""
+		},
 	});
 })
