@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 	if (soefinding.state.currentRegionName == "Queensland") {
-		soefinding.state.chart1.series = soefinding.findingContent.Boulia.app1 // we need something else for a default
+		soefinding.state.chart1.series = soefinding.findingContent.Palmerville.app1 // we need something else for a default
 	}
 
 
