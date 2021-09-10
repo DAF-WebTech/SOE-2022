@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Trend in number of extreme hot days at ${soefinding.state.currentRegionName}`,
+			heading1: () => `Trend in number of very heavy rainfall days at ${soefinding.state.currentRegionName}`,
 		},
 		methods: {
 			formatter1: val => val
