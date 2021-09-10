@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options = soefinding.getDefaultBarChartOptions()
 	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Year)
+	options.xaxis.title.text = "Year"
+	options.yaxis.title.text = "Number of cyclones"
 
 	soefinding.state.chart1 = {
 		options: options,
