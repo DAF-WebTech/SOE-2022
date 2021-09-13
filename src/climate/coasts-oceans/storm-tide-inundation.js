@@ -73,9 +73,25 @@ document.addEventListener("DOMContentLoaded", function () {
 			options: myOptions,
 			series: series,
 			chartactive: true,
-		};
+		}
 
 	})
+
+	// chart 4, just a plain table, not using component
+	soefinding.state.chart4 = {
+		headings: soefinding.findingJson.meta.fields,
+		data: [[]],
+		data: soefinding.findingJson.data.map(d => soefinding.findingJson.meta.fields.map(f => {
+			if (f == "Date") {
+				const date = new Date(d.Date)
+				return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+			}
+			else
+				return d[f]
+		})
+		)
+	};
+
 
 
 	new Vue({
@@ -85,10 +101,12 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: () => `Cyclone ${Object.keys(cyclones)[0]}`,
 			heading2: () => `Cyclone ${Object.keys(cyclones)[1]}`,
 			heading3: () => `Cyclone ${Object.keys(cyclones)[2]}`,
-			heading4: () => "",
+			heading4: () => "Storm tide inundation incidences, 2018–2019",
 		},
 		methods: {
 			formatter1: val => val < 0 ? `−${Math.abs(val)}` : val // use correct unicode
 		}
 	});
+
+
 })
