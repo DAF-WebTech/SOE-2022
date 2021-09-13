@@ -16,12 +16,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	const options2 = JSON.parse(JSON.stringify(options1))
-	//options2.forceNiceScale = false
+	options2.forceNiceScale = false
 	options2.yaxis.tickAmount = 6
 	options2.yaxis.min = -0.6
 	options2.yaxis.max = 0.6
 	options2.yaxis.labels.formatter = options1.yaxis.labels.formatter
 	options2.tooltip.y.formatter = options1.tooltip.y.formatter
+	options.yaxis.forceNiceScale = false
 
 	locations.forEach((loc, i) => {
 
