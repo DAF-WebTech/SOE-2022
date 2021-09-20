@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 2. line, total
-	const qldAll = soefinding.findingJson.data.find(d => d["Waste region"] == "Queensland" && d["Waste source"] == "All")
+	const qldAll = soefinding.findingJson.data.find(d => d["Waste region"] == "Queensland" && d["Waste type"] == "All")
 	const qldAllSeries = [{
 		name: "Total",
 		data: yearKeys.map(y => qldAll[y])
