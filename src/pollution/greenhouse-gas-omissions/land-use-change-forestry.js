@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
 
 	const options3 = {
-		xaxis: { categories: ["Year", "Emissions (million tonnes)"] },
+		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"] },
 		labels: yearKeys
 	}
 

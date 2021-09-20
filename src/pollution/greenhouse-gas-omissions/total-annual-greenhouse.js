@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		}
 	}
-	options1.xaxis.categories = ["Sector", "Emissions (million tonnes)"] // not needed for chart, but vue uses them for table headings
+	options1.xaxis.categories = ["Sector", "Emissions<br>(million tonnes)"] // not needed for chart, but vue uses them for table headings
 
 	soefinding.state.chart1 = {
 		options: options1,

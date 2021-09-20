@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		}
 	}
-	options1.xaxis.categories = ["Sector", "Emissions (million tonnes)"] // not needed for chart, but vue uses them for table headings
+	options1.xaxis.categories = ["Sector", "Emissions<br>(million tonnes)"] // not needed for chart, but vue uses them for table headings
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
 
 	const options4 = {
-		xaxis: { categories: ["Year", "Emissions (million tonnes)"] },
+		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"] },
 		labels: yearKeys
 	}
 
