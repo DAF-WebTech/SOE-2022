@@ -67,8 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function () { return `Annual maximum 1–hour average sulphur dioxide concentrations` },
-			heading2: function () { return `Number of days when the 1–hour sulphur dioxide concentrations exceed the air NEPM standards` },
+			heading1: function () { return `Annual maximum 1-hour average sulphur dioxide concentrations` },
+			heading2: function () { return `Number of days when the 1-hour sulphur dioxide concentrations exceed the air NEPM standards` },
 		},
 		methods: {
 		    formatter1: function(val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" },
