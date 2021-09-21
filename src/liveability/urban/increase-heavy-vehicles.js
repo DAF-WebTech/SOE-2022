@@ -16,8 +16,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Year)
 	options.xaxis.title.text = "Year"
 	options.yaxis.title.text = "Number of vehicles"
-	// options.yaxis.labels.formatter = val => val
-	// options.tooltip = { y: { formatter: val => val } }
+	options.yaxis.labels.formatter = val => {
+		if (val >= 1000000)
+		  return `${val / 1000000}m`
+		else
+          return `${val / 1000}k`
+		
+
+	}
+	options.tooltip = { y: { formatter: val => val.toLocaleString() } }
 
 
 	soefinding.state.chart1 = {
