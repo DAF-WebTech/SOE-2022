@@ -4,9 +4,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const keys = soefinding.findingJson.meta.fields.slice(1)
 
-	soefinding.findingJson.forEach(d => {
-		soefinding.findingContent[this.state.currentRegionName].app1 = keys.map(k => d[k])
+
+    soefinding.findingContent.Queensland = {app1: keys.map(k => 0)}
+
+	soefinding.findingJson.data.forEach(d => {
+		soefinding.findingContent[d.Region] = {app1: keys.map((k, i) => {
+            //first a side effect, sum up for qld
+            soefinding.findingContent.Queensland.app1[i] += d[k]
+
+			return d[k]
+			})
+		}
+
 	})
+
+
 
 
 	var options = soefinding.getDefaultPieChartOptions();
@@ -26,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: () => `Proportion of land by use in ${soefinding.state.currentRegionName}, 2019`
 		},
 		methods: {
-			formatter1: val => val.toFixed(1)
+			formatter1: val => val == 0 ? 0 : val.toLocaleString(undefined, {minimumFractionDigits: 2})
 		}
 	});
 
