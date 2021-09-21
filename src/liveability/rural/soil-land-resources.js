@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	var options = soefinding.getDefaultPieChartOptions();
 	options.labels = keys
-	options.xaxis = { categories: "Use", "Hectares" };
+	options.xaxis = { categories: ["Use", "Hectares"] }
 
 	soefinding.state.chart1 = {
 		options: options,
