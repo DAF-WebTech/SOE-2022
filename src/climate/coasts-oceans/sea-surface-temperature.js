@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.yaxis.max = 0.6
 	options2.yaxis.labels.formatter = options1.yaxis.labels.formatter
 	options2.tooltip.y.formatter = options1.tooltip.y.formatter
-	options.yaxis.forceNiceScale = false
+	options2.yaxis.forceNiceScale = false
 
 	locations.forEach((loc, i) => {
 
