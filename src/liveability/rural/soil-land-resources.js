@@ -23,21 +23,21 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Proportion of land by use in ${}, 2019`
+			heading1: () => `Proportion of land by use in ${soefinding.state.currentRegionName}, 2019`
 		},
 		methods: {
 			formatter1: val => val.toFixed(1)
 		}
 	});
-})
 
-window.soefinding.onRegionChange = function () {
-	// set the data series in each of the vue apps, for the current region
-	soefinding.state.chart1.series =
-		this.findingContent[this.state.currentRegionName].app1;
 
-	soefinding.loadFindingHtml();
-};
+	window.soefinding.onRegionChange = function () {
+		// set the data series in each of the vue apps, for the current region
+		soefinding.state.chart1.series =
+			this.findingContent[this.state.currentRegionName].app1;
+
+		soefinding.loadFindingHtml();
+	}
 
 
 })
