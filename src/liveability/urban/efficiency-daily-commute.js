@@ -2,20 +2,20 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-const years = soefinding.findingJson.meta.fields.slice(1)
+	const years = soefinding.findingJson.meta.fields.slice(1)
 
-	const series = soefinding.findingJson.map(d =>{
+	const series = soefinding.findingJson.data.map(d => {
 		return {
 			name: d.Peak,
-			data: years.map(d => d[y]) 
+			data: years.map(y => d[y])
 		}
 	})
-	
+
 
 	const options = soefinding.getDefaultLineChartOptions()
 	options.xaxis.categories = years.map(y => y.replace("-", "–")) //ndash
-	options.xaxis.title.text = "Travel time (minutes per 10 kms)"
-	options.yaxis.title.text = "Year"
+	options.xaxis.title.text = "Year"
+	options.yaxis.title.text = "Travel time (minutes per 10 kms)"
 	options.yaxis.labels.formatter = val => val
 	options.tooltip = { y: { formatter: val => val } }
 
@@ -34,7 +34,7 @@ const years = soefinding.findingJson.meta.fields.slice(1)
 			heading1: () => `Average travel time in minutes per 10 kilometres`
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toFixed(1)
 
 		}
 	});
