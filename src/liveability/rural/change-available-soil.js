@@ -7,15 +7,14 @@ Number.prototype.toLocaleString = function (opts) {
 	return result
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
 
 	const keys = soefinding.findingJson.meta.fields.slice(1)
 
-    soefinding.findingContent.Queensland = {app1: [{name: "Change", data: keys.map(k => 0)}]}
+    soefinding.findingContent.Queensland = {app1: [{name: "Change (ha)", data: keys.map(k => 0)}]}
 
 	soefinding.findingJson.data.forEach(d => {
-		soefinding.findingContent[d.Region] = {app1: [ { name: "Change", data: keys.map((k, i) => {
+		soefinding.findingContent[d.Region] = {app1: [ { name: "Change (ha)", data: keys.map((k, i) => {
             //first a side effect, sum up for qld
             soefinding.findingContent.Queensland.app1[0].data[i] += d[k]
 			return d[k]
@@ -43,7 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	series2[0].name = "Percent change"
 
 	const options2 = JSON.parse(JSON.stringify(options1))
-	options1.yaxis.title.text = "Percentage change in land classifictation"
+	options2.yaxis.title.text = "Percentage change in land classification"
+	options2.yaxis.labels.formatter = val => val.toLocaleString()
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -56,10 +56,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Change in available soil and land resources in ${soefinding.state.currentRegionName}`
+			heading1: () => `Change in available soil and land resources in ${soefinding.state.currentRegionName}`,
+			heading2: () => "Percentage change in area between 1999 and 2019"
 		},
 		methods: {
-			formatter1: val => val.toLocaleString({minimumFractionDigits: 2})
+			formatter1: val => val == 0 ? 0 : val.toLocaleString({minimumFractionDigits: 2, maximumFractionDigits: 2})
 		}
 	});
 
@@ -68,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		// set the data series in each of the vue apps, for the current region
 		soefinding.state.chart1.series =
 			this.findingContent[this.state.currentRegionName].app1;
-
 		soefinding.loadFindingHtml();
 	}
 
