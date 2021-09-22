@@ -2,13 +2,20 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	const years = [...new Set( soefinding.findingJson.data.map(d => d.Year))]
-	const locations = [...new Set( soefinding.findingJson.data.map(d => d.Location))]
-	
-	const qldSeries = locations.map(loc => {
+	const years = [...new Set(soefinding.findingJson.data.map(d => d.Year))]
+	const locations = [...new Set(soefinding.findingJson.data.map(d => d.Location))]
+
+	const qldSeries1 = locations.map(loc => {
+		const locationData = soefinding.findingJson.data.filter(d => d.Location == loc)
 		return {
 			name: loc,
-			data: soefinding.findingJson.filter(d => d.Location == loc).map(d => d["Heritage places open"])
+			data: years.map(y => {
+				const item = locationData.find(ld => ld.Year == y)
+				if (item)
+					return item["Heritage places open"]
+				else
+					return ""
+			})
 		}
 	})
 
@@ -19,7 +26,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.state.chart1 = {
 		options: options1,
-		series: qldSeries,
+		series: qldSeries1,
+		chartactive: true,
+	};
+
+
+	const qldSeries2 = locations.map(loc => {
+		const locationData = soefinding.findingJson.data.filter(d => d.Location == loc)
+		return {
+			name: loc,
+			data: years.map(y => {
+				const item = locationData.find(ld => ld.Year == y)
+				if (item)
+					return item["Visitors"]
+				else
+					return ""
+			})
+		}
+	})
+
+	const options2 = JSON.parse(JSON.stringify(options1))
+	options2.yaxis.title.text = "Number of visitors"
+	options2.yaxis.labels.formatter = val => `${val / 1000}k`
+	options2.tooltip.y = { formatter: val => val.toLocaleString() }
+
+
+
+	soefinding.state.chart2 = {
+		options: options2,
+		series: qldSeries2,
 		chartactive: true,
 	};
 
@@ -30,11 +65,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Heritage places open in ${soefinding.currentRegionName}`,
-			heading2: () => `People visiting heritage places in ${soefinding.currentRegionName}`
+			heading1: () => `Heritage places open in ${soefinding.state.currentRegionName}`,
+			heading2: () => `People visiting heritage places in ${soefinding.state.currentRegionName}`
 		},
 		methods: {
-			formatter1: val => val
+			formatter1: val => isNaN(parseInt(val)) ? "" : val.toLocaleString()
 		}
 	})
 
