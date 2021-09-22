@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
-	soefinding.state.chart1 = {
+	soefinding.state.chart2 = {
 		options: options1,
 		series: series2,
 		chartactive: true,
