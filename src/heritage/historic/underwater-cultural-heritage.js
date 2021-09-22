@@ -27,6 +27,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
+	const series2 = entries.map(e => {
+		return {
+			name: e,
+			data: soefinding.findingJson.data.filter(d => d.Entry == e).map(d => d["New entries"])
+		}
+	})
+
+	soefinding.state.chart1 = {
+		options: options1,
+		series: series2,
+		chartactive: true,
+	};
+
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
