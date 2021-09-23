@@ -67,7 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	qldSeries1.forEach(q => {
 		soefinding.findingContent[q.name] = { app3: [{
 			name: q.name,
-			data: q.data
+			data: q.data,
+			html: null
 		}]}
 		// we have to remove the null items
 		soefinding.findingContent[q.name].categories = []
@@ -96,10 +97,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // chart 4, visitors
 	qldSeries2.forEach(q => {
-		soefinding.findingContent[q.name] = { app4: [{
+		soefinding.findingContent[q.name].app4 = [{
 			name: q.name,
 			data: q.data
-		}]}
+		}]
 		// we have to remove the null items
 		soefinding.findingContent[q.name].categories = []
 		const newData = [] // 
@@ -142,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (this.state.currentRegionName != "Queensland") {
 
 			// update chart 3
-			soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].app3
+			this.state.chart3.series = this.findingContent[this.state.currentRegionName].app3
 			
 			// this works on the table
 			soefinding.state.chart3.options.xaxis.categories = this.findingContent[this.state.currentRegionName].categories
@@ -153,8 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
               // update chart 4
-			soefinding.state.chart4.series = this.findingContent[this.state.currentRegionName].app4
-
+			this.state.chart4.series = this.findingContent[this.state.currentRegionName].app4
 			// this works on the table
 			soefinding.state.chart4.options.xaxis.categories = this.findingContent[this.state.currentRegionName].categories
 			// but we also need this for the chart to update
