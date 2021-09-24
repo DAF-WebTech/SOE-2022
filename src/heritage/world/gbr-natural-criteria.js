@@ -19,9 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Total places removed, ${years[0]}–${latestYear}`,
-			heading2: () => `Proportion of places removed by Local Government Area (LGA), ${years[0]}–${latestYear}`,
-			heading3: () => `Places removed in each LGA, ${years[0]}–${latestYear}`
+			heading1: () => `Great Barrier Reef World Heritage natural criteria`
 		},
 		methods: {
 			formatter1: val => val,
