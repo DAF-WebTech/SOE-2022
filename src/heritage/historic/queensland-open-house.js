@@ -21,11 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			})
 		}
 	})
-	const tfoot = qldSeries1.map(q => {
-		return q.data.reduce((acc, curr) => {
-			return acc + (Number.isInteger(curr) ? curr : 0)
-		}, 0)
-	})
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
 	options1.xaxis.categories = years
@@ -36,8 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		options: options1,
 		series: qldSeries1,
 		chartactive: true,
-		tfoot: tfoot
-
 	};
 
 
