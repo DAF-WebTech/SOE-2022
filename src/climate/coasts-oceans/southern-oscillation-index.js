@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options.yaxis.labels.formatter = val => val < 0 ? `−${Math.abs(val).toFixed(0)}` : val.toFixed(0)
 	options.stroke = {width: 1}
 	options.markers.size = 0
-	options.tooltip = {x : { format: 'MMMM yyyy' } }
+	options.tooltip.x  = { format: 'MMMM yyyy' } 
 
 // taking the last 600 data points because they can't all fit
 // also need to fix the table
