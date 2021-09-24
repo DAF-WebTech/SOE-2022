@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options = soefinding.getDefaultLineChartOptions()
 	delete options.xaxis.categories
-	options.colors=[ "#00f", "#f00", "#880"]
+	options.colors=[ "#008FFB", "#ff4560", "#feb019"]
 	options.tooltip.x = { format: 'MMMM yyyy' }
 	options.tooltip.y = { formatter: val => val < 0 ? `−${Math.abs(val)}` : val }
 	options.xaxis.type = "datetime"
