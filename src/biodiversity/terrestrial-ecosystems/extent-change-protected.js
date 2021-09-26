@@ -38,7 +38,7 @@ soefinding.state.chart1.options.chart.stacked = "true";
 soefinding.state.chart1.options.xaxis.categories = soefinding.yearKeys;
 soefinding.state.chart1.options.xaxis.title.text = "Year";
 soefinding.state.chart1.options.yaxis.title.text = "Hectares";
-soefinding.state.chart1.options.tooltip.y = {
+soefinding.state.chart1.options.tooltip.y = { 
 	formatter: val => val.toLocaleString() + " ha"
 }
 
@@ -51,9 +51,8 @@ soefinding.state.chart2.options.yaxis.title.text = "Hectares";
 soefinding.state.chart2.options.tooltip.y = {
 	formatter: val => val.toLocaleString() + " ha"
 }
-
 soefinding.state.chart2.options.yaxis.labels.formatter = val => (val / 1000000) + "M"
-}
+
 
 
 new Vue({
