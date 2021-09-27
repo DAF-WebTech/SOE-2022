@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Riversleigh section of Australian fossil mammal sites World Heritage natural criteria`
+			heading1: () => `Gondwana Rainforests of Australia World Heritage natural criteria`
 		},
 		methods: {
 			formatter1: val => val,
