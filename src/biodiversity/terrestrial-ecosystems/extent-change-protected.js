@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	soefinding.state.chart1.options = this.getDefaultBarChartOptions();
+	soefinding.state.chart1.options = soefinding.getDefaultBarChartOptions();
 	soefinding.state.chart1.options.chart.stacked = "true";
 	soefinding.state.chart1.options.xaxis.categories = soefinding.yearKeys;
 	soefinding.state.chart1.options.xaxis.title.text = "Year";
