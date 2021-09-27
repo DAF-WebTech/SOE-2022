@@ -55,11 +55,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.xaxis.categories = soefinding.yearKeys
 	options2.xaxis.title.text = "Year"
 	options2.yaxis.title.text = "Parts per million"
-    options2.tooltip.y = {
-    	formatter: function (val) {
-    		return `${val} ppm`;
-        }
-    }
+	options2.yaxis.max = 0.12
+	options2.yaxis.min = 0
+	options2.yaxis.tickAmount = 6
+	options2.yaxis.labels.formatter = val => val.toFixed(2)
+    options2.tooltip.y = { formatter: val=> `${val} ppm` }
+        
+    
 
 	soefinding.state.chart2 = {
 		options: options2,
