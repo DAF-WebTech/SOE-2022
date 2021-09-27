@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const series = soefinding.findingJson.data.map(d => d["Criteria summary"])
 
 	const options = {
-		xaxis: { categories: ["World Heritage natural criteria", "Criteria summary"] },
+		xaxis: { categories: ["World heritage natural criteria", "Criteria summary"] },
 		labels: soefinding.findingJson.data.map(d => d["World Heritage natural criteria"])
 	}
 
