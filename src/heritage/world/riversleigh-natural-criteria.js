@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options = {
 		xaxis: { categories: ["World Heritage natural criteria", "Criteria summary"] },
-		//labels: soefinding.findingJson.data.map(d => d["World Heritage natural criteria"])
+		labels: soefinding.findingJson.data.map(d => d["World Heritage natural criteria"])
 	}
 
 	soefinding.state.chart1 = {
