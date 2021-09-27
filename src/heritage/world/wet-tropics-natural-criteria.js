@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Great Barrier Reef World Heritage natural criteria`
+			heading1: () => `Wet Tropics of Queensland World Heritage natural criteria`
 		},
 		methods: {
 			formatter1: val => val,
