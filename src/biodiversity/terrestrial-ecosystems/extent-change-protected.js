@@ -44,11 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	soefinding.state.chart2.options = this.getDefaultBarChartOptions();
-	soefinding.state.chart2.options.chart.stacked = "true";
-	soefinding.state.chart2.options.xaxis.categories = soefinding.yearKeys;
-	soefinding.state.chart2.options.xaxis.title.text = "Year";
-	soefinding.state.chart2.options.yaxis.title.text = "Hectares";
+	soefinding.state.chart2.options = JSON.parse(JSON.stringify(options1))
 	soefinding.state.chart2.options.tooltip.y = {
 		formatter: val => val.toLocaleString() + " ha"
 	}
