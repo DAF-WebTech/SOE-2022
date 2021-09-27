@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	soefinding.state.chart2.options = JSON.parse(JSON.stringify(options1))
+	soefinding.state.chart2.options = JSON.parse(JSON.stringify(soefinding.state.chart1.options))
 	soefinding.state.chart2.options.tooltip.y = {
 		formatter: val => val.toLocaleString() + " ha"
 	}
