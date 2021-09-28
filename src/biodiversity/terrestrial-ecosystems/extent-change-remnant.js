@@ -2,8 +2,8 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	var years = soefinding.findingJson.meta.fields.slice(4);
-	var latestYear = years.at(-1)
+	const years = soefinding.findingJson.meta.fields.slice(4);
+	const latestYear = years.at(-1)
 
 	// sort data by latest year
 	soefinding.findingJson.data.sort(function (a, b) {
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.findingJson.data.forEach(d => {
 		// fix up the group label
 		d["Broad vegetation group label"] = `${d["Broad vegetation group number"]}. ${d["Broad vegetation group label"].replace("-", "—")}` //mdash
-		//delete d["Broad vegetation group number"]
 
 		// group by bioregion
 		if (!bioregions[d.Bioregion]) {
@@ -110,13 +109,65 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
+	// third chart, stacked column for each region and qld
+	const data3 = JSON.parse(document.getElementById("jsonData3").textContent) // data for chart 3
+	const keys = data3.meta.fields.slice(3)
+	const lastKey = keys.at(-1)
+
+	const qldItem3 = {}
+	for (let bioregion in bioregions) { // assume same bioregions as what we had in data file 1
+		const regionData = data3.data.filter(d => d.Bioregion == bioregion)
+		soefinding.findingContent[bioregion].series3 = regionData.map(d => {
+			// as a side effect, populate the qld item
+			const name = `${d["Broad vegetation group number"]}. ${d["Broad vegetation group label"]}`
+			if (!qldItem3[name])
+				qldItem3[name] = keys.map(k => 0)
+			qldItem3[name].forEach((q, i) => qldItem3[name][i] += d[keys[i]])
+
+			return {
+				name,
+				data: keys.map(k => d[k])
+			}
+		})
+	}
+	soefinding.findingContent.Queensland.series3 = Object.keys(qldItem3).map(q => {
+		return {
+			name: q.replace("-", "—"), //emdash
+			data: qldItem3[q]
+		}
+	})
+	soefinding.findingContent.Queensland.series3.sort(function (a, b) {
+		return parseInt(a.name.substring(0, a.name.indexOf("."))) - parseInt(b.name.substring(0, b.name.indexOf(".")))
+	})
+
+	const options3 = soefinding.getDefaultStackedColumnChartOptions()
+	options3.chart.id = "chart3"
+	options3.xaxis.categories = keys.map(k => [k.substring(0, k.indexOf("-")) + "–", k.substring(k.indexOf("-") + 1)])  //endash
+	options3.xaxis.title = "Hectares lost"
+	options3.yaxis.title = "Year"
+	options3.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
+	options3.tooltip = { y: { formatter: val => val.toLocaleString() } }
+	options3.legend.labels = { trim: true }
+	//options3.legend.formatter = val => val.substring(0, 12) + "…"
+	options3.legend.position = "bottom"
+
+
+	soefinding.state.chart3 = {
+		options: options3,
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
+		chartactive: true,
+	}
+
+
+
 
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
 			heading1: () => `Proportion of broad vegetation groups in ${soefinding.state.currentRegionName}, ${latestYear}`,
-			heading2: () => `Pre-clear and ${latestYear} extents of broad vegetation groups in ${soefinding.state.currentRegionName}`
+			heading2: () => `Pre-clear and ${latestYear} extents of broad vegetation groups in ${soefinding.state.currentRegionName}`,
+			heading3: () => `Change in extent of broad vegetation groups in ${soefinding.state.currentRegionName}`
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
@@ -148,6 +199,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			)
 		}
 
+		// chart 3
+		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
+		// 		// this works on the table
+		// 		soefinding.state.chart3.options.xaxis.categories = this.findingContent[this.state.currentRegionName].labels3
+		// 		// but we also need this for the chart to update
+		// 		ApexCharts.exec("chart3", "updateOptions", {
+		// 			xaxis: {categories: this.findingContent[this.state.currentRegionName].labels3}}
+		// 		)
 
 
 		soefinding.loadFindingHtml();
