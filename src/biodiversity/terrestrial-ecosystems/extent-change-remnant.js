@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.findingJson.data.forEach(d => {
 		// fix up the group label
 		d["Broad vegetation group label"] = `${d["Broad vegetation group number"]}. ${d["Broad vegetation group label"].replace("-", "—")}` //mdash
-		delete d["Broad vegetation group number"]
+		//delete d["Broad vegetation group number"]
 
 		// group by bioregion
 		if (!bioregions[d.Bioregion]) {
@@ -37,11 +37,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	// set our chart data for each region
 	for (const bioregion in bioregions) {
 		soefinding.findingContent[bioregion] = {
-			app1: bioregions[bioregion].map((d, i) => {
+			series1: bioregions[bioregion].map(d => {
 				// as a side effect populate qld value
 				return d[latestYear]
 			}),
-			labels: bioregions[bioregion].map(d => d["Broad vegetation group label"])
+			labels1: bioregions[bioregion].map(d => d["Broad vegetation group label"])
 		}
 	}
 	// set chart date for qld, but first needs sorting
@@ -49,13 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		return b[latestYear] - a[latestYear]
 	})
 	soefinding.findingContent.Queensland = {
-		app1: qldData.map(d => d[latestYear]),
-		labels: qldData.map(d => d["Broad vegetation group label"]) // or could be keys of bioregions
+		series1: qldData.map(d => d[latestYear]),
+		labels1: qldData.map(d => d["Broad vegetation group label"]) // or could be keys of bioregions
 	}
 
 	const options1 = soefinding.getDefaultPieChartOptions();
 	options1.chart.id = "chart1"
-	options1.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels
+	options1.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels1
 	options1.tooltip = {
 		y: {
 			formatter: (val, options) => {
@@ -64,12 +64,49 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		}
 	}
+
 	options1.xaxis.categories = ["Broad vegetation group", "Hectares"] // these are the table headings
 
 
 	soefinding.state.chart1 = {
 		options: options1,
-		series: soefinding.findingContent[soefinding.state.currentRegionName].app1,
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series1,
+		chartactive: true,
+	}
+
+
+	// chart 2, column chart for each region, not displayed for qld
+	const seriesNames = ["Pre-clear vegetation", latestYear]
+	for (const bioregion in bioregions) {
+		bioregions[bioregion].sort(function (a, b) {
+			return a["Broad vegetation group number"] - b["Broad vegetation group number"]
+		})
+		soefinding.findingContent[bioregion].series2 = seriesNames.map(s => {
+			return {
+				name: s,
+				data: bioregions[bioregion].map(d => d[s])
+			}
+		})
+		soefinding.findingContent[bioregion].labels2 = bioregions[bioregion].map(d => d["Broad vegetation group label"])
+	}
+	soefinding.findingContent.Queensland.series2 = soefinding.findingContent["Wet Tropics"].series2 // won't be seen but needs a default
+	soefinding.findingContent.Queensland.labels2 = soefinding.findingContent["Wet Tropics"].labels2 // won't be seen but needs a default
+
+	const options2 = soefinding.getDefaultColumnChartOptions()
+	options2.chart.id = "chart2"
+	options2.tooltip = { y: { formatter: val => `${val.toLocaleString()}ha` } }
+	options2.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].labels2
+	options2.xaxis.labels = {
+		trim: true,
+		hideOverlappingLabels: false
+	}
+	options2.xaxis.title = "Broad Vegetation Group"
+	options2.yaxis.labels.formatter = val => `${val / 1000000}M`
+	options2.yaxis.title = "Hectares"
+
+	soefinding.state.chart2 = {
+		options: options2,
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
 		chartactive: true,
 	}
 
@@ -79,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		data: soefinding.state,
 		computed: {
 			heading1: () => `Proportion of broad vegetation groups in ${soefinding.state.currentRegionName}, ${latestYear}`,
-			heading2: () => "Percentage change in area between 1999 and 2019"
+			heading2: () => `Pre-clear and ${latestYear} extents of broad vegetation groups in ${soefinding.state.currentRegionName}`
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
@@ -91,15 +128,25 @@ document.addEventListener("DOMContentLoaded", function () {
 		// set the data series in each of the vue apps, for the current region
 
 		// chart 1
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].app1
+		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
 		// this works on the table
-		soefinding.state.chart1.options.labels = this.findingContent[this.state.currentRegionName].labels
+		soefinding.state.chart1.options.labels = this.findingContent[this.state.currentRegionName].labels1
 		// but we also need this for the chart to update
 		ApexCharts.exec("chart1", "updateOptions", {
-			labels: this.findingContent[this.state.currentRegionName].labels,
+			labels: this.findingContent[this.state.currentRegionName].labels1,
 		})
 
-
+		// chart 2
+		if (this.state.currentRegionName != "Queensland") {
+			soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
+			// this works on the table
+			soefinding.state.chart2.options.xaxis.categories = this.findingContent[this.state.currentRegionName].labels2
+			// but we also need this for the chart to update
+			ApexCharts.exec("chart2", "updateOptions", {
+				xaxis: { categories: this.findingContent[this.state.currentRegionName].labels2 }
+			}
+			)
+		}
 
 
 
