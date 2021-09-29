@@ -58,6 +58,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => `Cumulated number of each protected area`,
 			heading2: () => `Cumulated extent of all protected areas`
+		},
+		methods: {
+			formatter1: () => val.toLocaleString()
 		}
 	})
 
