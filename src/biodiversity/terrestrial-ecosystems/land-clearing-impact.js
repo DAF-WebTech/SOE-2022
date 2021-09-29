@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	const yearKeys = soefinding.findingJson.meta.fields.slice(2)
+	let yearKeys = soefinding.findingJson.meta.fields.slice(2)
 
 	const totalClearing = soefinding.findingJson.data.filter(d => d["Clearing type"] == "Total clearing")
 	soefinding.findingContent.Queensland = {
@@ -62,6 +62,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
+	yearKeys = yearKeys.slice(10) // there's no data for the first 10 years,
+	// but the algo here makes it hard to find them
 	const historicTypes = ["Non-remnant", "Remnant"]
 	const historicItems = soefinding.findingJson.data.filter(d => historicTypes.includes(d["Clearing type"]))
 	soefinding.findingContent.Queensland.series3 = historicTypes.map(d => {
@@ -84,8 +86,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 	})
 
+	const options3 = JSON.parse(JSON.stringify(options2))
+	options3.tooltip.y.formatter = options1.tooltip.y.formatter
+	options3.xaxis.categories = yearKeys
+	options3.yaxis.labels.formatter = options1.yaxis.labels.formatter
+
 	soefinding.state.chart3 = {
-		options: options2,
+		options: options3,
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
 		chartactive: true,
 	}
@@ -99,10 +106,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => `Proportion of total woody vegetation clearing, by bioregion`,
 			heading2: () => `Proportion of replacement landcover (clearing type) in ${soefinding.state.currentRegionName}`,
-			heading3: () => `Historic woody vegetation clearing in Queensland in ${soefinding.state.currentRegionName}`,
+			heading3: () => `Historic woody vegetation clearing in ${soefinding.state.currentRegionName}`,
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val?.toLocaleString() ?? ""
 		}
 	})
 
@@ -112,9 +119,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		// set the data series in each of the vue apps, for the current region
 
 		// chart 2
-		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
+		// the exec function only seems necessary when the x-axis changes, but keeping it here for reference in case i’m wrong
+		//ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
 		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
 
+		// chart 3
+		//ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
+		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
 
 
 		soefinding.loadFindingHtml()
