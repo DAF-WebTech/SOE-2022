@@ -99,6 +99,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		trim: true,
 		hideOverlappingLabels: false
 	}
+	options1.xaxis.tickPlacement = "between" // not a good option, but it fixes a bug
+	// where the chart xaxis did not redraw correctly when a) swapping between regions. and then b) clicking one of the legends
 	options2.xaxis.title = "Broad Vegetation Group"
 	options2.yaxis.labels.formatter = val => `${val / 1000000}M`
 	options2.yaxis.title = "Hectares"
