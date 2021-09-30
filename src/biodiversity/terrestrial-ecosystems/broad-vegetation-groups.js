@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// where the chart xaxis did not redraw correctly when swapping between regions.,
 	// and then you click on one of the legends
 
-	options1.xaxis.title = "Hectares"
+	options1.xaxis.title.text = "Hectares"
 
 	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
 	//	these options make it look better, but fail if you select a region
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// 	options1.yaxis.max = 30000000
 	// 	options1.yaxis.min = 0
 	// 	options1.yaxis.tickAmount = 6
-	options1.yaxis.title = "Broad Vegetation Group"
+	options1.yaxis.title.text = "Broad Vegetation Group"
 
 	soefinding.state.chart1 = {
 		options: options1,

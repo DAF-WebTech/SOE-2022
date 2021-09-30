@@ -101,9 +101,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	options1.xaxis.tickPlacement = "between" // not a good option, but it fixes a bug
 	// where the chart xaxis did not redraw correctly when a) swapping between regions. and then b) clicking one of the legends
-	options2.xaxis.title = "Broad Vegetation Group"
+	options2.xaxis.title.text = "Broad Vegetation Group"
 	options2.yaxis.labels.formatter = val => `${val / 1000000}M`
-	options2.yaxis.title = "Hectares"
+	options2.yaxis.title.text = "Hectares"
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -145,8 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options3 = soefinding.getDefaultStackedColumnChartOptions()
 	options3.chart.id = "chart3"
 	options3.xaxis.categories = keys.map(k => [k.substring(0, k.indexOf("-")) + "–", k.substring(k.indexOf("-") + 1)])  //endash
-	options3.xaxis.title = "Hectares lost"
-	options3.yaxis.title = "Year"
+	options3.xaxis.title.text = "Hectares lost"
+	options3.yaxis.title.text = "Year"
 	options3.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
 	options3.tooltip = { y: { formatter: val => val.toLocaleString() } }
 	options3.legend.labels = { trim: true }

@@ -16,9 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // en dash
-	options1.xaxis.title = "Year range"
+	options1.xaxis.title.text = "Year range"
 	options1.yaxis.labels.formatter = val => `${val / 1000}K`
-	options1.yaxis.title = "Hectares per year"
+	options1.yaxis.title.text = "Hectares per year"
 	options1.tooltip = { y: { formatter: val => val.toLocaleString() } }
 
 	soefinding.state.chart1 = {

@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options10.tooltip = {
 		y: {
 			formatter: function (val) {
-				return `${val < 1 ? '−' : ''}${Math.abs(val)}%` // a better minus sign
+				return `${val < 0 ? '−' : ''}${Math.abs(val)}%` // a better minus sign
 			}
 		}
 	};
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val,
-			formatter2: val => `${val < 1 ? '−' : ''}${Math.abs(val)}`, // a better minus sign
+			formatter2: val => `${val < 0 ? '−' : ''}${Math.abs(val)}`, // a better minus sign
 		}
 	})
 })

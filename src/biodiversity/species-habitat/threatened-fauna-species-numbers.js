@@ -161,13 +161,13 @@ soefinding.createChartTableVueApps = function() {
 
     var options3 = soefinding.getDefaultLineChartOptions(); 
     options3.xaxis.categories = soefinding.yearKeys;
-    options3.xaxis.title = {text: "Year"}
+    options3.xaxis.title.text = {text: "Year"}
     options3.yaxis.labels = {
         formatter: function (val, index) {
 			return (val / 1000000) + "M"
 		}
     }
-    options3.yaxis.title = {text: "Hectares"}
+    options3.yaxis.title.text = {text: "Hectares"}
     options3.chart.events = {
         legendClick: function(chartContext, seriesIndex, config) {
               var name = soefinding.speciesGroups[seriesIndex];

@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
 	options1.xaxis.categories = [...bioregions]
-	options1.xaxis.title = "Bioregion"
-	options1.yaxis.title = "Number of regional ecosystems"
+	options1.xaxis.title.text = "Bioregion"
+	options1.yaxis.title.text = "Number of regional ecosystems"
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = JSON.parse(JSON.stringify(options1))
 	options2.yaxis.labels.formatter = val => `${val / 1000000}M`
-	options2.yaxis.title = "Hectares"
+	options2.yaxis.title.text = "Hectares"
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -68,8 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options3 = soefinding.getDefaultLineChartOptions()
 	options3.chart.id = "chart3"
-	options3.xaxis.title = "Year"
-	options3.yaxis.title = "Hectares"
+	options3.xaxis.title.text = "Year"
+	options3.yaxis.title.text = "Hectares"
 	options3.xaxis.categories = yearKeys
 	options3.yaxis.labels.formatter = val => {
 		if (val >= 1000000)
