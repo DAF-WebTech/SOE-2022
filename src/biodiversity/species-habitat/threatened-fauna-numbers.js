@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	const series1Keys = soefinding.findingJson.meta.fields.filter(f => f.includes("Threatened"))
+	const series1Keys = soefinding.findingJson.meta.fields.filter(f => f.includes("threatened") && !f.includes("near"))
 	const series1 = soefinding.findingJson.data.map(d => {
 		return {
 			name: d.Group,
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
+	options1.xaxis.categories = series1Keys.map(k => k.split(" ")[0])
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Number of species"
 
