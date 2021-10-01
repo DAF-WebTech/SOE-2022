@@ -2,11 +2,19 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	var series1Keys = ["Marine conservation park zone", "Marine national park zone", "Marine preservation zone", 
-		"Buffer zone	", "Scientific research zone", "Fish habitat area management level A", 
+	const series1Keys = ["Marine conservation park zone", "Marine national park zone", "Marine preservation zone", 
+		"Buffer zone", "Scientific research zone", "Fish habitat area management level A", 
 		"Fish habitat area management level B"]
 
-
+	const series1KeyLabels = [
+		["Marine", "conservation", "park zone"],
+		["Marine national", "park zone"], 
+		["Marine", "preservation", "zone"], 
+		["Buffer zone"], 
+		["Scientific", "research zone"], 
+		["Fish habitat area", "management", "level A"], 
+		["Fish habitat area", "management", "level B"] 
+	] // there doesn't seem to be any way to get this done otherwise
 
 	const series1 = [{ 
 		name: "Hectares",
@@ -15,11 +23,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.tooltip = { y: { formatter: val => val.toLocaleString() } }
-	options1.xaxis.categories = series1Keys
-	options1.xaxis.labels = { trim: true, maxHeight: 160 }
+	options1.xaxis.categories = series1KeyLabels
 	options1.xaxis.title.text = "Protected area type"
 	options1.yaxis.title.text = "Hectares"
-	options1.yaxis.labels.formatter = val => `${val / 1000}K`
+	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}K`
+	options1.yaxis.tickAmount = 6
 
 	soefinding.state.chart1 = {
 		options: options1,
