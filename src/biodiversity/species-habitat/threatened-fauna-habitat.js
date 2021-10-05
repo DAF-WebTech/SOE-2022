@@ -10,18 +10,20 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (! regions[d.Region] ) 
 			regions[d.Region] = []
 
-			regions[d.Region].push(d)
+		d.Remnant = d[latestYear]
+		d["Non-remnant"] = d["Pre-clear"] - d.Remnant
+		regions[d.Region].push(d)
 	})
 
-	const series1Keys = [soefinding.findingJson.meta.fields[2], latestYear]
+	const series1Keys = ["Pre-clear", "Remnant"]
 	for(let region in regions) {
-		soefinding.findingContent[region].series1 = series1Keys.map(k => {
+		soefinding.findingContent[region] = {series1: series1Keys.map(k => {
 			return {
-				name: "k",
+				name: k,
 				data: regions[region].map(d => d[k])
 			}
 		})
-	}
+	}}
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.chart.id = "chart1"
@@ -29,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.title.text = "Fauna Group"
 	options1.yaxis.title.text = "Hectares"
 	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : `${val/1000}K`
-	options1.tooltip.y = { formatter: val => val.toLocaleString() }
+	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -39,7 +41,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+	// chart 2  a stacked column percent chart
+	const series2Keys = ["Remnant", "Non-remnant"]
+	for(let region in regions) {
+		soefinding.findingContent[region].series2 = series2Keys.map(k => {
+			return {
+				name: k,
+				data: regions[region].map(d => d[k])
+			}
+		})
+	}
 
+	const options2 = soefinding.getPercentStackedBarChartOptions()
+	options2.chart.id = "chart2"
+	options2.xaxis.categories = options1.xaxis.categories
+	options2.xaxis.title.text = "Fauna Group"
+	options2.yaxis.title.text = "Proportion"
+	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}  ha` }
+
+	soefinding.state.chart2 = {
+		options: options2,
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
+		chartactive: true,
+	}
 
 
 
@@ -47,8 +71,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened fauna habitat and ${this.latestYear} remnant habitat by species group` },
-			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened fauna habitat that is remnant and non-remnant habitat, ${this.latestYear}` },
+			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened fauna habitat and ${latestYear} remnant habitat by species group` },
+			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened fauna habitat that is remnant and non-remnant habitat, ${latestYear}` },
 			heading3: function () { return `Trend in threatened species habitat, for ${this.currentRegionName}` },
 			heading4: function () { return `Proportion of pre-clear threatened ${this.currentSpecies} habitat by bioregion` }
 		},
@@ -59,10 +83,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	window.soefinding.onRegionChange = function () {
+		
 		// set the data series in each of the vue apps, for the current region
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].app1;
+		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
 		ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
 
+		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
+		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
 
 
 
