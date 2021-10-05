@@ -81,14 +81,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.state.species[s] = {
 			checked: i == 0,
 			name: s,
-			chartactive: true,
+			chart3active: true,
+			chart4active: true,
 			regions: {},
 			nullSeries: false
 		}
 		for(let region in regions) {
 			const item = regions[region].find(d => d.Group == s)
 			soefinding.state.species[s].regions[region] = { 
-				isSeries3Null: false,
+				isSeries3Null: false, // some have all 0 for data, so we show just the table if that happens
 				series3: [{
 					name: "Habitat",
 					data: yearKeys.map(y => item[y])
@@ -98,11 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				soefinding.state.species[s].regions[region].isSeries3Null = true
 		}
 	})
-	// there's a big anomaly here when you pick northwest highlands,
-	// and the data is all 0, the chart looks bad, 
-	// converting to null would give us better options for display
-	// but then the table would show nothing
-	
 
 
 	//options for chart 3 in the species list
@@ -117,13 +113,29 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.options3 = options3
 
 
+	// chart 4 is a pie chart for qld only
+	speciesNames.forEach(s => {
+		soefinding.state.species[s].regions.Queensland.series4 = soefinding.findingJson.data
+				.filter(d => d.Group == s && d.Region != "Queensland")
+				.map(d => d["Pre-clear"])
+	})
+
+	soefinding.state.options4 = soefinding.getDefaultPieChartOptions()
+	soefinding.state.options4.labels = Object.keys(regions).slice(1)
+	soefinding.state.options4.tooltip = { y: { formatter: (val, options) => {
+		const percent = options.globals.seriesPercent[options.seriesIndex][0]
+		return `${val.toLocaleString()} ha (${percent.toFixed(1)}%)`
+	}}}
+	soefinding.state.options4.xaxis.categories = ["Region", "Pre-clear (ha)"]
+
+
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
 			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened fauna habitat and ${latestYear} remnant habitat by species group` },
 			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened fauna habitat that is remnant and non-remnant habitat, ${latestYear}` },
-			//heading3: function () { return `Trend in threatened what habitat` },
 			heading4: function () { return `Proportion of pre-clear threatened ${this.currentSpecies} habitat by bioregion` }
 		},
 		methods: {
@@ -142,14 +154,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
 
 
-
-
-		// soefinding.state.chart2.series =
-		// 	this.findingContent[this.state.currentRegionName].app2;
-		// soefinding.state.chart3.series =
-		// 	this.findingContent[this.state.currentRegionName].app3;
-		// soefinding.state.chart4.series =
-		// 	this.findingContent[this.state.currentRegionName].app4;
 
 		soefinding.loadFindingHtml();
 	}
