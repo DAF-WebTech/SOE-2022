@@ -2,8 +2,8 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	const years = soefinding.findingJson.meta.fields.slice(3)
-	const latestYear = years.at(-1)
+	const yearKeys = soefinding.findingJson.meta.fields.slice(3)
+	const latestYear = yearKeys.at(-1)
 
 	const regions = {}
 	soefinding.findingJson.data.forEach(d => {
@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		d["Non-remnant"] = d["Pre-clear"] - d.Remnant
 		regions[d.Region].push(d)
 	})
+
+	const speciesNames = regions.Queensland.map(d => d.Group) 
 
 	const series1Keys = ["Pre-clear", "Remnant"]
 	for(let region in regions) {
@@ -27,10 +29,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.chart.id = "chart1"
-	options1.xaxis.categories = regions.Queensland.map(d => d.Group)
+	options1.xaxis.categories = speciesNames
 	options1.xaxis.title.text = "Fauna Group"
 	options1.yaxis.title.text = "Hectares"
-	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : `${val/1000}K`
+	options1.yaxis.labels.formatter = val => {
+		if ( val >= 1000000 )
+			return `${val/1000000}M` 
+		else if (val >= 1000) 
+			return `${val/1000}K`
+		else
+			return val
+	}
 	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
 
 	soefinding.state.chart1 = {
@@ -40,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
+	
 	// chart 2  a stacked column percent chart
 	const series2Keys = ["Remnant", "Non-remnant"]
 	for(let region in regions) {
@@ -52,9 +61,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 	}
 
+
 	const options2 = soefinding.getPercentStackedBarChartOptions()
 	options2.chart.id = "chart2"
-	options2.xaxis.categories = options1.xaxis.categories
+	options2.xaxis.categories = speciesNames
 	options2.xaxis.title.text = "Fauna Group"
 	options2.yaxis.title.text = "Proportion"
 	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}  ha` }
@@ -65,6 +75,46 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
+	// create the species items for checkbox list and series 3 data
+	soefinding.state.species = {}
+	speciesNames.forEach((s, i) => { 
+		soefinding.state.species[s] = {
+			checked: i == 0,
+			name: s,
+			chartactive: true,
+			regions: {},
+			nullSeries: false
+		}
+		for(let region in regions) {
+			const item = regions[region].find(d => d.Group == s)
+			soefinding.state.species[s].regions[region] = { 
+				isSeries3Null: false,
+				series3: [{
+					name: "Habitat",
+					data: yearKeys.map(y => item[y])
+				}]
+			}
+			if (soefinding.state.species[s].regions[region].series3[0].data.every(d => d == 0))
+				soefinding.state.species[s].regions[region].isSeries3Null = true
+		}
+	})
+	// there's a big anomaly here when you pick northwest highlands,
+	// and the data is all 0, the chart looks bad, 
+	// converting to null would give us better options for display
+	// but then the table would show nothing
+	
+
+
+	//options for chart 3 in the species list
+	const options3 = soefinding.getDefaultLineChartOptions()
+	options3.chart.id = "chart3"
+	options3.xaxis.categories = yearKeys
+	options3.xaxis.title.text = "Year"
+	options3.yaxis.title.text = "Hectares"
+	options3.yaxis.labels.formatter = options1.yaxis.labels.formatter
+	options3.yaxis.showForNullSeries = false
+	options3.tooltip.y = { formatter: options1.tooltip.y.formatter }
+	soefinding.state.options3 = options3
 
 
 	new Vue({
@@ -73,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened fauna habitat and ${latestYear} remnant habitat by species group` },
 			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened fauna habitat that is remnant and non-remnant habitat, ${latestYear}` },
-			heading3: function () { return `Trend in threatened species habitat, for ${this.currentRegionName}` },
+			//heading3: function () { return `Trend in threatened what habitat` },
 			heading4: function () { return `Proportion of pre-clear threatened ${this.currentSpecies} habitat by bioregion` }
 		},
 		methods: {
@@ -83,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	window.soefinding.onRegionChange = function () {
-		
+
 		// set the data series in each of the vue apps, for the current region
 		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
 		ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
@@ -102,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		// 	this.findingContent[this.state.currentRegionName].app4;
 
 		soefinding.loadFindingHtml();
-	};
+	}
 
 
 })
