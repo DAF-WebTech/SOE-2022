@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				let heading = "Freshwater wetland system percentage of pre-clear extent remaining"
 				if (soefinding.state.currentRegionName != "Queensland")
 					heading += " in Bulloo"
-				heading += ", 2024 TOOD FIX YEAR"
+				heading += ", 2024 TODO FIX YEAR"
 				return heading
 			}
 		},
