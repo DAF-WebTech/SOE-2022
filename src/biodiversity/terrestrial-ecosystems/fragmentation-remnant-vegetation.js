@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
-	options1.tooltip = { y: { formatter: val => val.toFixed(4) } }
+	options1.tooltip.y = { formatter: val => val.toFixed(4) } 
 	options1.xaxis.categories = Array.from(years).map(y => [y.substring(0, y.lastIndexOf(" ")), y.substring(y.lastIndexOf(" ")+1)])
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.labels.formatter = val => Math.round(val)

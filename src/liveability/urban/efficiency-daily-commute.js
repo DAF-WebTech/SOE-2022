@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options.xaxis.title.text = "Year"
 	options.yaxis.title.text = "Travel time (minutes per 10 kms)"
 	options.yaxis.labels.formatter = val => val
-	options.tooltip = { y: { formatter: val => val } }
+	options.tooltip.y ={ formatter: val => val } 
 
 
 	soefinding.state.chart1 = {

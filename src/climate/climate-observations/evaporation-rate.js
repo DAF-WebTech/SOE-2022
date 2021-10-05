@@ -39,11 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.labels.formatter = function (val) {
 		return `${(val / 1000).toFixed(1)}k`;
 	}
-	options1.tooltip = {
-		y: {
+	options1.tooltip.y = {
 			formatter: val => val.toLocaleString()
 		}
-	}
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -82,11 +80,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.yaxis.labels.formatter = function (val) {
 		return `${(val / 1000).toFixed(1)}k`;
 	}
-	options2.tooltip = {
-		y: {
+	options2.tooltip.y = {
 			formatter: val => val?.toLocaleString() ?? "n/a"
 		}
-	}
 
 
 	soefinding.state.chart2 = {

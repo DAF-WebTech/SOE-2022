@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options.xaxis.title.text = "Region"
 	options.yaxis.title.text = "Hectares"
 	options.yaxis.labels.formatter = val => `${val / 1000}k`
-	options.tooltip = { y: { formatter: val => `${val.toLocaleString()} ha.` } }
+	options.tooltip.y = { formatter: val => `${val.toLocaleString()} ha.` } 
 
 
 	soefinding.state.chart1 = {

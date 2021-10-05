@@ -101,11 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options5 = JSON.parse(JSON.stringify(options3))
 	options5.xaxis.categories = Object.keys(sites)  // not large items
 	options5.yaxis.labels.formatter = val => Math.round(val)
-	options5.tooltip = {
-		y: {
-			formatter: (val, options) => (options.seriesIndex == 0 ? val : val.toFixed(1))
-		}
-	}
+	options5.tooltip.y.formatter = (val, options) => (options.seriesIndex == 0 ? val : val.toFixed(1))
 
 
 	Object.keys(extents).forEach((e, i) => {
@@ -156,13 +152,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options7 = JSON.parse(JSON.stringify(options5))
 	options7.yaxis.labels.formatter = val => Math.round(val)
-	options7.tooltip = {
-		y: {
-			formatter: function (val) {
+	options7.tooltip.y.formatter = function (val) {
 				return val
 			}
-		}
-	}
 
 	soefinding.state.chart7 = {
 		options: options7,
@@ -197,22 +189,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			case "Glass":
 				myOptions.yaxis.max = 2
 				myOptions.yaxis.labels.formatter = val => Math.round(val)
-				myOptions.tooltip = {
-					y: {
-						formatter: val => val
-					}
-				}
+				myOptions.tooltip.y.formatter = val => val
 				break
 			case "Metal":
 			case "Paper":
 			case "Plastic":
 			case "Other":
 				myOptions.yaxis.labels.formatter = val => Math.round(val)
-				myOptions.tooltip = {
-					y: {
-						formatter: val => val
-					}
-				}
+				myOptions.tooltip.y.formatter = val => val
 				break
 		}
 

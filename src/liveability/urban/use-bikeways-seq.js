@@ -16,8 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Site)
 	options.xaxis.title.text = "Location"
 	options.yaxis.title.text = "Average daily count"
-	// options.yaxis.labels.formatter = val => val
-	// options.tooltip = { y: { formatter: val => val } }
 
 
 	soefinding.state.chart1 = {

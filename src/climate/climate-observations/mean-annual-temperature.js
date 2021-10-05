@@ -24,11 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = yearKeys
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Temperature anomaly (degrees celsius)";
-	options1.tooltip = {
-		y: {
+	options1.tooltip.y = {
 			formatter: val => val >= 0 ? val : `-${Math.abs(val)}`
 		}
-	}
 
 	soefinding.state.chart1 = {
 		options: options1,

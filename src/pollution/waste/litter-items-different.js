@@ -71,14 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options10 = JSON.parse(JSON.stringify(options9))
 	options10.yaxis.title.text = "Percentage difference in count (%)"
-	options10.tooltip = {
-		y: {
+	options10.tooltip.y = {
 			formatter: function (val) {
 				return `${val < 0 ? '−' : ''}${Math.abs(val)}%` // a better minus sign
 			}
 		}
-	};
-
 
 	soefinding.state.chart10 = {
 		options: options10,

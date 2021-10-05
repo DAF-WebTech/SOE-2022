@@ -36,8 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.xaxis.categories = options2.xaxis.categories.slice(4)
 	options2.yaxis.labels.formatter = val => Math.round(val)
 	options2.yaxis.max = 100
-	//options2.tooltip = { y: { formatter: val => val } }
-	options2.tooltip = { y: { title: { formatter: val => val.replace("<br>", "") } } } // replace <br> for chart tooltip
+	options2.tooltip.y = { title: { formatter: val => val.replace("<br>", "") } } // replace <br> for chart tooltip
 
 
 	soefinding.state.chart2 = {

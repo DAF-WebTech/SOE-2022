@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
-	options1.tooltip = { y: { formatter: val => val.toLocaleString() } }
+	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
 	options1.xaxis.categories = series1items.map(d => {
 		if (d["Drainage division"].startsWith("North East"))
 			return [
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options3 = soefinding.getDefaultColumnChartOptions()
 	//options3.plotOptions = { bar: { barHeight: "90%" } }
-	options3.tooltip = { y: { formatter: val => val } }
+	options3.tooltip.y = { formatter: val => val } 
 	options3.xaxis.categories = series3Names
 	options3.xaxis.title.text = "Wetland system"
 	delete options3.xaxis.tickPlacement

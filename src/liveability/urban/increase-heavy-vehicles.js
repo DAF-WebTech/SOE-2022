@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		
 
 	}
-	options.tooltip = { y: { formatter: val => val.toLocaleString() } }
+	options.tooltip.y = { formatter: val => val.toLocaleString() } 
 
 
 	soefinding.state.chart1 = {
