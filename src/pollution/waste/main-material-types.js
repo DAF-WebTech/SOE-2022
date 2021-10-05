@@ -57,9 +57,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.yaxis.title.text = "Litres per 100m²"
 	options2.yaxis.tickAmount = 4
 	options2.yaxis.max = 2.0
-	options2.yaxis.labels = {
-		formatter: val => val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-	}
+	options2.yaxis.labels.formatter = val => val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+	
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -101,9 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	//5 and 6. stacked column, cigarette and non-cigarette count by type in Queensland and Australia
 	const options5 = JSON.parse(JSON.stringify(options3))
 	options5.xaxis.categories = Object.keys(sites)  // not large items
-	options5.yaxis.labels = {
-		formatter: val => Math.round(val)
-	}
+	options5.yaxis.labels.formatter = val => Math.round(val)
 	options5.tooltip = {
 		y: {
 			formatter: (val, options) => (options.seriesIndex == 0 ? val : val.toFixed(1))
@@ -199,9 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				break
 			case "Glass":
 				myOptions.yaxis.max = 2
-				myOptions.yaxis.labels = {
-					formatter: val => Math.round(val)
-				}
+				myOptions.yaxis.labels.formatter = val => Math.round(val)
 				myOptions.tooltip = {
 					y: {
 						formatter: val => val
@@ -212,9 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			case "Paper":
 			case "Plastic":
 			case "Other":
-				myOptions.yaxis.labels = {
-					formatter: val => Math.round(val)
-				}
+				myOptions.yaxis.labels.formatter = val => Math.round(val)
 				myOptions.tooltip = {
 					y: {
 						formatter: val => val
