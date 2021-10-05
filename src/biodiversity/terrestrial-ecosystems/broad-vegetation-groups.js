@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.chart.id = "chart1"
-	options1.tooltip = { y: { formatter: val => val.toLocaleString() } }
+	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
 	options1.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].groups
 	options1.xaxis.labels = {
 		trim: true,
@@ -82,14 +82,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.chart.id = "chart2"
 	options2.labels = fields
 	options2.xaxis.categories = ["Type", "Area (ha)"] // not needed for chart, but vue uses them for table headings
-	options2.tooltip = {
-		y: {
+	options2.tooltip.y = {
 			formatter: (val, options) => {
 				const percent = options.globals.seriesPercent[options.seriesIndex][0]
 				return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
 			}
 		}
-	}
+
 
 
 

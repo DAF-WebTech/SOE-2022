@@ -17,8 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = years
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Number of entries"
-	// options1.yaxis.labels.formatter = val => `${val / 1000}k`
-	// options1.tooltip = { y: { formatter: val => val.toLocaleString() } }
+
 
 	soefinding.state.chart1 = {
 		options: options1,

@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		else
 			return `${val / 1000}K`
 	}
-	options3.tooltip = { y: { formatter: val => val.toLocaleString() } }
+	options3.tooltip .y = { formatter: val => val.toLocaleString() } 
 
 	soefinding.state.chart3 = {
 		options: options3,

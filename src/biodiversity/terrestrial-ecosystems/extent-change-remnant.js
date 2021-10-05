@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = soefinding.getDefaultColumnChartOptions()
 	options2.chart.id = "chart2"
-	options2.tooltip = { y: { formatter: val => `${val.toLocaleString()}ha` } }
+	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}ha` } 
 	options2.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].labels2
 	options2.xaxis.labels = {
 		trim: true,
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.xaxis.title.text = "Hectares lost"
 	options3.yaxis.title.text = "Year"
 	options3.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
-	options3.tooltip = { y: { formatter: val => val.toLocaleString() } }
+	options3.tooltip.y = { formatter: val => val.toLocaleString() } 
 	options3.legend.labels = { trim: true }
 	//options3.legend.formatter = val => val.substring(0, 12) + "…"
 	options3.legend.position = "bottom"

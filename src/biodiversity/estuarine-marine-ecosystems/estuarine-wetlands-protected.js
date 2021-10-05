@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	 }]
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
-	options1.tooltip = { y: { formatter: val => val.toLocaleString() } }
+	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
 	options1.xaxis.categories = series1Keys
 	options1.xaxis.labels = { trim: true, maxHeight: 160 }
 	options1.xaxis.title.text = "Protected area type"
