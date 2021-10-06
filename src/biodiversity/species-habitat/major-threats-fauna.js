@@ -4,15 +4,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const series = [
 		{
-			name: "Number of threatened species",
+			name: "Number of<br>threatened<br>species",
 			data: soefinding.findingJson.data.map(d => d["Number threatened fauna"])
 		}
 	]
 
-	const options = soefinding.getDefaultLineChartOptions()
+	const options = soefinding.getDefaultColumnChartOptions()
 	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Threat.replace("-", "—"))
-	options.xaxis.title = "Threat"
-	options.yaxis.title = "Number of threatened species"
+	options.xaxis.labels.hideOverlappingLabels = false
+	options.xaxis.labels.trim = true
+	options.xaxis.title.text = "Threat"
+	options.yaxis.title.text = "Number of threatened species"
 
 	soefinding.state.chart1 = {
 		options,
