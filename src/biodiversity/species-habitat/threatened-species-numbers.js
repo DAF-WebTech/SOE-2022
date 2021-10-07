@@ -1,3 +1,5 @@
+// this is used by both flora and fauna
+
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
