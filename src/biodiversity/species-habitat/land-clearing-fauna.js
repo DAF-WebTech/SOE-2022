@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	// sort our data so pie charts look better
-	soefinding.findingJson.data.sort(function(a, b) {
+	soefinding.findingJson.data.sort(function (a, b) {
 		return b[latest] - a[latest]
 	})
 
@@ -38,13 +38,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	// add our qld object into the map
-	qldArray.sort(function(a, b) {
+	qldArray.sort(function (a, b) {
 		return b[latest] - a[latest]
 	})
 	regions.set("Queensland", qldArray)
 
 	// for each of our regions, sort them so the pie chart looks better
-	for(let [region, data] in regions) {
+	for (let [region, data] in regions) {
 
 	}
 
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		// series 1 is the last year values, in a pie chart
 		soefinding.findingContent[region] = {
 			series1: data.map(d => d[latest]),
-			labels: data.map(d => d["Clearing type"]) 
+			labels: data.map(d => d["Clearing type"])
 		}
 
 		//chart 2, line chart, all regions all years
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			years.forEach(y => {
 				totalItem[y] += d[y]
 			})
-		})		
+		})
 		soefinding.findingContent[region].series3 = [{
 			name: "Hectares",
 			data: years.map(y => totalItem[y])
@@ -108,12 +108,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.yaxis.title.text = "Hectares"
 	options2.yaxis.labels.formatter = val => {
 		if (val >= 1000000)
-			return `${val/1000000}M`
-		if (val >= 1000) 
-			return `${val/1000}K`
+			return `${val / 1000000}M`
+		if (val >= 1000)
+			return `${val / 1000}K`
 		return val
 	}
-	options2.tooltip.y = { formatter: val => `${val.toLocaleString()} ha.`}
+	options2.tooltip.y = { formatter: val => `${val.toLocaleString()} ha.` }
 
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
@@ -136,9 +136,9 @@ document.addEventListener("DOMContentLoaded", function () {
 				let retVal = "Proportion of replacement landcover (clearing type) in threatened fauna habitat"
 				if (soefinding.state.currentRegionName != "Queensland")
 					retVal += " in"
-					if (!soefinding.state.currentRegionName.startsWith("South") && ! soefinding.state.currentRegionName.startsWith("Cape"))
-						retVal += " the "
-					retVal += `${soefinding.state.currentRegionName}`
+				if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
+					retVal += " the "
+				retVal += `${soefinding.state.currentRegionName}`
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
@@ -146,9 +146,9 @@ document.addEventListener("DOMContentLoaded", function () {
 				let retVal = "Trends in replacement landcover (clearing type) in threatened fauna habitat"
 				if (soefinding.state.currentRegionName != "Queensland")
 					retVal += " in"
-					if (!soefinding.state.currentRegionName.startsWith("South") && ! soefinding.state.currentRegionName.startsWith("Cape"))
-						retVal += " the "
-					retVal += `${soefinding.state.currentRegionName}`
+				if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
+					retVal += " the "
+				retVal += `${soefinding.state.currentRegionName}`
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
@@ -156,9 +156,9 @@ document.addEventListener("DOMContentLoaded", function () {
 				let retVal = "Trend in total replacement landcover (clearing type) in threatened fauna habitat"
 				if (soefinding.state.currentRegionName != "Queensland")
 					retVal += " in"
-					if (!soefinding.state.currentRegionName.startsWith("South") && ! soefinding.state.currentRegionName.startsWith("Cape"))
-						retVal += " the "
-					retVal += `${soefinding.state.currentRegionName}`
+				if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
+					retVal += " the "
+				retVal += `${soefinding.state.currentRegionName}`
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
