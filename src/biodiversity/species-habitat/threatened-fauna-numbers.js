@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => "Numbers of threatened fauna (<i>Nature Conservation Act 1992</i> Extinct, Extinct in the Wild, Critically Endangered, Endangered, and Vulnerable) by species group"
+			heading1: () => "Numbers of threatened ${soefinding.biota} (<i>Nature Conservation Act 1992</i> Extinct, Extinct in the Wild, Critically Endangered, Endangered, and Vulnerable) by species group"
 		},
 		methods: {
 			formatter1: val => val
