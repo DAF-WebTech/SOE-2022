@@ -1,3 +1,5 @@
+// this is used by both fauna and flora
+
 document.addEventListener("DOMContentLoaded", function () {
 
 
@@ -170,8 +172,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened fauna habitat and ${this.latestYear} remnant habitat by species group` },
-			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened fauna habitat that is remnant and non-remnant habitat, ${this.latestYear}` },
+			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat and ${this.latestYear} remnant habitat by species group` },
+			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat that is remnant and non-remnant habitat, ${this.latestYear}` },
 			heading3: function () { return `Trend in threatened species habitat, for ${this.currentRegionName}` },
 			heading4: function () { return `Proportion of pre-clear threatened ${this.currentSpecies} habitat by bioregion` }
 		},
