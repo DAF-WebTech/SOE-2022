@@ -1,201 +1,164 @@
-// this is used by both fauna and flora
+// used by fauna and flora
+
+"use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
 
+	const yearKeys = soefinding.findingJson.meta.fields.slice(3)
+	const latestYear = yearKeys.at(-1)
 
-	soefinding.yearKeys = soefinding.findingJson.meta.fields.slice(3);
-	soefinding.state.latestYear = soefinding.yearKeys[soefinding.yearKeys.length - 1];
-	soefinding.regions = {};
-	soefinding.findingJson.data.forEach(function (row) {
-		if (!soefinding.regions[row.Region]) {
-			soefinding.regions[row.Region] = [];
-		}
-		soefinding.regions[row.Region].push(row);
-	});
-	soefinding.regionNames = Object.keys(soefinding.regions);
-	soefinding.speciesGroups = [];
-	soefinding.regions[soefinding.state.currentRegionName].forEach(function (row) {
-		soefinding.speciesGroups.push(row.Group);
-	});
+	const regions = {}
+	soefinding.findingJson.data.forEach(d => {
+		if (! regions[d.Region] ) 
+			regions[d.Region] = []
 
-	soefinding.regionNames.forEach(function (regionName) {
-		// findingContent holds the html and data series for each region
-		soefinding.findingContent[regionName] = {
-			html: "",
-			app1: [],
-			app2: [],
-			app3: [],
-			app4: [],
-		};
+		d.Remnant = d[latestYear]
+		d["Non-remnant"] = d["Pre-clear"] - d.Remnant
+		regions[d.Region].push(d)
+	})
 
-		// do some work to normalise the json to apex chart format, chart 1
-		const series = [
-			{
-				name: "Pre-clear",
-				data: [],
-			},
-			{
-				name: "Remnant",
-				data: [],
-			},
-		];
-		soefinding.regions[regionName].forEach(function (row, i) {
-			series[0].data.push(row["Pre-clear"]);
-			series[1].data.push(row[soefinding.state.latestYear]);
-		});
-		soefinding.findingContent[regionName].app1 = series;
+	const speciesNames = regions.Queensland.map(d => d.Group) 
 
-		// chart 2 -- normalise date to apex charts format
-		const series2 = [
-			{
-				name: "Remnant",
-				data: [],
-			},
-			{
-				name: "Non-remnant",
-				data: [],
-			},
-		];
-		soefinding.regions[regionName].forEach(function (row, i) {
-			series2[0].data.push(row[soefinding.state.latestYear]);
-			series2[1].data.push(row["Pre-clear"] - row[soefinding.state.latestYear]);
-		});
-		soefinding.findingContent[regionName].app2 = series2;
+	const series1Keys = ["Pre-clear", "Remnant"]
+	for(let region in regions) {
+		soefinding.findingContent[region] = {series1: series1Keys.map(k => {
+			return {
+				name: k,
+				data: regions[region].map(d => d[k])
+			}
+		})
+	}}
 
-		// chart 3 -- normalise date to apex charts format
-		const series3 = [];
-		soefinding.speciesGroups.forEach(function (group, index) {
-			const data = [];
-			soefinding.yearKeys.forEach(function (key) {
-				const item = soefinding.regions[regionName][index][key];
-				data.push(item);
-			});
-			series3.push({ name: group, data: data });
-		});
-		soefinding.findingContent[regionName].app3 = series3;
-
-		if (regionName == "Queensland") {
-			// chart 4 -- normalise date to apex charts format
-			soefinding.speciesPreClear = {};
-			soefinding.speciesGroups.forEach(function (species, i) {
-				soefinding.speciesPreClear[species] = [];
-				soefinding.regionNames.forEach(function (key) {
-					if (key == "Queensland") return; //don't do Queensland
-					soefinding.speciesPreClear[species].push(
-						soefinding.regions[key][i]["Pre-clear"]
-					);
-				});
-			});
-		}
-	});
-
-	//save the default html we received from the server
-	soefinding.findingContent[soefinding.firstChildPage].html = document.getElementById(
-		"findingTextContents"
-	).innerHTML;
-
-	// create vue app instances
-	// create the vue instance for first chart, our column chart
-	var options1 = soefinding.getDefaultBarChartOptions();
-	options1.xaxis.categories = soefinding.speciesGroups;
-	options1.xaxis.title.text = "Fauna Group";
-	options1.yaxis.title.text = "Hectares";
-	options1.yaxis.labels.formatter = function (val) {
-		return val / 1000000 + "M";
+	const options1 = soefinding.getDefaultColumnChartOptions()
+	options1.chart.id = "chart1"
+	options1.xaxis.categories = speciesNames
+	options1.xaxis.title.text =  `${soefinding.biota.toUpperCase()} Group`
+	options1.yaxis.title.text = "Hectares"
+	options1.yaxis.labels.formatter = val => {
+		if ( val >= 1000000 )
+			return `${val/1000000}M` 
+		else if (val >= 1000) 
+			return `${val/1000}K`
+		else
+			return val
 	}
-	options1.tooltip.y = {
-		formatter: function (val) {
-			return val.toLocaleString() + " ha";
-		},
-	}
-
-	// set up our second chart/table app, which is a stacked column
-	var options2 = soefinding.getPercentStackedBarChartOptions();
-	options2.xaxis.categories = soefinding.speciesGroups;
-	options2.xaxis.title.text = "Fauna Group";
-	options2.yaxis.title.text = "Proportion";
-	options2.tooltip.y = {
-		formatter: function (val) {
-			return val.toLocaleString() + " ha";
-		},
-	}
-
-	// set up our third chart/table app which is lines for each species
-
-	var options3 = soefinding.getDefaultLineChartOptions();
-	options3.xaxis.categories = soefinding.yearKeys;
-	options3.xaxis.title.text = { text: "Year" };
-	options3.yaxis.labels.formatter = function (val, index) {
-		return val / 1000000 + "M";
-	}
-	options3.yaxis.title.text = { text: "Hectares" };
-	options3.chart.events = {
-		legendClick: function (chartContext, seriesIndex, config) {
-			var name = soefinding.speciesGroups[seriesIndex];
-			soefinding.app4.series = soefinding.speciesPreClear[name];
-			soefinding.app4.speciesName = name;
-		},
-	};
-
-	// set up our fourth chart/table which is a pie
-	var options4 = soefinding.getDefaultPieChartOptions();
-	options4.labels = soefinding.regionNames.slice(1); // remove leading "Queensland"
-	options4.xaxis = { categories: options4.labels };
+	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
 
 	soefinding.state.chart1 = {
 		options: options1,
-		series: soefinding.findingContent[soefinding.state.currentRegionName].app1,
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series1,
 		chartactive: true,
-	};
+	}
+
+
+	
+	// chart 2  a stacked column percent chart
+	const series2Keys = ["Remnant", "Non-remnant"]
+	for(let region in regions) {
+		soefinding.findingContent[region].series2 = series2Keys.map(k => {
+			return {
+				name: k,
+				data: regions[region].map(d => d[k])
+			}
+		})
+	}
+
+
+	const options2 = soefinding.getPercentStackedBarChartOptions()
+	options2.chart.id = "chart2"
+	options2.xaxis.categories = speciesNames
+	options2.xaxis.title.text =  `${soefinding.biota.toUpperCase()} Group`
+	options2.yaxis.title.text = "Proportion"
+	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}  ha.` }
 
 	soefinding.state.chart2 = {
 		options: options2,
-		series: soefinding.findingContent[soefinding.state.currentRegionName].app2,
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
 		chartactive: true,
-	};
+	}
 
-	soefinding.state.chart3 = {
-		options: options3,
-		series: soefinding.findingContent[soefinding.state.currentRegionName].app3,
-		chartactive: true,
-	};
+	// create the species items for checkbox list and series 3 data
+	soefinding.state.species = {}
+	speciesNames.forEach((s, i) => { 
+		soefinding.state.species[s] = {
+			checked: i == 0,
+			name: s,
+			chart3active: true,
+			chart4active: true,
+			regions: {},
+			nullSeries: false
+		}
+		for(let region in regions) {
+			const item = regions[region].find(d => d.Group == s)
+			soefinding.state.species[s].regions[region] = { 
+				isSeries3Null: false, // some have all 0 for data, so we show just the table if that happens
+				series3: [{
+					name: "Habitat",
+					data: yearKeys.map(y => item[y])
+				}]
+			}
+			if (soefinding.state.species[s].regions[region].series3[0].data.every(d => d == 0))
+				soefinding.state.species[s].regions[region].isSeries3Null = true
+		}
+	})
 
-	soefinding.state.chart4 = {
-		options: options4,
-		series: soefinding.speciesPreClear["Birds"],
-		chartactive: true,
-	};
 
-	//
+	//options for chart 3 in the species list
+	const options3 = soefinding.getDefaultLineChartOptions()
+	options3.chart.id = "chart3"
+	options3.xaxis.categories = yearKeys
+	options3.xaxis.title.text = "Year"
+	options3.yaxis.title.text = "Hectares"
+	options3.yaxis.labels.formatter = options1.yaxis.labels.formatter
+	options3.yaxis.showForNullSeries = false
+	options3.tooltip.y = { formatter: options1.tooltip.y.formatter }
+	soefinding.state.options3 = options3
+
+
+	// chart 4 is a pie chart for qld only
+	speciesNames.forEach(s => {
+		soefinding.state.species[s].regions.Queensland.series4 = soefinding.findingJson.data
+				.filter(d => d.Group == s && d.Region != "Queensland")
+				.map(d => d["Pre-clear"])
+	})
+
+	soefinding.state.options4 = soefinding.getDefaultPieChartOptions()
+	soefinding.state.options4.labels = Object.keys(regions).slice(1)
+	soefinding.state.options4.tooltip = { y: { formatter: (val, options) => {
+		const percent = options.globals.seriesPercent[options.seriesIndex][0]
+		return `${val.toLocaleString()} ha (${percent.toFixed(1)}%)`
+	}}}
+	soefinding.state.options4.xaxis.categories = ["Region", "Pre-clear (ha)"]
+
+
 
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat and ${this.latestYear} remnant habitat by species group` },
-			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat that is remnant and non-remnant habitat, ${this.latestYear}` },
-			heading3: function () { return `Trend in threatened species habitat, for ${this.currentRegionName}` },
+			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat and ${latestYear} remnant habitat by species group` },
+			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat that is remnant and non-remnant habitat, ${latestYear}` },
 			heading4: function () { return `Proportion of pre-clear threatened ${this.currentSpecies} habitat by bioregion` }
 		},
-		methods : {
-		    formatter1: val => val.toLocaleString()
+		methods: {
+			formatter1: val => val.toLocaleString()
 		}
 	});
 
 
 	window.soefinding.onRegionChange = function () {
+
 		// set the data series in each of the vue apps, for the current region
-		soefinding.state.chart1.series =
-			this.findingContent[this.state.currentRegionName].app1;
-		soefinding.state.chart2.series =
-			this.findingContent[this.state.currentRegionName].app2;
-		soefinding.state.chart3.series =
-			this.findingContent[this.state.currentRegionName].app3;
-		soefinding.state.chart4.series =
-			this.findingContent[this.state.currentRegionName].app4;
+		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
+		ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
+
+		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
+		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
+
+
 
 		soefinding.loadFindingHtml();
-	};
+	}
 
 
 })
