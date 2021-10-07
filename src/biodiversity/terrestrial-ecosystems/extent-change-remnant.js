@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		y: {
 			formatter: (val, options) => {
 				const percent = options.globals.seriesPercent[options.seriesIndex][0]
-				return `${val.toLocaleString()}ha (${percent.toFixed(1)}%)`
+				return `${val.toLocaleString()} ha. (${percent.toFixed(1)}%)`
 			}
 		}
 	}
