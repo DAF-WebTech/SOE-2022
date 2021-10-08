@@ -1,3 +1,4 @@
+//used by flora and fauna
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -143,20 +144,20 @@ document.addEventListener("DOMContentLoaded", function () {
 				return retVal
 			},
 			heading2: () => {
-				let retVal = "Trends in replacement landcover (clearing type) in threatened fauna habitat"
+				let retVal = `Trends in replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
 				if (soefinding.state.currentRegionName != "Queensland")
 					retVal += " in"
-				if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
+				if (!soefinding.state.currentRegionName.includes("Queensland"))
 					retVal += " the "
 				retVal += `${soefinding.state.currentRegionName}`
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
 			heading3: () => {
-				let retVal = "Trend in total replacement landcover (clearing type) in threatened fauna habitat"
+				let retVal = `Trend in total replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
 				if (soefinding.state.currentRegionName != "Queensland")
-					retVal += " in"
-				if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
+					retVal += " in "
+				if (!soefinding.state.currentRegionName.includes("Queensland"))
 					retVal += " the "
 				retVal += `${soefinding.state.currentRegionName}`
 				retVal += `, ${latest.replace("-", "–")}` // en dash
