@@ -28,11 +28,23 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		})
 	}}
+	
+	function justify(s) {
+		const a = s.split(" ")
+		const ret = [a.shift()]
+		while (a.length > 0) {
+			if (ret[ret.length-1].length + a[0].length < 15)
+				ret[ret.length-1] += " " + a.shift()
+			else
+				ret.push(a.shift())
+		}
+		return ret
+	}
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.chart.id = "chart1"
-	options1.xaxis.categories = speciesNames
-	options1.xaxis.title.text =  `${soefinding.biota.toUpperCase()} Group`
+	options1.xaxis.categories = speciesNames.map(n => justify(n))
+	options1.xaxis.title.text =  `F${soefinding.biota.slice(1)} Group`
 	options1.yaxis.title.text = "Hectares"
 	options1.yaxis.labels.formatter = val => {
 		if ( val >= 1000000 )
@@ -66,10 +78,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = soefinding.getPercentStackedBarChartOptions()
 	options2.chart.id = "chart2"
-	options2.xaxis.categories = speciesNames
-	options2.xaxis.title.text =  `${soefinding.biota.toUpperCase()} Group`
+	options2.xaxis.categories = speciesNames.map(n => justify(n))
+	options2.xaxis.title.text =  `F${soefinding.biota.slice(1)} Group`
 	options2.yaxis.title.text = "Proportion"
-	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}  ha.` }
+	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}  ha.` } //todo
+	delete options2.yaxis.forceNiceScale
 
 	soefinding.state.chart2 = {
 		options: options2,
