@@ -135,31 +135,34 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => {
 				let retVal = "Proportion of replacement landcover (clearing type) in threatened fauna habitat"
-				if (soefinding.state.currentRegionName != "Queensland")
-					retVal += " in"
-				if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
-					retVal += " the "
-				retVal += `${soefinding.state.currentRegionName}`
+				if (soefinding.state.currentRegionName != "Queensland") {
+					retVal += " in "
+					if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
+						retVal += " the "
+					retVal += `${soefinding.state.currentRegionName}`
+				}
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
 			heading2: () => {
 				let retVal = `Trends in replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
-				if (soefinding.state.currentRegionName != "Queensland")
-					retVal += " in"
-				if (!soefinding.state.currentRegionName.includes("Queensland"))
-					retVal += " the "
-				retVal += `${soefinding.state.currentRegionName}`
+				if (soefinding.state.currentRegionName != "Queensland") {
+					retVal += " in "
+					if (!soefinding.state.currentRegionName.includes("Queensland"))
+						retVal += " the "
+					retVal += `${soefinding.state.currentRegionName}`
+				}
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
 			heading3: () => {
 				let retVal = `Trend in total replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
-				if (soefinding.state.currentRegionName != "Queensland")
+				if (soefinding.state.currentRegionName != "Queensland") {
 					retVal += " in "
-				if (!soefinding.state.currentRegionName.includes("Queensland"))
-					retVal += " the "
-				retVal += `${soefinding.state.currentRegionName}`
+					if (!soefinding.state.currentRegionName.includes("Queensland"))
+						retVal += " the "
+					retVal += `${soefinding.state.currentRegionName}`
+				}
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
