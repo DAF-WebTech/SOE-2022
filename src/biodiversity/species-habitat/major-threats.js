@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const series = [
 		{
 			name: "Number of<br>threatened<br>species",
-			data: soefinding.findingJson.data.map(d => d["Number threatened fauna"])
+			data: soefinding.findingJson.data.map(d => d[`Number threatened ${soefinding.biota}`])
 		}
 	]
 
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => "Major threats to fauna species, 2015 TODO fix year",
+			heading1: () => "Major threats to ${soefinding.biota} species, 2024 TODO fix year",
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
