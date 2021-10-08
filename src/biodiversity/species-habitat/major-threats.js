@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => "Major threats to ${soefinding.biota} species, 2024 TODO fix year",
+			heading1: () => `Major threats to ${soefinding.biota} species, 2024 TODO fix year`,
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
