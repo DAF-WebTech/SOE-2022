@@ -16,15 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultBarChartOptions()
 	options1.xaxis.categories = soefinding.yearKeys
 	options1.xaxis.title.text = "Year"
+	options1.xaxis.axisTicks = {show: false }
+	options1.xaxis.labels.rotateAlways = true
+	options1.tooltip.y = { formatter: val => `${val} days` }
 	options1.yaxis.title.text = "Number of days"
-	options1.tooltip.y = {
-		formatter: function (val) {
-			return `${val} days`;
-	    }
-	}
-	options1.yaxis.labels.formatter = function (val) {
-		return val
-	}
+	options1.yaxis.labels.formatter = val => val
 
 
 	soefinding.state.chart1 = {
