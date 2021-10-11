@@ -18,15 +18,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultBarChartOptions()
 	options1.xaxis.categories = soefinding.yearKeys
 	options1.xaxis.title.text = "Year"
+	options1.xaxis.axisTicks = { show: false }
+	options1.xaxis.labels.rotateAlways = true
 	options1.yaxis.title.text = "Number of days"
-	options1.tooltip.y = {
-		formatter: function (val) {
-			return val;
-	    }
-	}
-	options1.yaxis.labels.formatter = function (val) {
-		return val
-	}	
+	options1.yaxis.forceNiceScale = false
+	options1.yaxis.min = 0
+	options1.yaxis.max = 40
+	options1.yaxis.tickAmount = 4
 
 
 	soefinding.state.chart1 = {
@@ -45,8 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: soefinding.yearKeys.map(y => d[y])
 		}
 	})
+
+	const options2 = JSON.parse(JSON.stringify(options1))
+	options2.yaxis.max = 30
+	options2.yaxis.tickAmount = 6
+
 	soefinding.state.chart2 = {
-		options: options1,
+		options: options2,
 		series: daysExceeded25Series,
 		chartactive: true,
 	};
@@ -62,8 +65,13 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: soefinding.yearKeys.map(y => d[y])
 		}
 	})
+
+	const options3 = JSON.parse(JSON.stringify(options1))
+	options3.yaxis.labels.formatter = val => val.toFixed(0)
+	options3.tooltip.y = {formatter: val => val }
+
 	soefinding.state.chart3 = {
-		options: options1,
+		options: options3,
 		series: concentrations10Series,
 		chartactive: true,
 	};
@@ -79,8 +87,15 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: soefinding.yearKeys.map(y => d[y])
 		}
 	})
+
+	const options4 = JSON.parse(JSON.stringify(options1))
+	options4.yaxis.max = 10
+	options4.yaxis.tickAmount = 5
+	options4.yaxis.labels.formatter = val => val.toFixed(0)
+	options4.tooltip.y = {formatter: val => val }
+
 	soefinding.state.chart4 = {
-		options: options1,
+		options: options4,
 		series: concentrations25Series,
 		chartactive: true,
 	};
@@ -106,4 +121,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 })
-
