@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// create the vue instance for first chart, our column chart
 	const options1 = soefinding.getDefaultLineChartOptions()
 	options1.xaxis.categories = soefinding.yearKeys
+	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Kilometres travelled (billions)"
 	options1.tooltip.y = {
 		formatter: val => (val*1000000000).toLocaleString()
