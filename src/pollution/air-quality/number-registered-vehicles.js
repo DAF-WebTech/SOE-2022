@@ -31,14 +31,21 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     // chart 1. proportion of registrations
-    const latestProportionseries = Object.keys(vehicles).map(v => {
-        return vehicles[v].vehicleYearTotals[latestYear]
+    // first sort them
+    const latestProportionData = Object.keys(vehicles).map( v => {
+        return { name: v,
+                 value: vehicles[v].vehicleYearTotals[latestYear]
+    }
     })
+    latestProportionData.sort(function(a, b) {
+        return b.value - a.value
+    })
+    const latestProportionSeries = latestProportionData.map(v => v.value)
 
     // create the vue instance for first chart, our column chart
     const options1 = soefinding.getDefaultPieChartOptions()
     // the pie charts uses labels, but the table vue is looking for categories
-    options1.labels = Object.keys(vehicles)
+    options1.labels = latestProportionData.map(v => v.name)
     options1.tooltip = {
         y: {
             formatter: (val, options) => {
@@ -51,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     soefinding.state.chart1 = {
         options: options1,
-        series: latestProportionseries,
+        series: latestProportionSeries,
         chartactive: true,
     };
 
@@ -63,6 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return vehicles[v].vehicleYearTotals[y] / yearTotals[y] * 100.0
                 })
         }
+    })
+    yearlyProportionSeries.sort(function(a, b) {
+        return b.data[b.data.length-1] - a.data[a.data.length-1]
     })
     const options2 = soefinding.getDefaultLineChartOptions()
     options2.xaxis.categories = yearKeys
@@ -91,7 +101,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
         }
     })
-    const options3 = JSON.parse(JSON.stringify(options2))
+    yearlyNumberSeries.sort(function(a, b) {
+        return b.data[b.data.length-1] - a.data[a.data.length-1]
+    })
+    const options3 = soefinding.getDefaultStackedColumnChartOptions()
+    options3.xaxis.categories = yearKeys
     options3.xaxis.title.text = "Year"
     options3.yaxis.title.text = "Registrations"
     options3.yaxis.labels.formatter = val =>  `${Math.round(val/1000000)}M`
@@ -109,17 +123,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // chart 4 proportion of electric
-    const electricProportionseries = Object.keys(vehicles).map(v => {
+    const electricProportionItems = Object.keys(vehicles).map(v => {
         const electric = vehicles[v].data.filter(d => d["Fuel Type"].includes("Electric"))
         const count = electric.reduce( (acc, curr) => { return acc + curr[latestYear]}, 0)
-        return count 
+        return { name: v,
+                count
+        } 
     })
+    electricProportionItems.sort(function(a, b) {
+        return b.count - a.count
+    })
+    const electricProportionSeries = electricProportionItems.map(e => e.count)
 
     // create the vue instance 
     const options4 = JSON.parse(JSON.stringify(options1))
     // the pie charts uses labels, but the table vue is looking for categories
-    options4.labels = Object.keys(vehicles)
-    options4.xaxis.categories[1] = "Electrified Vehicle Registrations"
+    options4.labels = electricProportionItems.map(e => e.name)
+    options4.xaxis.categories[1] = "Electrified<br>Vehicle<br>Registrations"
     options4.tooltip = {
         y: {
             formatter: (val, options) => {
@@ -131,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     soefinding.state.chart4 = {
         options: options4,
-        series: electricProportionseries,
+        series: electricProportionSeries,
         chartactive: true,
     };
 
@@ -160,13 +180,15 @@ document.addEventListener("DOMContentLoaded", function () {
             data: fuelTypes[ft].data
         }
     })
-    console.log(fuelTypeSeries)
-    const options5 = soefinding.getDefaultBarChartOptions()
-    options5.chart.stacked = true
+    fuelTypeSeries.sort(function(a,b) {
+        return b.data.at(-1) - a.data.at(-1)
+    })
+
+    const options5 = soefinding.getDefaultStackedColumnChartOptions()
     options5.xaxis.categories = yearKeys
     options5.xaxis.title.text = "Year"
     options5.yaxis.title.text = "Registrations"
-    //options5.yaxis.labels.formatter = val =>  `${Math.round(val/1000000)}M`
+    options5.yaxis.labels.formatter = val => val >= 1000000 ? `${Math.round(val/1000000)}M` : ( val >= 1000 ? `${Math.round(val/1000)}K` : val)
     options5.tooltip.y = {
         formatter: val => `${val.toLocaleString()}`
     }
@@ -199,4 +221,3 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 })
-
