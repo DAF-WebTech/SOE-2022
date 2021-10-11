@@ -18,8 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	// create the vue instance for first chart, our column chart
 	const options1 = soefinding.getDefaultBarChartOptions()
 	options1.xaxis.categories = soefinding.yearKeys
+	options1.xaxis.labels.rotateAlways = true
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Parts per million"
+	options1.yaxis.forceNiceScale = false
 	options1.yaxis.tickAmount = 10
 	options1.yaxis.min = 0
 	options1.yaxis.max = .1
