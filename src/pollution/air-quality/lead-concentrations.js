@@ -3,11 +3,18 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.fields = soefinding.findingJson.meta.fields.slice(2);
+	const names = [
+			["SEQ", "major road"], 
+			["SEQ", "suburban"], 
+			["Mt Isa", "residential"], 
+			["Townsville", "peak (industrial)"],
+			["NEPM", "Standard"]
+	]
 
 	// chart 1. lead particles
-	const coSeries = soefinding.fields.map(f => {
+	const coSeries = soefinding.fields.map((f, i) => {
 		return {
-			name: f,
+			name: names[i],
 			data: soefinding.findingJson.data.map(d => {
 				return {
 					x: `${d.Year}-${String(d.Month).padStart(2, "0")}`,
