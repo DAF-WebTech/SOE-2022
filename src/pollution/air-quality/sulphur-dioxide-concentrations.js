@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// create the vue instance for first chart, our column chart
 	const options1 = soefinding.getDefaultBarChartOptions()
 	options1.xaxis.categories = soefinding.yearKeys
+	options1.xaxis.tickPlacement = "between"
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Parts per million"
 	options1.yaxis.tickAmount = 6
