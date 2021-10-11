@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.yaxis.min = 0
 	options2.yaxis.tickAmount = 6
 	options2.yaxis.labels.formatter = val => val.toFixed(2)
-    options2.tooltip.y = { formatter: val=> `${val} ppm` }
+  options2.tooltip.y = { formatter: val=> `${val} ppm` }
         
     
 
