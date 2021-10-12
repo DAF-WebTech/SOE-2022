@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// chart 6 is the chart that responds to check box clicks
-	soefinding.state.fuelTypes = Object.keys(fuelTypes)
+	soefinding.state.fuelTypes = fuelTypeSeries.map(ft => ft.name)
 
 	const options6 = soefinding.getDefaultLineChartOptions()
 	//options6.legend.show = false
@@ -241,7 +241,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(), //reüse for 3, 4, 5
-			formatter2: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+			formatter2: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+			toggleSeries: evt => {
+				ApexCharts.exec("chart6", "toggleSeries", evt.currentTarget.value)
+			}
+
 		},
 		mounted: function () {
 			// for whatever f-ed up reason, vue can't bind accent-color
