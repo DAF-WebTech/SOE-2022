@@ -10,10 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		return {
 			name: d["Emission type"],
 			data: soefinding.yearKeys.map(y => {
-				
+
 				return 100.0 / d[soefinding.yearKeys[0]] * d[y]
 			})
 		}
+	})
+	percentSeries.sort(function (a, b) {
+		return b.data.at(-1) - a.data.at(-1)
 	})
 
 	// create the vue instance for first chart, our column chart
@@ -25,11 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.min = 0
 	options1.yaxis.max = 400
 	options1.tooltip.y = {
-    	formatter: val => `${val.toLocaleString(undefined, { minimumFractionDigits: 2 })}%`
-    }
-    options1.yaxis.labels.formatter = val =>  `${val}%`
+		formatter: val => `${val.toLocaleString(undefined, { minimumFractionDigits: 2 })}%`
+	}
+	options1.yaxis.labels.formatter = val => `${val}%`
 
-    // create vue instance for first chart
+	// create vue instance for first chart
 	soefinding.state.chart1 = {
 		options: options1,
 		series: percentSeries,
@@ -44,24 +47,24 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: soefinding.yearKeys.map(y => d[y])
 		}
 	})
+	trendSeries.sort(function (a, b) {
+		return b.data.at(-1) - a.data.at(-1)
+	})
 
 	const options2 = JSON.parse(JSON.stringify(options1))
-	delete options2.yaxis.tickAmount 
-	delete options2.yaxis.min 
+	delete options2.yaxis.tickAmount
+	delete options2.yaxis.min
 	delete options2.yaxis.max
 	options2.yaxis.title.text = "Tonnes per annum"
 	options2.tooltip.y.formatter = val => val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? ""
-	options2.yaxis.labels.formatter = val =>  `${val / 1000}k`
-    
+	options2.yaxis.labels.formatter = val => val >= 1000 ? `${val / 1000}k` : val
 
-  
 	// create the vue instance for second chart, 
 	soefinding.state.chart2 = {
 		options: options2,
 		series: trendSeries,
 		chartactive: true,
 	};
-
 
 
 	new Vue({
@@ -73,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
-			formatter2: val => val?.toLocaleString(undefined, { minimumFractionDigits: 1 }) ?? ""
+			formatter2: val => val?.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) ?? ""
 		}
 	});
 
