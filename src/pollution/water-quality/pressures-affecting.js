@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	new Vue({
 		el: "#chartContainer",
-		data: soefinding.state,
+		data: soefinding.findingContent[soefinding.currentRegionName]?.series ?? {data:null},
 		computed: {
 			heading1: () => `Pressures identified in ${this.currentRegionName}`
 		},
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		// chart 1
 		//ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series
+		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName]?.series ?? {data:null}
 
 		// // but we also need this for the chart to update
 		// ApexCharts.exec("chart1", "updateOptions", {
