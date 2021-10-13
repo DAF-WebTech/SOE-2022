@@ -4,13 +4,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const yearKeys = soefinding.findingJson.meta.fields.slice(2)
 	const latestYear = yearKeys[yearKeys.length - 1]
+	const lastFourYears = yearKeys.slice(-4)
 
 	//1. stacked column, all waste types each year
-	const qldItems = soefinding.findingJson.data.filter(d => d["Waste region"] == "Queensland" && d["Waste source"] != "All")
+	const qldItems = soefinding.findingJson.data.filter(d => d["Waste region"] == "Queensland" && d["Waste type"] != "All")
 	const wasteYearSeries = qldItems.map(d => {
 		return {
-			name: d["Waste source"],
-			data: yearKeys.map(y => d[y])
+			name: d["Waste type"],
+			data: lastFourYears.map(y => d[y])
 		}
 	})
 	wasteYearSeries.sort(function (a, b) {
@@ -65,10 +66,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 3 pie, total in latest year for each region
 	const regionItems = soefinding.findingJson.data.filter(d => d["Waste region"] != "Queensland")
-	const regionSeries = regionItems.map(d => d[latestYear])
-	regionSeries.sort(function (a, b) {
-		return b - a
+	regionItems.sort(function (a, b) {
+		return b[latestYear] - a[latestYear]
 	})
+	const regionSeries = regionItems.map(d => d[latestYear])
 
 	const options3 = soefinding.getDefaultPieChartOptions()
 	options3.xaxis.categories = ["Region", "Tonnes"] //ndash
@@ -95,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => "Household waste recovered, by collection type",
+			heading1: () => "Household waste recovered, by waste type",
 			heading2: () => "Trend in total household waste recovered",
 			heading3: () => `Proportion of household waste recovered by region, ${latestYear.replace("-", "–")}`, //ndash
 		},
