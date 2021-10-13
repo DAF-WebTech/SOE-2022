@@ -15,31 +15,45 @@ document.addEventListener("DOMContentLoaded", function () {
 	for (const [region, data] of regions) {
 
 		if (region == "Reef Water Quality report card") {
-			soefinding.findingContent[region].series = {
-				headings: ["Year", "Progress toward the 2025 land management target", "Per cent (%) of land in priority areas managed using best management practice systems for water quality outcomes (soil, nutrient and pesticides)"],
-				data: data.map(d => {
-					return [
-						d.Year,
-						d.Subcatchment,
-						d["Per cent of land in priority areas managed using best management practice systems for water quality outcomes (soil, nutrient and pesticides)"]
-					]
-				})
+			soefinding.findingContent[region] = {
+				series: {
+					headings: ["Year", "Identified pressure", "Per cent (%) of land in priority areas<br>managed using best management practice systems<br>for water quality outcomes (soil, nutrient and pesticides)"],
+					data: data.map(d => {
+						return [
+							d.Year,
+							d.Subcatchment,
+							d["Per cent of land in priority areas managed using best management practice systems for water quality outcomes (soil, nutrient and pesticides)"]
+						]
+					})
+				}
 			}
 		}
 		else {
-			soefinding.findingContent[region].series = {
-				headings: ["Year", "Identified pressure", "Risk level", "Threat level"],
-				data: data.map(d => [d.Year, d["Identified pressure"], d["Risk level"], d["Threat level"]])
+			soefinding.findingContent[region] = {
+				series: {
+					headings: ["Year", "Identified pressure", "Risk level", "Threat level"],
+					data: data.map(d => [d.Year, d["Identified pressure"], d["Risk level"], d["Threat level"]])
+				}
 			}
 		}
 	}
 
+	const noData = ["Queensland", "Healthy Land and Water South East Queensland report card",
+		"Fitzroy Basin report card", "Gladstone Harbour report card", "Mackay–Whitsunday–Isaac report card",
+		"Wet Tropics Waterways report card", "Townsville Dry Tropics report card"]
+
+	noData.forEach(nd => soefinding.findingContent[nd] = { series: { data: null } })
+
+	soefinding.state.series = soefinding.findingContent[soefinding.state.currentRegionName].series
+
 
 	new Vue({
 		el: "#chartContainer",
-		data: soefinding.findingContent[soefinding.currentRegionName]?.series ?? {data:null},
+		data: soefinding.state,
 		computed: {
-			heading1: () => `Pressures identified in ${this.currentRegionName}`
+			heading1: function () {
+				return `Pressures identified in ${this.currentRegionName}`
+			}
 		},
 		methods: {
 			formatter1: val => val ?? "",
@@ -48,23 +62,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
 
-		// chart 1
-		//ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName]?.series ?? {data:null}
-
-		// // but we also need this for the chart to update
-		// ApexCharts.exec("chart1", "updateOptions", {
-		// 	xaxis: { categories: this.findingContent[this.state.currentRegionName].groups }
-		// }, true)
-		// // this works on the table
-		// options1.xaxis.categories = this.findingContent[this.state.currentRegionName].groups
-
-		// // chart 2, pie chart, labels stay the same
-		// ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-		// soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-
+		soefinding.state.series = this.findingContent[this.state.currentRegionName].series
 
 		soefinding.loadFindingHtml()
 	}
