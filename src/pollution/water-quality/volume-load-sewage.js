@@ -24,19 +24,44 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.min = 0
 	options1.yaxis.max = 1500
 
-
 	soefinding.state.chart1 = {
 		options: options1,
 		series: series1,
 		chartactive: true,
 	}
 
+
+	const series2Items = soefinding.findingJson.data.filter(d => d.Variable == "Annual volume (GL)")
+	const series2 = series2Items.map(d => {
+		return {
+			name: d.Region,
+			data: years.map(y => d[y])
+		}
+	})
+
+	const options2 = soefinding.getDefaultLineChartOptions()
+	options2.xaxis.categories = years
+	options2.xaxis.title.text = "Year"
+	options2.yaxis.title.text = "Annual Volume (gigalitres)"
+	options2.yaxis.forceNiceScale = false
+	options2.yaxis.tickAmount = 6
+	options2.yaxis.min = 0
+	options2.yaxis.max = 300
+
+	soefinding.state.chart2 = {
+		options: options2,
+		series: series2,
+		chartactive: true,
+	}
+
+
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
 			heading1: () => "Treated sewage total nitrogen and phosphorous (for SEQ and GBR)",
-			heading2: () => ""
+			heading2: () => "Trends in sewage load volumes, by region"
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
