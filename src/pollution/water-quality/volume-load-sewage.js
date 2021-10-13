@@ -4,12 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const years = soefinding.findingJson.meta.fields.slice(2)
 
-	series1keys = ["Total Nitrogen (tonne)", "Total Phosphorus (tonne)"]
-	series1items = soefinding.findingJson.data.filter(d => series1.includes(d.Variable))
-	const series1 = series1keys.map(k => {
+	const series1Keys = ["Total Nitrogen (tonne)", "Total Phosphorus (tonne)"]
+	const series1 = series1Keys.map(k => {
 		return {
 			name: k,
-			data: years.map(y => series1items.reduce((acc, curr) => {
+			data: years.map(y => soefinding.findingJson.data.filter(d => d.Variable == k).reduce((acc, curr) => {
 				return acc + curr[y]
 			}, 0))
 		}
@@ -17,9 +16,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.xaxis.categories = years
-	options1.xaxis.title.text= "Year"
+	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Load (tonnes)"
-	//options1.yaxis.labels.formatter = val => val.toLocaleString()
+	options1.yaxis.labels.formatter = val => val.toLocaleString()
+	options1.yaxis.forceNiceScale = false
+	options1.yaxis.tickAmount = 6
+	options1.yaxis.min = 0
+	options1.yaxis.max = 1500
 
 
 	soefinding.state.chart1 = {
