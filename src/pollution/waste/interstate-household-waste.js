@@ -17,8 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
-	const options1 = soefinding.getDefaultBarChartOptions()
-	options1.chart.stacked = true
+	const options1 = soefinding.getDefaultStackedColumnChartOptions()
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Tonnes (million)"
@@ -26,6 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
+	options1.yaxis.forceNiceScale = false
+	options1.yaxis.min = 0
+	options1.yaxis.max = 1250000
+	options1.yaxis.tickAmount = 5
+
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -36,12 +40,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	//2. line chart, total items by year
 	const allItem = soefinding.findingJson.data.find(d => d["Waste type"] == "Municipal solid")
-	const totalItemSeries = [{ name: "Tonnes", data: yearKeys.map(y => allItem[y]) }]
+	const totalItemSeries = [{ name: "Tonnes", data: yearKeys.slice(1).map(y => allItem[y]) }]
 
 	const options2 = soefinding.getDefaultLineChartOptions()
 	options2.chart.stacked = true
-	options2.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
+	options2.xaxis.categories = yearKeys.slice(1).map(y => y.replace("-", "–")) // ndash
 	options2.xaxis.title.text = "Year"
+	options2.xaxis.tickPlacement = "between"
 	options2.yaxis.title.text = "Tonnes"
 	options2.yaxis.tickAmount = 7
 	options2.yaxis.min = 40000
@@ -50,6 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.tooltip.y = {
 		formatter: val => `${val}`
 	}
+	
+
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -59,10 +66,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 3. pie lastest other items
-	const latestOtherSeries = sectorItems.map(d => d["2018-19 Other"] ? d["2018-19 Other"] : 0)
-	latestOtherSeries.sort(function (a, b) {
-		return b - a
+	sectorItems.sort(function (a, b) {
+		return b["2018-19 Other"] - a["2018-19 Other"]
 	})
+	const latestOtherSeries = sectorItems.map(d => d["2018-19 Other"] ? d["2018-19 Other"] : 0)
 
 	const options3 = soefinding.getDefaultPieChartOptions()
 	// the pie charts uses labels, but the table vue is looking for categories
@@ -89,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const latestOtherLandfillSeries = keys.map(k =>
 	{
       return {
-      	name: k,
+      	name: k.replace("-", "–").split(" "),  //ndash
       	data: sectorItems.map(d => d[k])
       }
 	})
@@ -97,13 +104,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options4 = soefinding.getDefaultBarChartOptions()
 	options4.chart.stacked = true
-	options4.xaxis.categories = sectorItems.map(d => d["Waste type"].split(" ")) //keys
+	options4.xaxis.categories = sectorItems.map(d => d["Waste type"].split(" ")) 
 	options4.xaxis.title.text = "Type of interstate household waste received"
 	options4.yaxis.title.text = "Tonnes (million)"
-	options4.yaxis.labels.formatter = val => `${val / 1000000}M`
+	options4.yaxis.labels.formatter = val => val == 0 ? 0 : (val >= 100000 ? `${(val / 1000000).toFixed(1)}m` : `${(val / 1000)}k`)
 	options4.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
+	delete options4.xaxis.tickPlacement 
+	
+
+
+
 
 	soefinding.state.chart4 = {
 		options: options4,
@@ -123,7 +135,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Interstate household waste received by landfill and other, 2018–2019"
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString() ?? ""
+			formatter1: val => val?.toLocaleString() ?? "",
+			formatter2: val => val?.toLocaleString() ?? 0,
 		}
 	})
 })

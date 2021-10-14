@@ -23,6 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.tooltip.y = {
 		formatter: val => val.toLocaleString()
 	}
+		options1.yaxis.forceNiceScale = false
+	options1.yaxis.min = 0
+	options1.yaxis.max = 3000000
+	options1.yaxis.tickAmount = 6
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -40,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options2 = soefinding.getDefaultLineChartOptions()
 	options2.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options2.xaxis.title.text = "Year"
+	options2.xaxis.labels.rotateAlways = true
 	options2.yaxis.title.text = "Tonnes (million)"
 	options2.yaxis.labels.formatter = val => {
 		return `${(val / 1000000).toFixed(1)}M`
