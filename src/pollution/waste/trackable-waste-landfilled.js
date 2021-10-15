@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Tonnes"
+	options1.yaxis.forceNiceScale = false
+	options1.yaxis.min = 0
+	options1.yaxis.max = 1200000
+	options1.yaxis.tickAmount = 6
 	options1.yaxis.labels.formatter = val => {
 		return val < 1000000 ? `${val / 1000}K` : `${val / 1000000}M`
 	}

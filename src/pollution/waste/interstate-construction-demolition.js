@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", function () {
     options1.tooltip.y = {
         formatter: val => `${val.toLocaleString()}`
     }
+    options1.yaxis.forceNiceScale = false
+    options1.yaxis.min = 0
+    options1.yaxis.max = 1250000
+    options1.yaxis.tickAmount = 5
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -47,6 +51,10 @@ document.addEventListener("DOMContentLoaded", function () {
     options2.tooltip.y = {
         formatter: val => `${val.toLocaleString()}`
     }
+    options1.yaxis.forceNiceScale = false
+    options1.yaxis.min = 0
+    options1.yaxis.max = 1200000
+    options1.yaxis.tickAmount = 6
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -91,10 +99,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	options4.xaxis.categories = wasteTypes.map(d => d["Waste type"].split(" ")) //keys
 	options4.xaxis.title.text = "Type of interstate construction and demolition waste received"
 	options4.yaxis.title.text = "Tonnes (million)"
-	options4.yaxis.labels.formatter = val => `${val / 1000000}M`
+	options4.yaxis.labels.formatter = val => { 
+		if (val == 0) return 0
+		if (val >= 1000000) return "1M" 
+		return `${(val / 1000).toFixed(0)}K`
+	}
 	options4.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
+	options4.yaxis.labels.minWidth = 100
 
 	soefinding.state.chart4 = {
 		options: options4,
@@ -116,9 +129,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val?.toLocaleString() ?? ""
 		},
 		mounted: function() { 
-          const divs = document.querySelectorAll("div.region-info")
-          divs[0].querySelector("th").textContent = "Waste type"
-          divs[1].querySelector("th").textContent = "Year range"
+//           const divs = document.querySelectorAll("div.region-info")
+//           divs[0].querySelector("th").textContent = "Waste type"
+//           divs[1].querySelector("th").textContent = "Year range"
 		}
 
 	})

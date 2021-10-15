@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
+
 	const options1 = soefinding.getDefaultBarChartOptions()
 	options1.xaxis.categories = Object.keys(materials)
 	options1.xaxis.title.text = "Litter Type"
@@ -73,6 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.legend.inverseOrder = true
 	options3.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options3.xaxis.title.text = "Year"
+	options3.yaxis.labels.formatter = val => `${val.toFixed(0)}`
+	options3.tooltip = { y: {formatter: val => val } }
 
 	Object.keys(extents).forEach((e, i) => {
 		const countAllItems = soefinding.findingJson.data.filter(d =>
@@ -101,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options5 = JSON.parse(JSON.stringify(options3))
 	options5.xaxis.categories = Object.keys(sites)  // not large items
 	options5.yaxis.labels.formatter = val => Math.round(val)
-	options5.tooltip.y.formatter = (val, options) => (options.seriesIndex == 0 ? val : val.toFixed(1))
+	options5.tooltip = { y: { formatter: (val, options) => (options.seriesIndex == 0 ? val : val.toFixed(1))}}
 
 
 	Object.keys(extents).forEach((e, i) => {
@@ -189,14 +192,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			case "Glass":
 				myOptions.yaxis.max = 2
 				myOptions.yaxis.labels.formatter = val => Math.round(val)
-				myOptions.tooltip.y.formatter = val => val
+				myOptions.tooltip = { y: {formatter: val => val } }
 				break
 			case "Metal":
 			case "Paper":
 			case "Plastic":
 			case "Other":
 				myOptions.yaxis.labels.formatter = val => Math.round(val)
-				myOptions.tooltip.y.formatter = val => val
+				myOptions.tooltip = { y: {formatter: val => val } }
 				break
 		}
 

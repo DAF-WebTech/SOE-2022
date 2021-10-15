@@ -17,18 +17,17 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
-	const options1 = soefinding.getDefaultBarChartOptions()
-	//options1.chart.stacked = true
-	options1.legend.inverseOrder = true
+	const options1 = soefinding.getDefaultColumnChartOptions()
+	//options1.legend.inverseOrder = true
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
     options1.xaxis.title.text = "Year"
+    delete options1.xaxis.tickPlacement 
     options1.yaxis.title.text = "Tonnes"
     options1.yaxis.labels.formatter = val =>  `${val/1000000}M`
     options1.tooltip.y = {
         formatter: val => `${val.toLocaleString()}`
     }
-    options1.chart.stacked = true //delete options1.xaxis.tickPlacement, problem with truncations of bar width
-    options1.plotOptions = { bar:  { barHeight: "90%" }}
+	
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -44,6 +43,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options2 = soefinding.getDefaultLineChartOptions()
 	options2.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
     options2.xaxis.title.text = "Year"
+    options2.xaxis.tickPlacement = "between"
+    options2.xaxis.axisTicks = { show: false }
     options2.yaxis.title.text = "Tonnes"
     options2.yaxis.labels.formatter = val => val < 1000000 ? `${val/1000}K` : `${val/1000000}M` 
     options2.tooltip.y = {
@@ -92,8 +93,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	options4.chart.stacked = true
 	options4.xaxis.categories = wasteTypes.map(d => d["Waste type"].split(" ")) //keys
 	options4.xaxis.title.text = "Type of interstate construction and demolition waste received"
+	options4.xaxis.tickPlacement = "between"
 	options4.yaxis.title.text = "Tonnes (million)"
-	options4.yaxis.labels.formatter = val => `${val / 1000000}M`
+	options4.yaxis.labels.formatter = val => {
+		if (val == 0) return 0
+		if (val >= 1000000) return "1M"
+		return `${val/1000}K`
+	}
+	options4.yaxis.labels.minWidth = 20
 	options4.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
@@ -116,11 +123,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? ""
-		},
-		mounted: function() { 
-          const divs = document.querySelectorAll("div.region-info")
-          divs[0].querySelector("th").textContent = "Waste type"
-          divs[1].querySelector("th").textContent = "Year range"
 		}
 
 	})
