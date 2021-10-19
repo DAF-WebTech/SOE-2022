@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
+	soefinding.vueApp = new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
@@ -46,16 +46,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	window.soefinding.onRegionChange = function () {
 		// set the data series in each of the vue apps, for the current region
+		// chart 1
+		soefinding.vueApp.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
 		// chart 2
-		if (this.state.currentRegionName != "Queensland") {
-			ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-			soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-		}
+		// if (this.state.currentRegionName != "Queensland") {
+		// 	ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
+		// 	soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
+		// }
 
-		// chart 3
-		ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
-		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
+		// // chart 3
+		// ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
+		// soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
 
 
 
