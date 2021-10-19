@@ -15,8 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options1 = soefinding.getDefaultLineChartOptions()
+	options1.xaxis.axisTicks = { show: false }
+	options1.xaxis.categories = yearKeys.map(y => [y.slice(0, 4) + "–", y.slice(5)]) // ndash
+	options1.xaxis.tickPlacement = "between"
+	options1.xaxis.labels.rotateAlways = false
 	options1.xaxis.title.text = "Year"
-	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options1.yaxis.title.text = "Number of items per 100m²"
 
 
