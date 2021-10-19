@@ -17,7 +17,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	// 1 - 8, one line chart for each site
 	const headings = []
 	const options = soefinding.getDefaultLineChartOptions()
-	options.xaxis.categories = yearKeys.map(y => y.replace("-", "–"))
+	options.xaxis.axisTicks = { show: false }
+	options.xaxis.categories = yearKeys.map(y => [y.slice(0, 4) + "–", y.slice(5)]) // ndash
+	options.xaxis.labels.rotateAlways = false
+	options.xaxis.tickPlacement = "between"
+	options.xaxis.title.text = "Year"
 	options.xaxis.title.text = "Year"
 	options.yaxis.title.text = "Number of items per 100m²"
 	Object.keys(sites).forEach((s, i) => {
