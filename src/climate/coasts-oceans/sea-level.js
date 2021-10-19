@@ -8,10 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		return {
 			name: m,
 			data: soefinding.findingJson.data.map(d => {
-				return [new Date(d.Year, d.Month - 1).getTime(), d[m]]
+				return { x: `${d.Year}-${d.Month.toString().padStart(2, "0")}`, y: d[m] }
 			})
 		}
 	})
+
 
 	const options = soefinding.getDefaultLineChartOptions()
 	delete options.xaxis.categories
@@ -39,7 +40,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: () => `Trends of mean sea level change from the Australian Baseline Sea Level Monitoring Project sites at Cape Ferguson and Rosslyn Bay for the period 1996 to February 2020`
 		},
 		methods: {
-			formatter1: val => val
+			formatter1: (val, index) => {
+				const sign = val < 0 ? "−" : ""
+				const abs = Math.abs(val)
+				return sign + ( index == 2 ? abs.toFixed(1) : abs)
+			}
 		}
 	});
 })

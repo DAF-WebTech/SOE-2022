@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const keys = soefinding.findingJson.meta.fields.slice(3)
 	const options = soefinding.getDefaultBarChartOptions()
+	options.xaxis.tickPlacement = "between"
 	options.xaxis.title.text = "Incident"
 	options.yaxis.title.text = "Metres"
 	options.yaxis.forceNiceScale = false
@@ -104,7 +105,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Storm tide inundation incidences, 2018–2019",
 		},
 		methods: {
-			formatter1: val => val < 0 ? `−${Math.abs(val)}` : val // use correct unicode
+			formatter1: val => { 
+				const sign = val < 0 ? "−" : "" // use correct unicode
+				const amount = Math.abs(val).toFixed(2)
+				return sign + amount
+			}
 		}
 	});
 

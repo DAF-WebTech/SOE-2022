@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options3 = soefinding.getDefaultLineChartOptions()
-	options3.markers = { size: 4 }
+	options3.markers.size = 4
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"

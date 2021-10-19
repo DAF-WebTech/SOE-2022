@@ -95,11 +95,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.chart.id = "chart2"
 	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}ha` } 
 	options2.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].labels2
-	options2.xaxis.labels = {
-		trim: true,
-		hideOverlappingLabels: false
-	}
-	options1.xaxis.tickPlacement = "between" // not a good option, but it fixes a bug
+	options2.xaxis.labels.trim = true,
+	options2.xaxis.labels.hideOverlappingLabels = false
+
+	options2.xaxis.tickPlacement = "between" // not a good option, but it fixes a bug
 	// where the chart xaxis did not redraw correctly when a) swapping between regions. and then b) clicking one of the legends
 	options2.xaxis.title.text = "Broad Vegetation Group"
 	options2.yaxis.labels.formatter = val => `${val / 1000000}M`

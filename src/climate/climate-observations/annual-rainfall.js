@@ -31,7 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	}
 
-	const options1 = soefinding.getDefaultLineChartOptions();
+	const options1 = soefinding.getDefaultLineChartOptions()
+	options1.stroke = {width: 1.5}
+	options1.markers.size = 0
 	options1.xaxis.categories = soefinding.yearKeys
 	options1.xaxis.title.text = "Year";
 	options1.yaxis.title.text = "Rainfall (millimetres)";

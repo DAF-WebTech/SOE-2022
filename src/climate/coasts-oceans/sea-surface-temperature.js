@@ -5,18 +5,21 @@ document.addEventListener("DOMContentLoaded", function () {
 	const locations = ["Coral Sea", "Northern Tropics"]
 
 	const options1 = soefinding.getDefaultBarChartOptions()
+	options1.forceNiceScale = false
 	options1.xaxis.title.text = "Year"
+	options1.xaxis.labels.rotateAlways = false
+	options1.xaxis.labels.hideOverlappingLabels = true
 	options1.yaxis.title.text = "Temperature change (degrees celsius)"
 	options1.yaxis.tickAmount = 4
 	options1.yaxis.min = -1
 	options1.yaxis.max = 1
 	options1.yaxis.labels.formatter = val => val < 0 ? `−${Math.abs(val).toFixed(1)}` : val.toFixed(1)
+	options1.grid = { xaxis: { lines: { show: true } } }
 	options1.tooltip.y = {
 		formatter: val => val < 0 ? `−${Math.abs(val)}` : val
 	}
 
 	const options2 = JSON.parse(JSON.stringify(options1))
-	options2.forceNiceScale = false
 	options2.yaxis.tickAmount = 6
 	options2.yaxis.min = -0.6
 	options2.yaxis.max = 0.6

@@ -61,14 +61,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			return null
 	}
 
-	const options2 = soefinding.getDefaultLineChartOptions();
+	const options2 = soefinding.getDefaultLineChartOptions()
+	options2.stroke = { width: 1.5 }
+	options2.markers.size = 0
 	options2.xaxis.categories = yearKeys
-	options2.xaxis.title.text = "Year";
-	options2.yaxis.title.text = "Temperature (degrees celsius)";
+	options2.xaxis.title.text = "Year"
+	options2.yaxis.title.text = "Temperature (degrees celsius)"
 	options2.yaxis.labels.formatter = val => Math.round(val)
-	options2.tooltip.y = {
-		formatter: val => (val == null ? "n/a" : val.toFixed(2))
-	}
+	options2.tooltip.y = { formatter: val => (val == null ? "n/a" : val.toFixed(2)) }
 
 
 	soefinding.state.chart2 = {

@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	}]
 
 	const options = soefinding.getDefaultBarChartOptions()
-	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Region)
+	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Region.split(" "))
+	options.xaxis.tickPlacement = "between"
 	options.xaxis.title.text = "Region"
 	options.yaxis.title.text = "Hectares"
 	options.yaxis.labels.formatter = val => `${val / 1000}k`

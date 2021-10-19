@@ -5,7 +5,7 @@ soefinding.regions = pinLocations // these should already be set in ssjs
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	soefinding.yearKeys = soefinding.findingJson.meta.fields.slice(2);
+	soefinding.yearKeys = soefinding.findingJson.meta.fields.slice(2)
 	const latestYear = soefinding.yearKeys[soefinding.yearKeys.length - 1]
 	const regionNames = Object.keys(soefinding.regions)
 
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			let count = 0
 			const sum = soefinding.yearKeys.reduce(function (acc, curr, i, a) {
 				if (d[curr]) {
-					++count;
+					++count
 					return acc + d[curr]
 				} else return acc
 			}, 0)
@@ -29,25 +29,21 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.findingContent.Queensland = {
 		html: "",
 		app1: qldSeries
-	};
-
-
-	const options1 = soefinding.getDefaultBarChartOptions();
-	options1.xaxis.categories = locationItems.map(d => d.Name)
-	options1.xaxis.title.text = "Station";
-	options1.yaxis.title.text = "Mean annual pan evaporation (millimetres)";
-	options1.yaxis.labels.formatter = function (val) {
-		return `${(val / 1000).toFixed(1)}k`;
 	}
-	options1.tooltip.y = {
-			formatter: val => val.toLocaleString()
-		}
+
+
+	const options1 = soefinding.getDefaultBarChartOptions()
+	options1.xaxis.categories = locationItems.map(d => d.Name)
+	options1.xaxis.title.text = "Station"
+	options1.yaxis.title.text = "Mean annual pan evaporation (millimetres)"
+ 	options1.yaxis.labels.formatter = val => Math.round(val).toLocaleString()
+	options1.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.chart1 = {
 		options: options1,
 		series: soefinding.findingContent.Queensland.app1,
 		chartactive: true,
-	};
+	}
 
 
 	// 2. line chart for each region
@@ -69,27 +65,23 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.findingContent[region] = {
 			html: "",
 			app2: series
-		};
-	}
-
-
-	const options2 = soefinding.getDefaultLineChartOptions();
-	options2.xaxis.categories = soefinding.yearKeys
-	options2.xaxis.title.text = "Year";
-	options2.yaxis.title.text = "Annual pan evaporation (millimetres)";
-	options2.yaxis.labels.formatter = function (val) {
-		return `${(val / 1000).toFixed(1)}k`;
-	}
-	options2.tooltip.y = {
-			formatter: val => val?.toLocaleString() ?? "n/a"
 		}
+	}
+
+
+	const options2 = soefinding.getDefaultLineChartOptions()
+	options2.xaxis.categories = soefinding.yearKeys
+	options2.xaxis.title.text = "Year"
+	options2.yaxis.title.text = "Annual pan evaporation (millimetres)"
+	options2.yaxis.labels.formatter = val => Math.round(val).toLocaleString()
+	options2.tooltip.y = { formatter: val => val?.toLocaleString() ?? "n/a" }
 
 
 	soefinding.state.chart2 = {
 		options: options2,
 		series: null,
 		chartactive: true,
-	};
+	}
 	if (soefinding.state.currentRegionName == "Queensland")
 	  soefinding.state.chart2.series = soefinding.findingContent["Cairns Airport"].app2 // need a default
 	else
@@ -134,7 +126,7 @@ soefinding.onRegionChange = function () {
 		regionInfos[1].style.display = "block"
 
 		// set the data series in each of the vue apps, for the current region
-		this.state.chart2.series = this.findingContent[this.state.currentRegionName].app2;
+		this.state.chart2.series = this.findingContent[this.state.currentRegionName].app2
 	}
 
 	soefinding.loadFindingHtml();

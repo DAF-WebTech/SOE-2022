@@ -27,13 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 	// and one for queensland
-	soefinding.findingContent.Queensland = {
-		html: "",
-		app1: []
-	}
+	soefinding.findingContent.Queensland = { html: "" }
 
 
 	const options1 = soefinding.getDefaultLineChartOptions();
+	options1.stroke = { width: 1.5 }
+	options1.markers.size = 3
 	options1.xaxis.categories = yearKeys
 	options1.xaxis.title.text = "Year";
 	options1.yaxis.title.text = "Temperature (degrees celsius)";
@@ -43,11 +42,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	soefinding.state.chart1 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName],
 		options: options1,
 		chartactive: true,
-	}
-	if (soefinding.state.currentRegionName == "Queensland") {
-		soefinding.state.chart1.series = soefinding.findingContent.Palmerville.app1 // we need something else for a default
 	}
 
 
@@ -55,14 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Trend in number of very heavy rainfall days at ${soefinding.state.currentRegionName}`,
+			heading1: function() { 
+				return`Trend in number of very heavy rainfall days at ${this.currentRegionName}`
+			}
 		},
 		methods: {
 			formatter1: val => val
-		},
-		mounted: () => {
-			if (soefinding.state.currentRegionName == "Queensland")
-				document.querySelector("div.region-info").style.display = "none"
 		}
 	})
 })
@@ -74,12 +69,7 @@ soefinding.onRegionChange = function () {
 	const regionInfos = document.querySelectorAll("div.region-info")
 
 	// toggle visibility of region-info, not shown for Queensland
-	if (this.state.currentRegionName == "Queensland") {
-		regionInfos[0].style.display = "none"
-	}
-	else {
-		regionInfos[0].style.display = "block"
-
+	if (this.state.currentRegionName != "Queensland") {
 		// set the data series in the vue apps, for the current region
 		this.state.chart1.series = this.findingContent[this.state.currentRegionName].app1;
 	}
