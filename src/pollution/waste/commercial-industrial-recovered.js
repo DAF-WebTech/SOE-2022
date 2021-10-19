@@ -42,10 +42,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}]
 
 	const options2 =  soefinding.getDefaultLineChartOptions()
-	options2.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
-	options2.xaxis.title.text = "Year"
-	options2.xaxis.labels.rotateAlways = true
+	options2.xaxis.categories = yearKeys.map(y => [y.slice(0, 4) + "–", y.slice(5)]) // ndash
+	options2.xaxis.axisTicks = { show: false }
 	options2.yaxis.title.text = "Tonnes (million)"
+	options2.xaxis.title.text = "Year"
+	options2.xaxis.tickPlacement = "between"
 	options2.yaxis.labels.formatter = val => {
 		return `${(val / 1000000).toFixed(1)}M`
 	}
