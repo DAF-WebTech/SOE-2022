@@ -89,8 +89,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 
-	const options4 = soefinding.getDefaultBarChartOptions()
+	const options4 = soefinding.getDefaultColumnChartOptions()
 	options4.chart.stacked = true
+	options4.legend.inverseOrder = true
 	options4.xaxis.categories = wasteTypes.map(d => d["Waste type"].split(" ")) //keys
 	options4.xaxis.title.text = "Type of interstate construction and demolition waste received"
 	options4.xaxis.tickPlacement = "between"
