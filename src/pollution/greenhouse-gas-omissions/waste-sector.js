@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 3})}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}

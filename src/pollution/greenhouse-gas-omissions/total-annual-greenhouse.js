@@ -84,10 +84,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options3 = soefinding.getDefaultLineChartOptions()
 	options3.markers = { size: 4 }
-	options3.xaxis.categories = ["Year", "Emissions (tonnes)"]
+	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 2})}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const qldTotalSeries = yearKeys.map(y => qldTotal[y])
 
 	const options4 = {
-		xaxis: { categories: yearKeys },
+		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"]  },
 		labels: yearKeys
 	}
 

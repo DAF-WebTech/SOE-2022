@@ -50,13 +50,18 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: yearKeys.map(y => d[y])
 		}
 	})
+	qldTrendSeries.sort(function(a, b) {
+		return b.data.at(-1) - a.data.at(-1)
+	})
 
 
 	const options3 = soefinding.getDefaultAreaChartOptions()
 	options3.xaxis.categories = yearKeys
+	options3.legend.inverseOrder = true
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options3.stroke = {width: 1 }
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 2})}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}

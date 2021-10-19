@@ -54,15 +54,22 @@ document.addEventListener("DOMContentLoaded", function () {
 	const qldTrendSeries = qldItems.map(d => {
 		return {
 			name: d.Category,
-			data: yearKeys.map(y => d[y])
+			data: yearKeys.map(y => d[y] == "Data is confidential" ? null : d[y])
 		}
 	})
+	qldTrendSeries.sort(function(a, b) {
+		if (a.data.at(-1) == null || b.data.at(-1) == null)
+			return b.data[6] - a.data[6]
+		else
+			return b.data.at(-1) - a.data.at(-1)
+	})//doesn't seem to work
 
 	const options3 = soefinding.getDefaultAreaChartOptions()
+	options3.stroke = {width: 1 }
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 2})}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}
@@ -99,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Queensland’s total industrial processes emissions"
 		},
 		methods: {
-			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) //reüse for 2, 3
+			formatter1: val => val?.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) ?? "confidential" //reüse for 2, 3
 		}
 	})
 })

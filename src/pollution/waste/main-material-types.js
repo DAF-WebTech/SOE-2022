@@ -168,7 +168,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// charts 8–13, line chart for each material type in qld and aust
 	const options8 = soefinding.getDefaultLineChartOptions()
-	options8.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
+	options8.xaxis.axisTicks = { show: false }
+	options8.xaxis.categories = yearKeys.map(y => [y.slice(0, 4) + "–", y.slice(5)]) // ndash
+	options8.xaxis.labels.rotateAlways = false
+	options8.xaxis.tickPlacement = "between"
 	options8.xaxis.title.text = "Year"
 	options8.yaxis.title.text = "Number of items per 100m²"
 	options8.yaxis.min = 0

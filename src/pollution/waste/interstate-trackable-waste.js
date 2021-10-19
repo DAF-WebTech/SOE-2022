@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options1 = soefinding.getDefaultBarChartOptions()
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
+	options1.xaxis.tickPlacement = "between"
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Tonnes"
 	options1.yaxis.labels.formatter = val => {
