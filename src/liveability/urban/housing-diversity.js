@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.year = "2016"
 
 
+	// chart 1, pie
 	const series1Items = soefinding.findingJson.data.filter(d=> d.Measure == "2016 Census Number of Dwellings")
 	series1Items.forEach(d => 
 		soefinding.findingContent[d["Regional Planning Area"]] = { series1: keys.map(k => d[k]) }
@@ -21,11 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
+
+	// chart 2, pie
 	const series2Items = soefinding.findingJson.data.filter(d=> d.Measure == "2016-2019 Building Approvals Data")
 	series2Items.forEach(d => 
 		soefinding.findingContent[d["Regional Planning Area"]] = { series2: keys.map(k => d[k]) }
 	)
-
 
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
@@ -33,6 +35,35 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
+
+	// chart 3, stacked column, qld only
+	const series3Items = soefinding.findingJson.data.filter(d => d.Measure == "2016 Census Number of Dwellings" && d["Regional Planning Area"] != "Queensland")
+	const series3 = keys.map(k => {
+		return {
+			name: k.replace("-", "–"), // ndash
+			data: series3Items.map(d => d[k])
+		}
+	})
+
+	const options3 = soefinding.getDefaultStackedColumnChartOptions()
+	options3.xaxis.categories = series3Items.map(d => d["Regional Planning Area"].split(/\s|–/))
+	options3.xaxis.labels.hideOverlappingLabels = false
+	options3.xaxis.labels.rotate = 0
+	options3.xaxis.labels.rotateAlways = false
+	options3.xaxis.tickPlacement = "between"
+	options3.xaxis.title.text = "Regional plan area"
+	options3.yaxis.forceNiceScale = false
+	options3.yaxis.labels.formatter = (val) => val >= 1000000 ? `${val / 1000000}M` : `${val/1000}K`
+	options3.yaxis.max = 1500000
+	options3.yaxis.min = 0
+	options3.yaxis.tickAmount = 6
+	options3.yaxis.title.text = "Number of dwellings"
+
+	soefinding.state.chart3 = {
+		series: series3,
+		options: options3,
+		chartactive: true,
+	}
 
 
 	new Vue({
@@ -69,19 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		// chart 2
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-
-		// // chart 3
-		// ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
-		// soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
-
-
-
-		// but we also need this for the chart to update
-		//		ApexCharts.exec("chart1", "updateOptions", {
-		//			xaxis: { categories: this.findingContent[this.state.currentRegionName].groups }
-		//		}, true)
-		// this works on the table
-		//		options1.xaxis.categories = this.findingContent[this.state.currentRegionName].groups
 
 		soefinding.loadFindingHtml()
 	}
