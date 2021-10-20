@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	)
 
 	const options1 = soefinding.getDefaultPieChartOptions()
-	options1.labels = keys.map(k => k.replace("-", ""))
+	options1.labels = keys.map(k => k.replace("-", "–"))
 	options1.xaxis.categories = ["Type", "Amount"]
 
 	soefinding.state.chart1 = {
@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
+			percentcolumn: (series, s) => (s / series.reduce((acc, curr) => acc+curr) * 100).toFixed(1)
 		}
 	})
 
