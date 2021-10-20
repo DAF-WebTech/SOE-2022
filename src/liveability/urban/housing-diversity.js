@@ -66,6 +66,28 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
+	// chart 4, stacked column, qld only
+	const series4Items = soefinding.findingJson.data.filter(d => d.Measure == "2016-2019 Building Approvals Data" && d["Regional Planning Area"] != "Queensland")
+	const series4 = keys.map(k => {
+		return {
+			name: k.replace("-", "–"), // ndash
+			data: series4Items.map(d => d[k])
+		}
+	})
+
+	const options4 = JSON.parse(JSON.stringify(options3))
+	options4.yaxis.labels.formatter = val => `${val/1000}K`
+	options4.yaxis.max = 120000
+//	options4.yaxis.tickAmount = 6
+	options4.yaxis.title.text = "Number of building approvals"
+
+	soefinding.state.chart4 = {
+		series: series4,
+		options: options4,
+		chartactive: true,
+	}
+
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
@@ -83,8 +105,8 @@ document.addEventListener("DOMContentLoaded", function () {
 					return `Number of building approvals in ${this.currentRegionName} between 2016–2019`
 			},
 
-			heading3: () => "",
-			heading4: () => "",
+			heading3: () => "Number of dwellings in Regional Planning Areas in Queensland 2016 census",
+			heading4: () => "Number of building approvals in Regional Planning Areas between 2016–2019",
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
