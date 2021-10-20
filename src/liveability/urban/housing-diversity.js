@@ -21,6 +21,17 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
+	const series2Items = soefinding.findingJson.data.filter(d=> d.Measure == "2016-2019 Building Approvals Data")
+	series2Items.forEach(d => 
+		soefinding.findingContent[d["Regional Planning Area"]] = { series2: keys.map(k => d[k]) }
+	)
+
+
+	soefinding.state.chart2 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
+		options: options1,
+		chartactive: true,
+	}
 
 
 
@@ -34,7 +45,13 @@ document.addEventListener("DOMContentLoaded", function () {
 				else
 					return `Number of dwellings in ${this.currentRegionName} in ${this.year} Queensland census`
 			},
-			heading2: () => "",
+			heading2: function() {
+				if (this.currentRegionName == "Queensland")
+					return "Proportion of building approvals in 2016–2019 Queensland"
+				else 
+					return `Number of building approvals in ${this.currentRegionName} between 2016–2019`
+			},
+
 			heading3: () => "",
 			heading4: () => "",
 		},
@@ -51,10 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
 		// chart 2
-		// if (this.state.currentRegionName != "Queensland") {
-		// 	ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-		// 	soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-		// }
+		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
 
 		// // chart 3
 		// ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
