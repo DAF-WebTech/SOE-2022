@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	soefinding.vueApp = new Vue({
+	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	window.soefinding.onRegionChange = function () {
 		// set the data series in each of the vue apps, for the current region
 		// chart 1
-		soefinding.vueApp.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
+		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
 		// chart 2
 		// if (this.state.currentRegionName != "Queensland") {
