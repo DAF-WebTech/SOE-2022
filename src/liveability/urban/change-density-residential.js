@@ -96,13 +96,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options4 = JSON.parse(JSON.stringify(options2))
 	options4.xaxis.categories = lotKeys
-	options2.yaxis.title.text = "Median lot size registered m²"
+	options4.yaxis.title.text = "Median lot size registered m²"
 
 	soefinding.state.chart4 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series4,
 		options: options4,
 		chartactive: true,
 	}
+
+	// 5. column chart for qld only, urban lot registrations
+	const series5Items = soefinding.findingJson.data.filter(d => 
+			d.Measure == "Lot registrations" 
+			&& d[lotKeys[0]] != null
+			&& d["Regional Planning Area"] != "Queensland" )
+	const series5 = lotKeys.map(k => {
+		return {
+			name: k,
+			data: series5Items.map(d => d[k])
+		}
+	})
+
+	const options5 = JSON.parse(JSON.stringify(options3))
+	options5.yaxis.title.text = "Number of urban lot registrations"
+
+	soefinding.state.chart5 = {
+		series: series5,
+		options: options5,
+		chartactive: true,
+	}
+
+
+	// 6. column chart for each region, lot registrations
+	for(let regionName in soefinding.findingContent)
+		soefinding.findingContent[regionName].series6 = null //initialise, not all will have data
+	series5Items.forEach(d => {
+		soefinding.findingContent[d["Regional Planning Area"]].series6 = [{
+			name: "Size",
+			data: lotKeys.map(k => d[k])
+		}]
+	})
+
+	const options6 = JSON.parse(JSON.stringify(options4))
+	options6.xaxis.categories = lotKeys
+	options6.yaxis.title.text = options5.yaxis.title.text
+
+	soefinding.state.chart6 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series6,
+		options: options6,
+		chartactive: true,
+	}
+
 
 
 	new Vue({
@@ -117,6 +160,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: function() {
 				return `Change in median lot size in regions for ${this.currentRegionName}`
 			},
+			heading5: () => "Change in number of urban lot registrations for Queensland",
+			heading6: function() {
+				return `Change in number of urban lot registrations for ${this.currentRegionName}`
+			},
+
 		},
 		methods: {
 			formatter1: val => val.toFixed(1),
@@ -128,6 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	window.soefinding.onRegionChange = function () {
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
 		soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].series4
+		soefinding.state.chart6.series = soefinding.findingContent[soefinding.state.currentRegionName].series6
 
 
 		soefinding.loadFindingHtml()
