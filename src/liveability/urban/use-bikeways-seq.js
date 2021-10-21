@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options = soefinding.getDefaultColumnChartOptions()
 	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Site)
 	options.xaxis.title.text = "Location"
+	options.xaxis.labels.trim = true,
 	options.yaxis.title.text = "Average daily count"
 
 
