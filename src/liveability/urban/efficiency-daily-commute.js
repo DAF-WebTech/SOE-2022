@@ -13,10 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options = soefinding.getDefaultLineChartOptions()
-	options.xaxis.tickPlacement = "between"
-	options.xaxis.axisTicks = { show: false }
 	options.xaxis.categories = years.map(y => y.replace("-", "–")) //ndash
 	options.xaxis.title.text = "Year"
+	options.xaxis.tickPlacement = "between"
+	options.xaxis.axisTicks = { show: false }
 	options.yaxis.forceNiceScale = false
 	options.yaxis.min = 9.5
 	options.yaxis.max = 12.5

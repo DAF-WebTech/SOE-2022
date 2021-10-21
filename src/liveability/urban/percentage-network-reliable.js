@@ -15,6 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultLineChartOptions()
 	options1.xaxis.categories = years.map(y => y.replace("-", "–")) //ndash
 	options1.xaxis.title.text = "Year"
+	options1.xaxis.tickPlacement = "between"
+	options1.xaxis.axisTicks = { show: false }
+	options1.yaxis.forceNiceScale = false
+	options1.yaxis.min = 70
+	options1.yaxis.max = 100
+	options1.yaxis.tickAmount = 6
+
 	options1.yaxis.title.text = "Network travel time reliability (%)"
 
 	soefinding.state.chart1 = {
@@ -36,8 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.xaxis.categories = options2.xaxis.categories.slice(4)
 	options2.yaxis.labels.formatter = val => Math.round(val)
 	options2.yaxis.max = 100
-	options2.tooltip.y = { title: { formatter: val => val.replace("<br>", "") } } // replace <br> for chart tooltip
-
+	options2.yaxis.min = 90
+	options2.yaxis.tickAmount = 5
+	options2.tooltip.y = { formatter: val => `${val}%` } 
 
 	soefinding.state.chart2 = {
 		options: options2,
