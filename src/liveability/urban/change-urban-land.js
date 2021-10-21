@@ -91,7 +91,34 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
+	// chart 4 is a column chart per region that shows on the queensland page
+	const options4 = soefinding.getDefaultColumnChartOptions()
+	options4.xaxis.title.text = "Year"
+	options4.yaxis.title.text = "Hectares"
 
+	soefinding.state.chart4 = soefinding.regionNames.slice(1).map((r, i) => { 
+		const options = JSON.parse(JSON.stringify(options4))
+		options.xaxis.categories = ["1999", soefinding.findingJson.data[Year_of_current_mapping][r]]
+		options.yaxis.labels.formatter = val => val>1000 ? `${val/1000}k` : val
+		options.tooltip.y = { formatter: val => val.toLocaleString() }
+
+		return {
+			name: r,
+			checked: i == 0,
+			chartactive: true,
+			series: [{
+				name: "Hectares", 
+				data: [
+					soefinding.findingJson.data[Urban_area_in_1999][r], 
+					soefinding.findingJson.data[Urban_area_in_current_mapping][r]
+				]
+			}],
+			options
+		}
+	})
+
+
+	
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
@@ -130,7 +157,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		soefinding.loadFindingHtml()
 	}
-
-
 
 })
