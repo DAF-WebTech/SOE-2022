@@ -4,9 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// normalise queensland
 	const regions = soefinding.findingJson.meta.fields.slice(1)
-	regions[regions.length - 1] = "Queensland" // assuming "Queensland Wide" was the last one
 
-	soefinding.data.forEach(d => {
+	// fix "Queensland Wide" to Queensland, and assuming it was in last position
+	regions[regions.length - 1] = "Queensland" 
+	soefinding.findingJson.data.forEach(d => {
 		const temp = d["Queensland Wide"]
 		delete d["Queensland Wide"]
 		d.Queensland = temp
@@ -19,14 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
 			series1: [{
 				name: "Hectares",
 				data: [soefinding.findingJson.data[1][r], soefinding.findingJson.data[2][r]]
-			}]
+			}],
+			categories1: ["1999", String(soefinding.findingJson.data[3][r]).replace("-", "–")]
 		}
 	})
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
+	options1.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].categories1
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Hectares"
-	options1.yaxis.title.formatter = val => val >= 1000000 ? val/1000000 : (val >= 1000 ? val/1000 : val)
+	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : (val >= 1000 ? `${val/1000}K` : val)
+	options1.yaxis.labels.minWidth = 30
 	options1.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.chart1 = {
@@ -46,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					return "Urban area growth between 1999 and 2017*" 
 				else 
 					return `Urban area growth between 1999 and ${soefinding.findingJson.data[3][this.currentRegionName]} in ${this.currentRegionName}`
+			}
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
@@ -53,14 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	window.soefinding.onRegionChange = function () {
-		// soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-		// soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].series4
-		// soefinding.state.chart6.series = soefinding.findingContent[soefinding.state.currentRegionName].series6
+		soefinding.state.chart1.options.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].categories1
+		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
 
 		soefinding.loadFindingHtml()
 	}
-
-
 
 })
