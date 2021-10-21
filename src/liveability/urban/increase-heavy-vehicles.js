@@ -13,16 +13,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options = soefinding.getDefaultColumnChartOptions()
+	options.xaxis.tickPlacement = "between"
 	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Year)
 	options.xaxis.title.text = "Year"
 	options.yaxis.title.text = "Number of vehicles"
+	options.yaxis.labels.minWidth = 30
 	options.yaxis.labels.formatter = val => {
 		if (val >= 1000000)
-		  return `${val / 1000000}m`
+		  return `${Math.round(val / 1000000)}m`
 		else
-          return `${val / 1000}k`
-		
-
+          return `${Math.round(val / 1000)}k`
 	}
 	options.tooltip.y = { formatter: val => val.toLocaleString() } 
 
