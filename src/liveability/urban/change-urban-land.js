@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				soefinding.findingJson.data[Urban_area_in_current_mapping][r], 
 				soefinding.findingJson.data[Total_area_mapped][r] - soefinding.findingJson.data[Urban_area_in_current_mapping][r] 
 		]
-		soefinding.findingContent[r].tfoot = `<th scope=row>Total<td class=num>${soefinding.findingJson.data[Total_area_mapped][r].toLocaleString()}`
+		soefinding.findingContent[r].tfoot2 = `<th scope=row>Total<td class=num>${soefinding.findingJson.data[Total_area_mapped][r].toLocaleString()}`
 	})
 
 	const options2 = soefinding.getDefaultPieChartOptions()
@@ -64,8 +64,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
-		tfoot: soefinding.findingContent[soefinding.state.currentRegionName].tfoot, 
+		tfoot: soefinding.findingContent[soefinding.state.currentRegionName].tfoot2, 
 		options: options2,
+		chartactive: true,
+	}
+
+
+	// chart 3, pie chart regions only
+	regions.filter(r => r != "Queensland").forEach(r => {
+		soefinding.findingContent[r].series3 = [ 
+				soefinding.findingJson.data[Total_area_mapped].Queensland, 
+				soefinding.findingJson.data[Urban_area_in_current_mapping][r] 
+		]
+		soefinding.findingContent[r].labels3 = ["Queensland urban", `${r} urban`]
+	})
+
+	const options3 = soefinding.getDefaultPieChartOptions()
+	options3.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels3
+	options3.xaxis.categories = ["", "Hectares"]
+	options3.tooltip = {y : {  formatter: options1.tooltip.y.formatter}}
+
+	soefinding.state.chart3 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
+		options: options3,
 		chartactive: true,
 	}
 
@@ -86,6 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
 					return "Proportion of urban and non-urban areas as at 2017*"
 				else
 					return `Proportion of ${this.currentRegionName} made up of urban and non-urban areas in ${soefinding.findingJson.data[Year_of_current_mapping][this.currentRegionName]}` 
+			},
+			heading3: function() {
+				return `Proportion of Queensland made up of urban area in ${this.currentRegionName} in 2017`
 			}
 		},
 		methods: {
@@ -98,7 +122,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-		soefinding.state.chart2.tfoot = soefinding.findingContent[soefinding.state.currentRegionName].tfoot
+		soefinding.state.chart2.tfoot = soefinding.findingContent[soefinding.state.currentRegionName].tfoot2
+
+		soefinding.state.chart3.options.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels3
+		soefinding.state.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
 
 
 		soefinding.loadFindingHtml()
