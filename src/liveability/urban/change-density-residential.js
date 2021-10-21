@@ -2,8 +2,9 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 	const densityKeys = soefinding.findingJson.meta.fields.slice(2, 4)
+	const lotKeys = soefinding.findingJson.meta.fields.slice(-2)
 
-	// line chart for qld only, dwelling density
+	// 1. column chart for qld only, dwelling density
 	const series1Items = soefinding.findingJson.data.filter(d => d.Measure == "Dwelling density" && d["Regional Planning Area"] != "Queensland")
 	const series1 = densityKeys.map(k => {
 		return {
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.findingContent.Queensland = { html: "" }
 
 
-	// line chart for each region, dwelling density
+	// 2. column chart for each region, dwelling density
 	series1Items.forEach(d => {
 		soefinding.findingContent[d["Regional Planning Area"]] = {
 			series2: [{
@@ -55,6 +56,32 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
+	// 3. column chart for qld only, Median lot size
+	const series3Items = soefinding.findingJson.data.filter(d => 
+			d.Measure == "Median lot size" 
+			&& d[lotKeys[0]] != null
+			&& d["Regional Planning Area"] != "Queensland" )
+	const series3 = lotKeys.map(k => {
+		return {
+			name: k,
+			data: series3Items.map(d => d[k])
+		}
+	})
+
+	const options3 = soefinding.getDefaultColumnChartOptions()
+	options3.xaxis.categories = series3Items.map(d => d["Regional Planning Area"].split(/\s|–/))
+	options3.xaxis.labels.hideOverlappingLabels = false
+	options3.xaxis.labels.rotate = 0
+	options3.xaxis.labels.rotateAlways = false
+	options3.xaxis.tickPlacement = "between"
+	options3.xaxis.title.text = "Regional planning area"
+	options3.yaxis.title.text = "Median lot size registered m²"
+
+	soefinding.state.chart3 = {
+		series: series3,
+		options: options3,
+		chartactive: true,
+	}
 
 
 	new Vue({
@@ -65,11 +92,12 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: function() {
 				return `Mean population-weighted dwelling density for ${this.currentRegionName}`
 			},
-			heading3: () => "",
+			heading3: () => "Change in median lot size in regions for Queensland",
 			heading4: () => "",
 		},
 		methods: {
 			formatter1: val => val.toFixed(1),
+			formatter4: val => val
 		}
 	})
 
