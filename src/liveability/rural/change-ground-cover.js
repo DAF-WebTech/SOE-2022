@@ -7,15 +7,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const series1Items = soefinding.findingJson.data.filter(d => d.Region != "QLD")
 
-	const series1 = [{
-		name: "Groundcover (%)",
-		data: series1Items.map(d => d[latestYear])
-	}]
+	const series1 = [
+		{
+			name: "Groundcover (%)",
+			data: series1Items.map(d => d[latestYear]),
+			type: "column"
+		}, 
+		{
+			name: "All year mean",
+			data: series1Items.map(d => d.AllYearMean),
+			type: "line"
+		}
+	]
 	
-	const  options1 = getDefaultColumnChartOptions
+	const  options1 = soefinding.getDefaultLineChartOptions()
 	options1.xaxis.categories = series1Items.map(d => d.Region)
 	options1.xaxis.title.text = "Region"
 	options1.yaxis.title.text = "Groundcover (%)"
+	options1.yaxis.labels.formatter = val => Math.round(val)
+	options1.tooltip.y = { formatter: val => val }
+	options1.yaxis.min = 0
 
 	soefinding.state.chart1 = {
 		series: series1,
