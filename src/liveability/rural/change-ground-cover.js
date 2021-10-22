@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.min = 0
 	options1.yaxis.max = 100
 	options1.yaxis.forceNiceScale = false
-	options1.fill = { opacity: 1 }
+	//options1.fill = { opacity: 1 }
 	
 
 
