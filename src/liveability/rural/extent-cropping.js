@@ -16,18 +16,33 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	for (let [region, data] of regions) {
-		soefinding.findingContent[region].series = areas.map(a => {
-			return {
-				name: a,
-				data: data.map(d => d[a])
-			}
-		})
+		soefinding.findingContent[region] = {
+			series: areas.map(a => {
+				let displayA = a.split("(")
+				displayA[1] = "(" + displayA[1]
+
+				return {
+					name: displayA,
+					data: data.map(d => d[a])
+				}
+			})
+		}
 	}
 
-	const options = soefinding.getDefaultColumnChartOptions()
+	const options = soefinding.getDefaultStackedColumnChartOptions()
 	options.xaxis.categories = [...years]
 	options.xaxis.title.text = "Year"
-	options.yaxis.title.text = "Hectares"
+	options.yaxis.title.text = "Hectares (millions)"
+	options.yaxis.labels.formatter = val => `${Number.isInteger(val) ? val : val.toFixed(3)}M`
+	options.legend.showForNullSeries = false
+	options.tooltip.y = { formatter: val => `${(val * 1000000).toLocaleString()}ha` }
+
+	soefinding.state.chart1 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series,
+		options,
+		chartactive: true,
+	}
+	 	
 
 
 
@@ -35,12 +50,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function() { return  `Cropped area by season (million ha) in ${this.currentRegionName}`
+			heading1: function() { return  `Cropped area (million ha) by season in ${this.currentRegionName}`
 		}
 
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val?.toFixed(2) ?? "n/a"
 		}
 	})
 
@@ -48,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
+		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series
 
 		soefinding.loadFindingHtml()
 	}
