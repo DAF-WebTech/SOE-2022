@@ -2,10 +2,11 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	//const years = 
-	const latestYear = soefinding.findingJson.meta.fields.at(-2)
+	const years = soefinding.findingJson.meta.fields.slice(2, soefinding.findingJson.meta.fields.length - 1)
+	const latestYear = years.at(-2)
 
-	const series1Items = soefinding.findingJson.data.filter(d => d.Region != "QLD")
+
+	const series1Items = soefinding.findingJson.data.filter(d => d.Region != "Queensland")
 
 	const series1 = [
 		{
@@ -27,6 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.labels.formatter = val => Math.round(val)
 	options1.tooltip.y = { formatter: val => val }
 	options1.yaxis.min = 0
+	options1.yaxis.max = 100
+	options1.yaxis.forceNiceScale = false
+	options1.fill = { opacity: 1 }
+	
+
 
 	soefinding.state.chart1 = {
 		series: series1,
@@ -36,7 +42,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+	soefinding.findingJson.data.forEach(d => {
+		soefinding.findingContent[d.Region] = { 
+			series2: [
+				{
+					name: "Groundcover (%)", 
+					data: years.map(y => d[y])
+				}
+			] 
+		}
+	})
 
+	const options2 = soefinding.getDefaultLineChartOptions()
+	options2.xaxis.categories = years
+	options2.xaxis.title.text = "Year"
+	options2.yaxis.title.text = "Groundcover (%)"
+	options2.yaxis.labels.formatter = val => Math.round(val)
+	options2.tooltip.y = { formatter: val => val }
+	options2.yaxis.min = 0
+	options2.yaxis.max = 100
+	options2.yaxis.forceNiceScale = false
+	options2.xaxis.tickPlacement = "between"
+	options2.xaxis.axisTicks = { show: false }
+
+
+	soefinding.state.chart2 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
+		options: options2,
+		chartactive: true,
+	}
 
 
 
@@ -46,22 +80,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		data: soefinding.state,
 		computed: {
 			heading1: () => `Mean late dry season ground cover (%), ${latestYear}`,
-			heading2: function() {
-				return `Mean population-weighted dwelling density for ${this.currentRegionName}`
-			},
-			heading3: () => "Change in median lot size in regions for Queensland",
-			heading4: function() {
-				return `Change in median lot size in regions for ${this.currentRegionName}`
-			},
-			heading5: () => "Change in number of urban lot registrations for Queensland",
-			heading6: function() {
-				return `Change in number of urban lot registrations for ${this.currentRegionName}`
-			},
+			heading2: function() { 
+				return  `Mean late dry season ground cover (%) ${this.currentRegionName == "Queensland" ? "accross" :"in"} ${this.currentRegionName}`
+			}
 
 		},
 		methods: {
-			formatter1: val => val.toFixed(1),
-			formatter4: val => val
+			formatter1: val => val.toFixed(1)
 		}
 	})
 
@@ -70,9 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	window.soefinding.onRegionChange = function () {
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-		soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].series4
-		soefinding.state.chart6.series = soefinding.findingContent[soefinding.state.currentRegionName].series6
-
 
 		soefinding.loadFindingHtml()
 	}
