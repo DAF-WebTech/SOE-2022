@@ -55,10 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-
-
-
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
