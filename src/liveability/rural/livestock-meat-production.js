@@ -38,6 +38,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.findingContent = { Queensland: {} }
 	soefinding.state.regionData = {}
 	soefinding.findingJson.data.forEach(d => {
+
+		// if it’s all nulls, then ignore it
+		if (year_keys.map(yk => d[yk]).every(v => v == null))
+			return;
+
 		
 		if (d[subregion_key] == null) {
 			d[subregion_key] = d[region_key]
@@ -58,9 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		// fix the data, replace n.p. with null
 		d.forEach(function(item, i) { 
-			if (item == "n.p.") 
-				d[i] = null
-			else if (String(item).indexOf("&") >= 0) 
+			if (String(item).indexOf("&") >= 0) 
 				d[i] = item.replace("&", "and")
 		})
 
