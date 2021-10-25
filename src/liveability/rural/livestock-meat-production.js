@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const region_key = 0
 	const subregion_key = 1
+	const quantity_key = 2
 	const product_key = 3
 	const header = soefinding.findingJson.data.shift()
 	const year_keys = [4, 5, 6]
@@ -33,9 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	const year_keys_value = [8, 9, 10]
 	const years_value = year_keys_value.map(yk => header[yk])
 
-
 	// group by region and subregion
-	soefinding.findingContent = {}
+	soefinding.findingContent = { Queensland: {} }
 	soefinding.state.regionData = {}
 	soefinding.findingJson.data.forEach(d => {
 		
@@ -68,19 +68,28 @@ document.addEventListener("DOMContentLoaded", function () {
 			soefinding.state.regionData[d[region_key]][d[subregion_key]].data.push(d)
 	})
 
-	soefinding.state.columnChartOptions = soefinding.getDefaultColumnChartOptions()
-	soefinding.state.columnChartOptions.xaxis.categories = years.map(k => k.replace("-", "–")) // ndash
-	soefinding.state.columnChartOptions.xaxis.title.text = "Year"
-	soefinding.state.columnChartOptions.yaxis.title.text = "Tonnes"
-	soefinding.state.columnChartOptions.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : ( val >= 1000 ? `${val/1000}K`: val)
-	soefinding.state.columnChartOptions.tooltip.y = { formatter: val => val.toLocaleString() }
+	const columnChartOptions = soefinding.getDefaultColumnChartOptions()
+	columnChartOptions.xaxis.categories = years.map(k => k.replace("-", "–")) // ndash
+	columnChartOptions.xaxis.title.text = "Year"
+	columnChartOptions.yaxis.title.text = "Tonnes"
+	columnChartOptions.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : ( val >= 1000 ? `${val/1000}K`: val)
+	columnChartOptions.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.lineChartOptions = soefinding.getDefaultLineChartOptions()
+
+
 	soefinding.state.lineChartOptions.xaxis.categories = years_value.map(k => k.replace("-", "–")) // ndash
+	soefinding.state.lineChartOptions.legend.showForNullSeries = false 
+	soefinding.state.lineChartOptions.yaxis.showForNullSeries = false
 	soefinding.state.lineChartOptions.xaxis.title.text = "Year"
 	soefinding.state.lineChartOptions.xaxis.tickPlacement = "between"
-	soefinding.state.lineChartOptions.tooltip.y = { formatter: val => val?.toLocaleString() ?? "n.p." }
-	soefinding.state.lineChartOptions.yaxis.title.text = "Tonnes"
+	soefinding.state.lineChartOptions.tooltip.y = { formatter: val => { 
+		if (val == null)
+			return "n/a"
+		else
+			return `$${val.toLocaleString(undefined, {minimumFractionDigits: 2})}` 
+	}}
+	soefinding.state.lineChartOptions.yaxis.title.text = "Value ($)"
 	soefinding.state.lineChartOptions.yaxis.labels.minWidth = 30
 	soefinding.state.lineChartOptions.yaxis.labels.formatter = val => {
 		if (val >= 1000000000)
@@ -109,13 +118,18 @@ document.addEventListener("DOMContentLoaded", function () {
 							return acc + d[curr]
 						}, 0) == 0
 
-				
+				const options = JSON.parse(JSON.stringify(columnChartOptions))
+				options.yaxis.title.text = d[quantity_key]
+				options .tooltip.y = columnChartOptions.tooltip.y
+				options.yaxis.labels.formatter = columnChartOptions.yaxis.labels.formatter 
+
 				return { // column chart for each product
 						productName: d[product_key],
 						heading,
 						series: [{name: "Tonnes", data: year_keys.map(yk => d[yk])}],
 						chartactive: !zeroSeries,
-						zeroSeries
+						zeroSeries,
+						options
 				}
 			})
 
@@ -143,6 +157,17 @@ document.addEventListener("DOMContentLoaded", function () {
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
+		methods: {
+			tableCellFormatter: val => {
+				if (val == null)
+					return "n/a"
+				else if (val == 0)
+					return "0"
+				else
+					return val.toLocaleString(undefined, {minimumFractionDigits: 2})
+			}
+		}
+
 	})
 
 
