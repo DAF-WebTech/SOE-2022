@@ -81,8 +81,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.lineChartOptions.xaxis.categories = years_value.map(k => k.replace("-", "–")) // ndash
 	soefinding.state.lineChartOptions.xaxis.title.text = "Year"
 	soefinding.state.lineChartOptions.xaxis.tickPlacement = "between"
-	soefinding.state.lineChartOptions.tooltip.y = { formatter: val => val?.toLocaleString() ?? "n.p." }
-	soefinding.state.lineChartOptions.yaxis.title.text = "Tonnes"
+	soefinding.state.lineChartOptions.tooltip.y = { formatter: val => { 
+		if (val == null)
+			return "n.p."
+		else
+			return `$${val.toLocaleString()}` 
+	}}
+	soefinding.state.lineChartOptions.yaxis.title.text = "Value ($)"
 	soefinding.state.lineChartOptions.yaxis.labels.minWidth = 30
 	soefinding.state.lineChartOptions.yaxis.labels.formatter = val => {
 		if (val >= 1000000000)
@@ -107,10 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				if (regionName != subregionName)
 					heading += ` — ${subregionName}` // mdash
 
-				const zeroSeries = year_keys.reduce( function (acc, curr) {
-							return acc + d[curr]
-						}, 0) == 0
-
+				const zeroSeries = year_keys.map(yk => d[yk]).every(val => val == 0)
 				
 				return { // column chart for each product
 						productName: d[product_key],
