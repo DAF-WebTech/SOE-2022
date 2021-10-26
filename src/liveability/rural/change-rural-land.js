@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				if  (d[y] != null)
 					lastIndex = i
 			})
-			soefinding.findingContent[region].series1categories = [firstIndex, lastIndex]
+			soefinding.findingContent[region].series1categories = [yearKeys[firstIndex], yearKeys[lastIndex]]
 
 			return {
 				name: d.Use,
@@ -36,11 +36,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 	}
 
-	const options1 = soefinding.getDefaultColumnChartOptions
-	options1.xaxis.categories = soefinding.findingContent[region].series1categories
+	const options1 = soefinding.getDefaultStackedColumnChartOptions()
+	options1.chart.id = "chart1"
+	options1.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Hectares"
 	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : (val >= 1000 ? `${val/1000}K` : val)
+	options1.yaxis.labels.minWidth = 30
 	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
 
 	soefinding.state.chart1 = {
@@ -53,11 +55,25 @@ document.addEventListener("DOMContentLoaded", function () {
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
+		computed: {
+			heading1: function() { 
+				let retVal = `Rural area growth between ${soefinding.findingContent[this.currentRegionName].series1categories[0]} and ${soefinding.findingContent[this.currentRegionName].series1categories[1]}`
+				if (this.currentRegionName == "Queensland")
+					retVal += "*"
+				return retVal
+			}
+		},
+		methods: {
+			formatter1: val => val.toLocaleString()
+		}
 	})
 
 
 	window.soefinding.onRegionChange = function () {
-		soefinding.state.options1.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
+		soefinding.state.chart1.options.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
+		ApexCharts.exec("chart1", "updateOptions", {
+			xaxis: { categories: soefinding.state.chart1.options.xaxis.categories }
+		}, true)
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
 		soefinding.loadFindingHtml()
