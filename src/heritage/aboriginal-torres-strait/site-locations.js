@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const sites = new Map()
 	soefinding.regionNames.forEach(r => regions.set(r, []))
 	soefinding.findingJson.data.forEach(d => {
-		regions.get(r.Region).push(d)
+		regions.get(d.Region).push(d)
 
 		// sites are to populate qld item
 		if (!sites.has(d.Site))
@@ -19,31 +19,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// add each "Site" up for our qld aggregate item
 	regions.set("Queensland", [])
-	for (let [site, data] in sites) {
-		regions.get("Queensland").push(years.map(y => data.reduce((acc, curr) => {
-			return acc + curr[y]
-		}, 0)))
+	for (let [site, data] of sites) {
+		const newItem = {
+			Region: "Queensland",
+			Site: site,
+		}
+		years.forEach(y => newItem[y] = data.reduce((acc, curr) => {
+ 			return acc + curr[y]
+ 		}, 0))
+
+	
+		regions.get("Queensland").push(newItem)
 	}
 
 	// chart 1 stacked column
-	for (let [region, data] in regions) {
+	for (let [region, data] of regions) {
 		data.sort(function(a, b) {
 			return b[latestYear] - a[latestYear]
 		})
-		soefinding.findingContent[region].series1 = data.map(d => {
-			return {
-				name: d.Site,
-				data: years.map(y => d[y])
-			}
-		})
-		soefinding.findingContent[region].series1categories = data.map(d => d.Site)
+		soefinding.findingContent[region] = { 
+			series1: data.map(d => {
+				return {
+					name: d.Site,
+					data: years.map(y => d[y])
+				}
+			})
+		}
 	}
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
 	options1.xaxis.title.text = "Year"
-	options1.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
+	options1.xaxis.categories = years
 	options1.yaxis.title.text = "Number of places"
 	options1.yaxis.labels.formatter = val => val.toLocaleString()
+	options1.yaxis.forceNiceScale = false
 
 	soefinding.state.chart1 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series1,
@@ -65,26 +74,17 @@ document.addEventListener("DOMContentLoaded", function () {
 					return `Change in number of locations by site type in ${this.currentRegionName} cultural heritage region`
 			},
 			heading2: function () {
-				let retVal = `Proportion of rural and other areas as at ${soefinding.findingContent[this.currentRegionName].series2LatestYear}`
-				if (this.currentRegionName == "Queensland")
-					retVal += "*"
-				else
-					retVal += ` in ${this.currentRegionName}`
-				return retVal
 			},
-			heading3: function () {
-				return `Proportion of Queensland made up of rural areas in ${this.currentRegionName} NRM region in ${soefinding.findingContent[this.currentRegionName].series2LatestYear}`
-			}
+
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val?.toLocaleString() ?? ""
 		}
 	})
 
 
 	window.soefinding.onRegionChange = function () {
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
-		soefinding.state.chart1.options.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
 
 		soefinding.loadFindingHtml()
 	}
