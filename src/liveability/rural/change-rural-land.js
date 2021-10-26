@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		regions.get(d.Region).push(d)
 	})
 
+	const qldTotal = regions.get("Queensland").find(d => d.Use == "total area mapped")["total area mapped"]
+
 	// create series for each region
 	for(let [region, data] of regions) {
 		soefinding.findingContent[region] = {}
@@ -44,6 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		const totalMapped = data.find(d => d.Use == "total area mapped")["total area mapped"]
 		const nonRural = totalMapped - totalRural
 		soefinding.findingContent[region].series2.push(nonRural)
+
+		// chart 3, a pie chart, regions only
+		soefinding.findingContent[region].series3 = [totalRural, qldTotal - totalRural]
 
 	}
 
@@ -78,6 +83,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
+
+	const options3 = soefinding.getDefaultPieChartOptions()
+	options3.labels = [soefinding.state.currentRegionName + " NRM Region", "All Other Qld"]
+	options3.xaxis.categories = ["Name", "Value"]
+	options3.tooltip = { y: { formatter: options2.tooltip.y.formatter } }
+
+	soefinding.state.chart3 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
+		options: options3,
+		chartactive: true,
+	}
+
+
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
@@ -97,6 +116,9 @@ document.addEventListener("DOMContentLoaded", function () {
 				else
 					retVal += ` in ${this.currentRegionName}`
 				return retVal
+			},
+			heading3: function() {
+				return `Proportion of Queensland made up of rural areas in ${this.currentRegionName} NRM region in ${soefinding.findingContent[this.currentRegionName].series2LatestYear}`	
 			}
 		},
 		methods: {
@@ -112,11 +134,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		}, true)
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
-
-
 		soefinding.state.chart2.options.xaxis.categories[1] = soefinding.findingContent[soefinding.state.currentRegionName].series2LatestYear
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
 
+		soefinding.state.chart3.options.labels[0] = soefinding.state.currentRegionName + " NRM Region"
+		ApexCharts.exec("chart1", "updateOptions", {
+			labels: soefinding.state.chart3.options.labels
+		}, true)
+		soefinding.state.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
 
 		soefinding.loadFindingHtml()
 	}
