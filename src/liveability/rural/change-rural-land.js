@@ -6,21 +6,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// group by region name
 	const regions = new Map()
+	soefinding.regionNames.forEach(r => regions.set(r, []))
+	
 	soefinding.findingJson.data.forEach(d => {
 		// normalise region names to match UI
 		d.Region = d.Region.replace(" NRM region", "")
 		d.Region = d.Region.replace(" Wide", "")
 
-		if (!regions.has(d.Region))
-			regions.set(d.Region, [])
 		regions.get(d.Region).push(d)
 	})
 
+	// initialise items we will use this in the loop of regions
 	const qldTotal = regions.get("Queensland").find(d => d.Use == "total area mapped")["total area mapped"]
+	soefinding.state.series4 = {} 
+	// we need these now because the individual options for chart 4 will be based on this
+	const options1 = soefinding.getDefaultStackedColumnChartOptions()
+	options1.chart.id = "chart1"
+	options1.xaxis.title.text = "Year"
+	options1.yaxis.title.text = "Hectares"
+	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : (val >= 1000 ? `${val/1000}K` : val)
+	options1.yaxis.labels.minWidth = 30
+	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
+
 
 	// create series for each region
 	for(let [region, data] of regions) {
 		soefinding.findingContent[region] = {}
+		const keys = []
 
 		// chart 1, a stacked column chart, same for qld and each region
 		soefinding.findingContent[region].series1 = data.filter(d => d.Use != "total area mapped").map(d => {
@@ -31,6 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
 				if  (d[y] != null)
 					lastIndex = i
 			})
+			
+			keys[0] = firstIndex
+			keys[1] = lastIndex
+
 			soefinding.findingContent[region].series1categories = [yearKeys[firstIndex], yearKeys[lastIndex]]
 
 			return {
@@ -50,16 +66,35 @@ document.addEventListener("DOMContentLoaded", function () {
 		// chart 3, a pie chart, regions only
 		soefinding.findingContent[region].series3 = [totalRural, qldTotal - totalRural]
 
-	}
 
-	const options1 = soefinding.getDefaultStackedColumnChartOptions()
-	options1.chart.id = "chart1"
+		//chart 4 is a column chart for each regions that iis only showed on qld page.
+		if (region != "Queensland") {
+			const years = keys.map(k => yearKeys[k])
+			const options = JSON.parse(JSON.stringify(options1))
+			options.yaxis.labels.formatter = options1.yaxis.labels.formatter
+			options.tooltip.y.formatter = options1.tooltip.y.formatter
+			options.xaxis.categories = years
+
+			soefinding.state.series4[region] = {
+				checked: false,
+				chartactive: true,
+				years,
+				options,
+				series: data.filter(d => d.Use != "total area mapped").map(d => {
+					return {
+						name: d.Use,
+						data: years.map(y => d[y])
+					}
+				})
+			}
+		}
+
+	}
+	soefinding.state.series4["Burnett Mary"].checked = true
+
+
+	// set up chart 1
 	options1.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
-	options1.xaxis.title.text = "Year"
-	options1.yaxis.title.text = "Hectares"
-	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : (val >= 1000 ? `${val/1000}K` : val)
-	options1.yaxis.labels.minWidth = 30
-	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
 
 	soefinding.state.chart1 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series1,
@@ -68,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
+	// set up chart 2
 	const options2 = soefinding.getDefaultPieChartOptions()
 	options2.labels = ["Rural Land in Intensive Use", "Rural Land in Extensive Use", "Rural Land Not Settled", "Non Rural area"]
 	options2.xaxis.categories = ["Use", soefinding.findingContent[soefinding.state.currentRegionName].seriesLatestYear]
@@ -83,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
+	// set up chart 3
 	const options3 = soefinding.getDefaultPieChartOptions()
 	options3.labels = [soefinding.state.currentRegionName + " NRM Region", "All Other Qld"]
 	options3.xaxis.categories = ["Name", "Value"]
@@ -96,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
+	// chart 4 already done in loop
 
 	new Vue({
 		el: "#chartContainer",
