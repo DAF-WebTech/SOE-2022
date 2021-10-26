@@ -43,7 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
 					name: d.Site,
 					data: years.map(y => d[y])
 				}
-			})
+			}),
+			series2: data.map(d => d[latestYear] ?? 0),
+			series2Labels: data.map(d => d.Site)
 		}
 	}
 
@@ -61,6 +63,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
+	const options2 = soefinding.getDefaultPieChartOptions()
+	options2.labels = soefinding.findingContent[soefinding.state.currentRegionName].series2Labels
+	options2.xaxis.categories = ["Site", "Number of locations"]
+
+	soefinding.state.chart2 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
+		options: options2,
+		chartactive: true,
+	}
+
 
 
 	new Vue({
@@ -74,8 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
 					return `Change in number of locations by site type in ${this.currentRegionName} cultural heritage region`
 			},
 			heading2: function () {
+				if (this.currentRegionName == "Queensland")
+					return `Proportion of locations by site type, ${latestYear}`
+				else 
+					return `Proportion of locations by site type in ${this.currentRegionName} cultural heritage region, ${latestYear}`
 			},
-
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? ""
@@ -85,6 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	window.soefinding.onRegionChange = function () {
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
+		
+		soefinding.state.chart2.options.labels = soefinding.findingContent[soefinding.state.currentRegionName].series2Labels
+		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
 
 		soefinding.loadFindingHtml()
 	}
