@@ -81,14 +81,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.chart.id = "chart2"
 	options2.labels = fields
 	options2.xaxis.categories = ["Type", "Area (ha)"] // not needed for chart, but vue uses them for table headings
-	options2.tooltip.y = {
+	options2.tooltip = {
+		y: {
 			formatter: (val, options) => {
 				const percent = options.globals.seriesPercent[options.seriesIndex][0]
 				return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
 			}
 		}
-
-
+	}
 
 
 	soefinding.state.chart2 = {
