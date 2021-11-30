@@ -7,14 +7,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// chart 1, pie
-	const series1Items = soefinding.findingJson.data.filter(d=> d.Measure == "2016 Census Number of Dwellings")
-	series1Items.forEach(d => 
+	const series1Items = soefinding.findingJson.data.filter(d => d.Measure == "2016 Census Number of Dwellings")
+	series1Items.forEach(d =>
 		soefinding.findingContent[d["Regional Planning Area"]] = { series1: keys.map(k => d[k]) }
 	)
 
 	const options1 = soefinding.getDefaultPieChartOptions()
 	options1.labels = keys.map(k => k.replace("-", "–"))
 	options1.xaxis.categories = ["Type", "Amount"]
+	options1.tooltip = {
+		y: {
+			formatter: (val, options) => {
+				const percent = options.globals.seriesPercent[options.seriesIndex][0]
+				return `${val.toLocaleString()}ha (${percent.toFixed(1)}%)`
+			}
+		}
+	}
+
 
 	soefinding.state.chart1 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series1,
@@ -24,10 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// chart 2, pie
-	const series2Items = soefinding.findingJson.data.filter(d=> d.Measure == "2016-2019 Building Approvals Data")
-	series2Items.forEach(d => 
-		soefinding.findingContent[d["Regional Planning Area"]] = { series2: keys.map(k => d[k]) }
-	)
+	const series2Items = soefinding.findingJson.data.filter(d => d.Measure == "2016-2019 Building Approvals Data")
+	series2Items.forEach(d => soefinding.findingContent[d["Regional Planning Area"]].series2 = keys.map(k => d[k]))
+
 
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
@@ -53,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.xaxis.tickPlacement = "between"
 	options3.xaxis.title.text = "Regional plan area"
 	options3.yaxis.forceNiceScale = false
-	options3.yaxis.labels.formatter = (val) => val >= 1000000 ? `${val / 1000000}M` : `${val/1000}K`
+	options3.yaxis.labels.formatter = (val) => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}K`
 	options3.yaxis.max = 1500000
 	options3.yaxis.min = 0
 	options3.yaxis.tickAmount = 6
@@ -76,9 +84,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options4 = JSON.parse(JSON.stringify(options3))
-	options4.yaxis.labels.formatter = val => `${val/1000}K`
+	options4.yaxis.labels.formatter = val => `${val / 1000}K`
 	options4.yaxis.max = 120000
-//	options4.yaxis.tickAmount = 6
+	//	options4.yaxis.tickAmount = 6
 	options4.yaxis.title.text = "Number of building approvals"
 
 	soefinding.state.chart4 = {
@@ -92,16 +100,16 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function() { 
+			heading1: function () {
 				if (this.currentRegionName == "Queensland")
 					return `Number of dwellings in ${this.year} Queensland census`
 				else
 					return `Number of dwellings in ${this.currentRegionName} in ${this.year} Queensland census`
 			},
-			heading2: function() {
+			heading2: function () {
 				if (this.currentRegionName == "Queensland")
 					return "Proportion of building approvals in 2016–2019 Queensland"
-				else 
+				else
 					return `Number of building approvals in ${this.currentRegionName} between 2016–2019`
 			},
 
@@ -110,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
-			percentcolumn: (series, s) => (s / series.reduce((acc, curr) => acc+curr) * 100).toFixed(1)
+			percentcolumn: (series, s) => (s / series.reduce((acc, curr) => acc + curr) * 100).toFixed(1)
 		}
 	})
 
@@ -118,11 +126,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	window.soefinding.onRegionChange = function () {
 		// set the data series in each of the vue apps, for the current region
 		// chart 1
+		ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
+		// table 1
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
 		// chart 2
+		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-
 		soefinding.loadFindingHtml()
 	}
 
