@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.labels = localPlaces.map(p => p.LGA)
 	options1.tooltip = { y: { formatter: (val, options) => {
 		const percent = options.globals.seriesPercent[options.seriesIndex][0]
-		return `${val.toLocaleString()}ha (${percent.toFixed(1)}%)`
+		return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
 	}}}
 
 	soefinding.state.chart1 = {
