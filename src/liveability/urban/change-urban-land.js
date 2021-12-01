@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// fix "Queensland Wide" to Queensland, and assuming it was in last position
-	regions[regions.length - 1] = "Queensland" 
+	regions[regions.length - 1] = "Queensland"
 	soefinding.findingJson.data.forEach(d => {
 		const temp = d["Queensland Wide"]
 		delete d["Queensland Wide"]
@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// chart 1, each region and qld
 	regions.forEach(r => {
+		r = r.replace(" NRM region", "")
 		soefinding.findingContent[r] = {
 			series1: [{
 				name: "Hectares",
@@ -34,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].categories1
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Hectares"
-	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : (val >= 1000 ? `${val/1000}K` : val)
+	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : (val >= 1000 ? `${val / 1000}K` : val)
 	options1.yaxis.labels.minWidth = 30
 	options1.tooltip.y = { formatter: val => val.toLocaleString() }
 
@@ -47,9 +48,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// chart 2, pie chart same for every region and qld
 	regions.forEach(r => {
-		soefinding.findingContent[r].series2 = [ 
-				soefinding.findingJson.data[Urban_area_in_current_mapping][r], 
-				soefinding.findingJson.data[Total_area_mapped][r] - soefinding.findingJson.data[Urban_area_in_current_mapping][r] 
+		soefinding.findingContent[r].series2 = [
+			soefinding.findingJson.data[Urban_area_in_current_mapping][r],
+			soefinding.findingJson.data[Total_area_mapped][r] - soefinding.findingJson.data[Urban_area_in_current_mapping][r]
 		]
 		soefinding.findingContent[r].tfoot2 = `<th scope=row>Total<td class=num>${soefinding.findingJson.data[Total_area_mapped][r].toLocaleString()}`
 	})
@@ -57,14 +58,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options2 = soefinding.getDefaultPieChartOptions()
 	options2.labels = ["Urban", "Non-Urban"]
 	options2.xaxis.categories = ["", "Hectares"]
-	options2.tooltip = {y : {  formatter: (val, options) => {
-		const percent = options.globals.seriesPercent[options.seriesIndex][0]
-		return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
-	}}}		
+	options2.tooltip = {
+		y: {
+			formatter: (val, options) => {
+				const percent = options.globals.seriesPercent[options.seriesIndex][0]
+				return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+			}
+		}
+	}
 
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
-		tfoot: soefinding.findingContent[soefinding.state.currentRegionName].tfoot2, 
+		tfoot: soefinding.findingContent[soefinding.state.currentRegionName].tfoot2,
 		options: options2,
 		chartactive: true,
 	}
@@ -72,9 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// chart 3, pie chart regions only
 	regions.filter(r => r != "Queensland").forEach(r => {
-		soefinding.findingContent[r].series3 = [ 
-				soefinding.findingJson.data[Total_area_mapped].Queensland, 
-				soefinding.findingJson.data[Urban_area_in_current_mapping][r] 
+		soefinding.findingContent[r].series3 = [
+			soefinding.findingJson.data[Total_area_mapped].Queensland,
+			soefinding.findingJson.data[Urban_area_in_current_mapping][r]
 		]
 		soefinding.findingContent[r].labels3 = ["Queensland urban", `${r} urban`]
 	})
@@ -82,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options3 = soefinding.getDefaultPieChartOptions()
 	options3.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels3
 	options3.xaxis.categories = ["", "Hectares"]
-	options3.tooltip = {y : {  formatter: options1.tooltip.y.formatter}}
+	options3.tooltip = { y: { formatter: options1.tooltip.y.formatter } }
 
 	soefinding.state.chart3 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
@@ -96,10 +101,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	options4.xaxis.title.text = "Year"
 	options4.yaxis.title.text = "Hectares"
 
-	soefinding.state.chart4 = soefinding.regionNames.slice(1).map((r, i) => { 
+	soefinding.state.chart4 = soefinding.regionNames.slice(1).map((r, i) => {
 		const options = JSON.parse(JSON.stringify(options4))
 		options.xaxis.categories = ["1999", soefinding.findingJson.data[Year_of_current_mapping][r]]
-		options.yaxis.labels.formatter = val => val>1000 ? `${val/1000}k` : val
+		options.yaxis.labels.formatter = val => val > 1000 ? `${val / 1000}k` : val
 		options.tooltip.y = { formatter: val => val.toLocaleString() }
 
 		return {
@@ -107,9 +112,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			checked: i == 0,
 			chartactive: true,
 			series: [{
-				name: "Hectares", 
+				name: "Hectares",
 				data: [
-					soefinding.findingJson.data[Urban_area_in_1999][r], 
+					soefinding.findingJson.data[Urban_area_in_1999][r],
 					soefinding.findingJson.data[Urban_area_in_current_mapping][r]
 				]
 			}],
@@ -118,25 +123,25 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 
-	
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function() {
+			heading1: function () {
 				if (this.currentRegionName == "Queensland")
-					return "Urban area growth between 1999 and 2017*" 
-				else 
-					return `Urban area growth between 1999 and ${soefinding.findingJson.data[Year_of_current_mapping][this.currentRegionName]} in ${this.currentRegionName}`
+					return "Urban area growth between 1999 and 2017*"
+				else
+					return `Urban area growth between 1999 and ${soefinding.findingJson.data[Year_of_current_mapping][this.currentRegionName]} in ${this.currentRegionName} NRM region`
 			},
-			heading2: function() {
+			heading2: function () {
 				if (this.currentRegionName == "Queensland")
 					return "Proportion of urban and non-urban areas as at 2017*"
 				else
-					return `Proportion of ${this.currentRegionName} made up of urban and non-urban areas in ${soefinding.findingJson.data[Year_of_current_mapping][this.currentRegionName]}` 
+					return `Proportion of ${this.currentRegionName} NRM region made up of urban and non-urban areas in ${soefinding.findingJson.data[Year_of_current_mapping][this.currentRegionName]}`
 			},
-			heading3: function() {
-				return `Proportion of Queensland made up of urban area in ${this.currentRegionName} in 2017`
+			heading3: function () {
+				return `Proportion of Queensland made up of urban area in ${this.currentRegionName} NRM region in 2017`
 			}
 		},
 		methods: {
