@@ -1,13 +1,63 @@
 "use strict"
 document.addEventListener("DOMContentLoaded", function () {
 
-	const LOCAL = "Local heritage places identified in a local heritage register"
-	const localPlaces = soefinding.findingJson.data.filter(d => d[LOCAL] > 0)
-	localPlaces.sort(function(a, b) {
-		return b[LOCAL] - a[LOCAL]
+
+	const keys = soefinding.findingJson.meta.fields.slice(2)
+	const localPlaces = []
+	const series2 = []
+	let currentLga = ""
+	soefinding.findingContent.Queensland = {series3: null}
+
+
+	//iterate the data and group them in to each series
+	soefinding.findingJson.data.forEach(d => {
+		// if it has a value in the last column, it goes into the qld pie chart
+		if (d[keys[3]] > 0)
+			localPlaces.push(d)
+
+		// all items go into qld table, we concatenate lga name and first key
+		series2.push({
+			name: `${d.LGA} (${d["Planning scheme"]})`,
+			data: keys.map(k => d[k])
+		})
+
+
+		if (currentLga != d.LGA) {
+			// first time seeing this LGA
+			soefinding.findingContent[d.LGA] = {
+				series3: [{
+					name: d["Planning scheme"],
+					data: keys.map(k => d[k])
+				}]
+			}
+		}
+		else {
+			// saw this lga previously
+			soefinding.findingContent[d.LGA].series3.push({
+				name: d["Planning scheme"],
+				data: keys.map(k => d[k])
+			})
+		}
+
+		currentLga = d.LGA
+
 	})
+
 	
-	const series1 = localPlaces.map(p => p[LOCAL])
+	// fix the qld series
+	localPlaces.sort(function(a, b) {
+		return b[keys[2]] - a[keys[2]]
+	})
+	const series1 = localPlaces.map(p => p[keys[2]])
+
+	series2.sort(function(a, b) {
+		if (a.data[keys[0]] == b.data[keys[0]])
+			return b.name - a.name
+		else
+			return b.data[keys[0]] - a.data[keys[0]]
+	})
+
+
 
 	const options1 = soefinding.getDefaultPieChartOptions()
 	options1.labels = localPlaces.map(p => p.LGA)
@@ -15,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const percent = options.globals.seriesPercent[options.seriesIndex][0]
 		return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
 	}}}
-	options1.xaxis.categories = ["LGA", LOCAL.replace("identified", "identified<br>")
+	options1.xaxis.categories = ["LGA", keys[2].replace("identified", "identified<br>")
 	]
 
 	soefinding.state.chart1 = {
@@ -24,16 +74,41 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
+	const options2 = { 
+		xaxis: {
+			categories: keys
+		}
+	}
+	soefinding.state.chart2 = {
+		series: series2,
+		options: options2,
+		chartactive: false,
+	}
+
+
+	soefinding.state.chart3 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
+		options: options2,
+		chartactive: false,
+	}
+
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => "Proportion of local heritage places on local heritage registers by local government area, 2020 (TODO fix year)"
+			heading1: () => "Proportion of local heritage places on local heritage registers by local government area, 2020 (TODO fix year)",
+			heading2: () => `Local heritage places and areas by planning scheme in ${soefinding.state.currentRegionName} Local Government Area`
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
 		}
 	})
 
+
+	window.soefinding.onRegionChange = function () {
+		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
+		soefinding.loadFindingHtml();
+	}
 
 })
