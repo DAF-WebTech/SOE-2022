@@ -44,7 +44,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
-	options1.xaxis.categories = series1Keys
+	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
+	options1.xaxis.categories = [ /*there's no easy way to automatically break these down so do it manually*/
+		"Nature refuge", 
+		["National park", "(scientific)"],
+		"National park",
+		["National park", "(Cape York", "Aboriginal land)"],
+		"Conservation park",
+		"Resources reserve"
+	]
+	delete options1.xaxis.tickPlacement
+	options1.xaxis.title.text = "Protected area type"
+	options1.yaxis.labels.formatter = val => `${val/1000}K`
+	options1.yaxis.title.text = "Hectares"
+
 
 	soefinding.state.chart1 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series1,
@@ -66,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	window.soefinding.onRegionChange = function () {
-
+		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
 		soefinding.loadFindingHtml()
 	}
