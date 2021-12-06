@@ -1,19 +1,9 @@
 /*
-we have a bug here, I don't know what to do
-first load up queensland, the default,
-choose a region,
-the pie chart doesn't render the labels and there's console errors logged.
-note also the table loses its labels
-
-maybe it's because the map layer is failing?
-
-note the pie charts are fine if you load the page with a region already picked,
-and then pick other regions.
-but  if you go to queensland, and then go back to a region,
-the pie chart fails again
-
+there's a bug here between charts one and two
+if you comment one out in the markup, the other works fine
+but if you have them both, then there are console errors when you change regions.
+TODO: chart 4
 */
-
 
 "use strict";
 
@@ -31,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
 	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
 	options1.xaxis.categories = series1items.map(d => {
-		if (d["Drainage division"].startsWith("North East"))
+		if (d["Drainage division"].startsWith("North East")) //separate into two lines
 			return [
 				d["Drainage division"].substring(0, d["Drainage division"].lastIndexOf(" ")),
 				d["Drainage division"].substring(d["Drainage division"].lastIndexOf(" ") + 1)
@@ -46,6 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.max = 3000000
 	options1.yaxis.tickAmount = 6
 	options1.yaxis.title.text = "Hectares"
+	options1.yaxis.labels.minWidth = 25
+	options1.chart.id = "chart1"
+
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -61,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			series2: seriesNames.map(n => d[n])
 		}
 	})
-	soefinding.findingContent.Queensland = soefinding.findingContent.Gulf.series2 // dummy values, never used
 
 	const options2 = soefinding.getDefaultPieChartOptions()
 	options2.chart.id = "chart2"
@@ -76,9 +68,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 
+	soefinding.findingContent.Queensland = { series2: [1, 1, 1] }// dummy values, never used
+
+
 	soefinding.state.chart2 = {
-		options: options2,
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
+		options: options2,
 		chartactive: true,
 	}
 
@@ -132,11 +127,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: () => `Freshwater wetland systems extent by region, 2024  TODO fix year`,
 			heading2: () => `Proportion of freshwater wetland systems extent in ${soefinding.state.currentRegionName}, 2024 TODO fix year`,
 			heading3: () => {
-				let heading = "Freshwater wetland system percentage of pre-clear extent remaining"
-				if (soefinding.state.currentRegionName != "Queensland")
-					heading += " in Bulloo"
-				heading += ", 2024 TODO FIX YEAR"
-				return heading
+				if (soefinding.state.currentRegionName == "Queensland")
+					return "Freshwater wetland systems percentage of pre-clear extent remaining, 2017 TODO fix year"
+				else
+					return `Freshwater wetland system percentage of pre-clear extent remaining in ${soefinding.state.currentRegionName}, 2017 TODO fix year`
 			}
 		},
 		methods: {
@@ -149,15 +143,21 @@ document.addEventListener("DOMContentLoaded", function () {
 	window.soefinding.onRegionChange = function () {
 		// set the data series in each of the vue apps, for the current region
 
+// 		if (this.state.currentRegionName == "Queensland") {
+// 			ApexCharts.exec("chart1", "updateSeries", series1)
+// 			soefinding.state.chart1.series = series1
+// 			ApexCharts.exec("chart1", "render")
+// 		}
+
 		// chart 2
 		if (this.state.currentRegionName != "Queensland") {
-			ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
+			//ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
 			soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
 		}
 
 		// chart 3
-		ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
-		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
+		//ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
+		//soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
 
 
 
