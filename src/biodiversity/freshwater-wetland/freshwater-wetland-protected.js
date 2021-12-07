@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	window.soefinding.onRegionChange = function () {
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
+		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
 
 		soefinding.loadFindingHtml()
 	}
