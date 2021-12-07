@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.xaxis.labels.trim = true,
 	options2.xaxis.labels.hideOverlappingLabels = false
 
+
 	options2.xaxis.tickPlacement = "between" // not a good option, but it fixes a bug
 	// where the chart xaxis did not redraw correctly when a) swapping between regions. and then b) clicking one of the legends
 	options2.xaxis.title.text = "Broad Vegetation Group"
@@ -143,14 +144,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options3 = soefinding.getDefaultStackedColumnChartOptions()
 	options3.chart.id = "chart3"
-	options3.xaxis.categories = keys.map(k => [k.substring(0, k.indexOf("-")) + "–", k.substring(k.indexOf("-") + 1)])  //endash
-	options3.xaxis.title.text = "Hectares lost"
-	options3.yaxis.title.text = "Year"
-	options3.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
-	options3.tooltip.y = { formatter: val => val.toLocaleString() } 
 	options3.legend.labels = { trim: true }
-	//options3.legend.formatter = val => val.substring(0, 12) + "…"
 	options3.legend.position = "bottom"
+	options3.tooltip.y = { formatter: val => val.toLocaleString() } 
+	options3.xaxis.categories = keys.map(k => [k.substring(0, k.indexOf("-")) + "–", k.substring(k.indexOf("-") + 1)])  //endash
+	options3.xaxis.title.text = "Year"
+	options3.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
+	options3.yaxis.labels.minWidth = 30
+	options3.yaxis.title.text = "Hectares lost"
 
 
 	soefinding.state.chart3 = {
@@ -160,15 +161,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
 			heading1: () => `Proportion of broad vegetation groups in ${soefinding.state.currentRegionName}, ${latestYear}`,
 			heading2: () => `Pre-clear and ${latestYear} extents of broad vegetation groups in ${soefinding.state.currentRegionName}`,
-			heading3: () => `Change in extent of broad vegetation groups in ${soefinding.state.currentRegionName}`
+			heading3: function() { 
+				const retVal = "Change in extent of broad vegetation groups"
+				if (this.currentRegionName != "Queensland")
+					retVal += ` in ${this.currentRegionName}`
+				return retVal
+			}
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
