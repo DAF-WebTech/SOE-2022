@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const systems = ["Lacustrine", "Palustrine", "Riverine"]
 	const series1Keys = soefinding.findingJson.meta.fields.slice(2, 8)
+	const series2Keys = soefinding.findingJson.meta.fields.slice(-2)
 
 	// group by region
 	const regions = {}
@@ -13,12 +14,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		regions[d["State of the Environment Report drainage division"]].push(d)
 	})
 
-	// initialise series 1 for queensland
+	// initialise series for queensland
 	soefinding.findingContent.Queensland = {
 		series1: systems.map(s => {
 			return {
 				name: s,
 				data: series1Keys.map(k => 0)
+			}
+		}),
+		series2: series2Keys.map(s => {
+			return {
+				name: s,
+				data: systems.map(k => 0)
 			}
 		})
 	}
@@ -39,7 +46,22 @@ document.addEventListener("DOMContentLoaded", function () {
 				})
 
 				return retVal
+			}),
+			series2: series2Keys.map((k, i) => {
+
+				const retVal = {
+					name: k,
+					data: regions[r].map(d => d[k])
+				}
+
+				// side effect, populate qld values
+				retVal.data.forEach((rv, j) => {
+					soefinding.findingContent.Queensland.series2[i].data[j] += rv
+				})
+
+				return retVal
 			})
+
 		}
 	}
 
@@ -58,19 +80,45 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.labels.formatter = val => `${val/1000}K`
 	options1.yaxis.title.text = "Hectares"
 
-
 	soefinding.state.chart1 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series1,
 		options: options1,
 		chartactive: true,
 	}
 
+	const options2 = JSON.parse(JSON.stringify(options1))
+	options2.tooltip.y = options1.tooltip.y
+	options2.xaxis.categories = systems
+	options2.xaxis.title.text = "Wetland System"
+	options2.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : val > 1000 ? `${val/1000}K` : val
+
+	soefinding.state.chart2 = {
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
+		options: options2,
+		chartactive: true,
+	}
+
+
 
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function() { return `Proportion of freshwater wetland systems in protected areas in ${this.currentRegionName}, 2024`}
+			heading1: function() { 
+				let retVal = "Proportion of freshwater wetland systems in protected areas"
+				if (this.currentRegionName != "Queensland")
+					retVal += ` in ${this.currentRegionName}`
+				retVal += ", 2024 (TODO fix year)"
+				return retVal
+			},
+			heading2: function() { 
+				let retVal = "Overall protection of freshwater wetland systems"
+				if (this.currentRegionName != "Queensland")
+					retVal += ` in ${this.currentRegionName}`
+				retVal += ", 2024 (TODO fix year)"
+				return retVal
+			}
+
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
