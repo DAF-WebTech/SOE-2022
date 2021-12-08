@@ -65,7 +65,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = soefinding.getDefaultPieChartOptions()
 	options2.labels = soefinding.findingContent[soefinding.state.currentRegionName].series2Labels
+	options2.tooltip.y = { 
+		formatter: (val, options) => {
+			const percent = options.globals.seriesPercent[options.seriesIndex][0]
+			return `${val.toLocaleString()} ha (${percent.toFixed(1)}%)`
+		}
+	}
 	options2.xaxis.categories = ["Site", "Number of locations"]
+
 
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,

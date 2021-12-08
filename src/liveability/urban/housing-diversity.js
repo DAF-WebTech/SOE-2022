@@ -13,14 +13,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	)
 
 	const options1 = soefinding.getDefaultPieChartOptions()
+	options1.chart.type = "donut"
 	options1.labels = keys.map(k => k.replace("-", "–"))
 	options1.xaxis.categories = ["Type", "Amount"]
-	options1.tooltip = {
-		y: {
-			formatter: (val, options) => {
-				const percent = options.globals.seriesPercent[options.seriesIndex][0]
-				return `${val.toLocaleString()}ha (${percent.toFixed(1)}%)`
-			}
+	options1.tooltip.y = {
+		formatter: (val, options) => {
+			const percent = options.globals.seriesPercent[options.seriesIndex][0]
+			return `${val.toLocaleString()}ha (${percent.toFixed(1)}%)`
 		}
 	}
 

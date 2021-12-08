@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// set up chart 2
 	const options2 = soefinding.getDefaultPieChartOptions()
+	options2.chart.type= "donut"
 	options2.labels = ["Rural Land in Intensive Use", "Rural Land in Extensive Use", "Rural Land Not Settled", "Non Rural area"]
 	options2.xaxis.categories = ["Use", soefinding.findingContent[soefinding.state.currentRegionName].seriesLatestYear]
 	options2.tooltip = { y: { formatter: (val, options) => {
@@ -121,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// set up chart 3
 	const options3 = soefinding.getDefaultPieChartOptions()
+	options3.chart.type = "donut"
 	options3.labels = [soefinding.state.currentRegionName + " NRM Region", "All Other Qld"]
 	options3.xaxis.categories = ["Name", "Value"]
 	options3.tooltip = { y: { formatter: options2.tooltip.y.formatter } }

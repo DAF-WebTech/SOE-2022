@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options2 = soefinding.getDefaultPieChartOptions()
+	options2.chart.type = "donut"
 	options2.labels = ["Urban", "Non-Urban"]
 	options2.xaxis.categories = ["", "Hectares"]
 	options2.tooltip = {
@@ -85,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options3 = soefinding.getDefaultPieChartOptions()
+	options3.chart.type = "donut"
 	options3.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels3
 	options3.xaxis.categories = ["", "Hectares"]
 	options3.tooltip = { y: { formatter: options1.tooltip.y.formatter } }

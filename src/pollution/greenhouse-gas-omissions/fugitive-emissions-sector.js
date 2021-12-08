@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const qldSeries = qldItems.map(d => d[latestYear])
 
 	const options2 = JSON.parse(JSON.stringify(options1))
+	options2.chart.type = "donut"
 	options2.labels = qldItems.map(d => d.Category)
 
 	soefinding.state.chart2 = {
