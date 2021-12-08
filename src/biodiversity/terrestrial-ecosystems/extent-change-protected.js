@@ -60,10 +60,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `Cumulated extent of all protected areas`
 		},
 		methods: {
-			formatter1: () => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			onStackedRadioClick: function() {
+				this.chart2.options.chart.type = "bar"
+			},
+			onLineRadioClick: function() {
+				this.chart2.options.chart.type = "line"
+			}
 		}
 	})
-
-
-
+	
 })
