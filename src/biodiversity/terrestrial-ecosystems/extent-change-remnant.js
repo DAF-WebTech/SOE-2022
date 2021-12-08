@@ -179,6 +179,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
+		},
+		onStackedRadioClick: function() {
+			this.chart3.options.chart.type = "bar"
+			this.chart3.options.chart.stacked = true
+		},
+		onLineRadioClick: function() {
+			this.chart3.options.chart.type = "line"
+			this.chart3.options.chart.stacked = false
 		}
 	})
 
