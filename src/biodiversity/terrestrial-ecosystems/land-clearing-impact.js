@@ -15,8 +15,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
+	delete options1.xaxis.tickPlacement
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // en dash
 	options1.xaxis.title.text = "Year range"
+	options1.xaxis.labels.formatter = function(val) {
+		if (typeof val != "undefined") {
+			const year = Number(val.split("–")[1])
+			console.log(val, year, year%2)
+			return year % 2 ? "" : val
+		}
+	}
 	options1.yaxis.labels.formatter = val => `${val / 1000}K`
 	options1.yaxis.title.text = "Hectares per year"
 	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
@@ -52,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options2 = JSON.parse(JSON.stringify(options1))
+	options2.xaxis.labels.formatter = options1.xaxis.labels.formatter
 	options2.yaxis.labels.formatter = options1.yaxis.labels.formatter
 	options2.tooltip.y.formatter = options1.tooltip.y.formatter
 
