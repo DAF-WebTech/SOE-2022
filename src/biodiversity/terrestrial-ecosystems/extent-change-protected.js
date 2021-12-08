@@ -63,9 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val.toLocaleString(),
 			onStackedRadioClick: function() {
 				this.chart2.options.chart.type = "bar"
+				this.chart2.options.chart.stacked = true
 			},
 			onLineRadioClick: function() {
 				this.chart2.options.chart.type = "line"
+				this.chart2.options.chart.stacked = false
 			}
 		}
 	})
