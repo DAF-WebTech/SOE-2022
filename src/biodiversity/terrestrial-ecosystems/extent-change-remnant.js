@@ -93,10 +93,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = soefinding.getDefaultColumnChartOptions()
 	options2.chart.id = "chart2"
-	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}ha` } 
+	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}ha` }
 	options2.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].labels2
 	options2.xaxis.labels.trim = true,
-	options2.xaxis.labels.hideOverlappingLabels = false
+		options2.xaxis.labels.hideOverlappingLabels = false
 
 
 	options2.xaxis.tickPlacement = "between" // not a good option, but it fixes a bug
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.legend.inverseOrder = false
 	options3.legend.offsetY = 20
 	options3.legend.position = "bottom"
-	options3.tooltip.y = { formatter: val => val.toLocaleString() } 
+	options3.tooltip.y = { formatter: val => val.toLocaleString() }
 	options3.xaxis.categories = keys.map(k => [k.substring(0, k.indexOf("-")) + "–", k.substring(k.indexOf("-") + 1)])  //endash
 	delete options3.xaxis.tickPlacement
 	options3.xaxis.title.text = "Year"
@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => `Proportion of broad vegetation groups in ${soefinding.state.currentRegionName}, ${latestYear}`,
 			heading2: () => `Pre-clear and ${latestYear} extents of broad vegetation groups in ${soefinding.state.currentRegionName}`,
-			heading3: function() { 
+			heading3: function () {
 				let retVal = "Change in extent of broad vegetation groups"
 				if (this.currentRegionName != "Queensland")
 					retVal += ` in ${this.currentRegionName}`
@@ -178,15 +178,15 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
-		},
-		onStackedRadioClick: function() {
-			this.chart3.options.chart.type = "bar"
-			this.chart3.options.chart.stacked = true
-		},
-		onLineRadioClick: function() {
-			this.chart3.options.chart.type = "line"
-			this.chart3.options.chart.stacked = false
+			formatter1: val => val.toLocaleString(),
+			onStackedRadioClick: function () {
+				this.chart3.options.chart.type = "bar"
+				this.chart3.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart3.options.chart.type = "line"
+				this.chart3.options.chart.stacked = false
+			}
 		}
 	})
 
