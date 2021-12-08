@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
+	options1.chart.height = 450
 	options1.xaxis.categories = [...bioregions]
 	options1.xaxis.title.text = "Bioregion"
 	options1.yaxis.title.text = "Number of regional ecosystems"
@@ -87,6 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options4 = soefinding.getDefaultPieChartOptions()
+	options4.chart.type = "donut"
 	options4.labels = fields
 	options4.xaxis.categories = ["Biodiversity status", "Number of regional ecosystems"]
 
