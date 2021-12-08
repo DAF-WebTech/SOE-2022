@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		labels1: qldData.map(d => d["Broad vegetation group label"]) // or could be keys of bioregions
 	}
 
-	const options1 = soefinding.getDefaultPieChartOptions();
+	const options1 = soefinding.getDefaultPieChartOptions()
 	options1.chart.id = "chart1"
 	options1.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels1
 	options1.tooltip = {
@@ -143,11 +143,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options3 = soefinding.getDefaultStackedColumnChartOptions()
+	options3.chart.height = 600
 	options3.chart.id = "chart3"
-	options3.legend.labels = { trim: true }
+	options3.legend.inverseOrder = false
+	options3.legend.offsetY = 20
 	options3.legend.position = "bottom"
 	options3.tooltip.y = { formatter: val => val.toLocaleString() } 
 	options3.xaxis.categories = keys.map(k => [k.substring(0, k.indexOf("-")) + "–", k.substring(k.indexOf("-") + 1)])  //endash
+	delete options3.xaxis.tickPlacement
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
 	options3.yaxis.labels.minWidth = 30
@@ -168,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: () => `Proportion of broad vegetation groups in ${soefinding.state.currentRegionName}, ${latestYear}`,
 			heading2: () => `Pre-clear and ${latestYear} extents of broad vegetation groups in ${soefinding.state.currentRegionName}`,
 			heading3: function() { 
-				const retVal = "Change in extent of broad vegetation groups"
+				let retVal = "Change in extent of broad vegetation groups"
 				if (this.currentRegionName != "Queensland")
 					retVal += ` in ${this.currentRegionName}`
 				return retVal
