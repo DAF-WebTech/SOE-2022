@@ -15,12 +15,27 @@ document.addEventListener("DOMContentLoaded", function () {
 	 }]
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
+	options1.chart.height = 500
 	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
-	options1.xaxis.categories = series1Keys
-	options1.xaxis.labels = { trim: true, maxHeight: 160 }
+	delete options1.xaxis.tickPlacement
+	options1.xaxis.categories = /* series1Keys */ [
+		["National park", "(scientific)"], 
+		"National park", 
+		["National park (Cape", " York Aboriginal land)"],
+		"Conservation park", 
+		"Resources reserve", 
+		"Nature refuge", 
+		["Marine conservation", "park zone"], 
+		["Marine national",  "park zone"], 
+		["Marine preservation", "zone"], 
+		"Buffer zone", 
+		["Scientific research", "zone"], 
+		["Fish habitat area", "management level A"], 
+		["Fish habitat area", "management level B"]
+	]
 	options1.xaxis.title.text = "Protected area type"
-	options1.yaxis.title.text = "Hectares"
 	options1.yaxis.labels.formatter = val => `${val / 1000}K`
+	options1.yaxis.title.text = "Hectares"
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -33,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const series2 = series2Keys.map(k => soefinding.findingJson.data[0][k])
 
 	const options2 = soefinding.getDefaultPieChartOptions()
+	options2.chart.type = "donut"
 	options2.labels = series2Keys
 	options2.tooltip = { y: { formatter: (val, options) => {
 		const percent = options.globals.seriesPercent[options.seriesIndex][0]
