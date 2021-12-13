@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		data: soefinding.state,
 		computed: {
 			heading1: () => {
-				let retVal = "Proportion of replacement landcover (clearing type) in threatened fauna habitat"
+				let retVal = `Proportion of replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
 				if (soefinding.state.currentRegionName != "Queensland") {
 					retVal += " in "
 					if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
