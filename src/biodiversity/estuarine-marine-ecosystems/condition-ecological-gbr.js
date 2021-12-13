@@ -18,25 +18,26 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	soefinding.state.dial = {
-		imgsrc: "./?a=1479906:v4",
+		number: 6,
 		val: "Good",
 		measure: "Condition",
 		rankings: ["Very High", "Good", "Poor", "Very Poor"]
 	}
 
-	
+
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
 			heading1: () => "Condition of ecological processes in the Great Barrier Reef, 2024 TODO fix year",
-
 		},
 		methods: {
 			formatter1: val => val,
+			getdialurl1: function () {
+				return soefinding.getDialUrl(this.dial.number)
+			}
+
 		}
 	})
-
-
 
 })
