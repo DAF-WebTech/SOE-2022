@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		else
 			return `${val / 1000}K`
 	}
-	options3.tooltip .y = { formatter: val => val.toLocaleString() } 
+	options3.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.chart3 = {
 		options: options3,
@@ -91,6 +91,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	options4.chart.type = "donut"
 	options4.labels = fields
 	options4.xaxis.categories = ["Biodiversity status", "Number of regional ecosystems"]
+	options4.tooltip.y = {
+		formatter: (val, options) => {
+			const percent = options.globals.seriesPercent[options.seriesIndex][0]
+			return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+		}
+	}
 
 	soefinding.state.chart4 = {
 		options: options4,
@@ -99,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	soefinding.state.chart5 = {
-		options: options4,
+		options: options4, //reüse
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series5,
 		chartactive: true,
 	}
