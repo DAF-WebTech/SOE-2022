@@ -17,8 +17,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: false,
 	}
 
+	soefinding.state.dial = {
+		imgsrc: "./?a=1479906:v4",
+		val: "Good",
+		measure: "Condition",
+		rankings: ["Very High", "Good", "Poor", "Very Poor"]
+	}
 
-
+	
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
@@ -30,4 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val,
 		}
 	})
+
+
+
 })
