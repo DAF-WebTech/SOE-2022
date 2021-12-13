@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options2 = soefinding.getDefaultPieChartOptions()
+	options2.chart.type = "donut"
 	options2.chart.id = "chart2"
 	options2.labels = fields
 	options2.xaxis.categories = ["Type", "Area (ha)"] // not needed for chart, but vue uses them for table headings
