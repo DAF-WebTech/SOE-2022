@@ -32,23 +32,47 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	});
 
+	soefinding.state.chart1.series.sort(function (a, b) {
+		return b.data[0] - a.data[0]
+	})
+
 
 
 	soefinding.state.chart1.options = soefinding.getDefaultBarChartOptions();
-	soefinding.state.chart1.options.chart.stacked = "true";
+	soefinding.state.chart1.options.chart.stacked = true;
+	soefinding.state.chart1.options.legend.inverseOrder = true
+	delete soefinding.state.chart1.options.xaxis.tickPlacement
 	soefinding.state.chart1.options.xaxis.categories = soefinding.yearKeys;
 	soefinding.state.chart1.options.xaxis.title.text = "Year";
 	soefinding.state.chart1.options.yaxis.title.text = "Hectares";
 	soefinding.state.chart1.options.tooltip.y = {
-		formatter: val => val.toLocaleString() + " ha"
+		formatter: function (val) {
+			if (val == null)
+				return "n/a"
+			else
+				return `${val.toLocaleString()} ha`
+		}
 	}
 
 
 	soefinding.state.chart2.options = JSON.parse(JSON.stringify(soefinding.state.chart1.options))
-	soefinding.state.chart2.options.tooltip.y = {
-		formatter: val => val.toLocaleString() + " ha"
-	}
+	soefinding.state.chart2.options.tooltip.y = soefinding.state.chart1.options.tooltip.y
 	soefinding.state.chart2.options.yaxis.labels.formatter = val => (val / 1000000) + "M"
+
+
+	// note chart 3 is a line chart version of chart 1, and goes under chart 1
+	soefinding.state.chart3 = {
+		series: soefinding.state.chart1.series,
+		chartactive: true
+	}
+	soefinding.state.chart3.options = JSON.parse(JSON.stringify(soefinding.state.chart1.options))
+	soefinding.state.chart3.options.chart.type = "line"
+	soefinding.state.chart3.options.chart.stacked = false;
+	soefinding.state.chart3.options.legend.inverseOrder = false
+	soefinding.state.chart3.options.tooltip.y = soefinding.state.chart1.options.tooltip.y
+	soefinding.state.chart3.options.xaxis.tickPlacement = "on"
+	soefinding.state.chart3.options.yaxis.labels.formatter = soefinding.state.chart1.options.yaxis.labels.formatter
+
 
 
 
@@ -57,18 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		data: soefinding.state,
 		computed: {
 			heading1: () => `Cumulated number of each protected area`,
-			heading2: () => `Cumulated extent of all protected areas`
+			heading2: () => `Cumulated extent of all protected areas`,
+			heading3: () => `Number of each protected area`
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString() ?? "",
-			onStackedRadioClick: function () {
-				this.chart2.options.chart.type = "bar"
-				this.chart2.options.chart.stacked = true
-			},
-			onLineRadioClick: function () {
-				this.chart2.options.chart.type = "line"
-				this.chart2.options.chart.stacked = false
-			}
+			formatter1: val => val?.toLocaleString() ?? ""
 		}
 	})
 
