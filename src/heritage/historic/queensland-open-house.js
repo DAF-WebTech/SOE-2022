@@ -5,8 +5,8 @@ soefinding.regions = pinLocations // these should already be set in ssjs
 
 document.addEventListener("DOMContentLoaded", function () {
 
-	const years = [...new Set(soefinding.findingJson.data.map(d => d.Year))]
-	const locations = [...new Set(soefinding.findingJson.data.map(d => d.Location))]
+	const years = [...new Set(soefinding.findingJson.data.map(d => d.Year))] // array of each unique year
+	const locations = [...new Set(soefinding.findingJson.data.map(d => d.Location))] // array of each unique location
 
 	const qldSeries1 = locations.map(loc => {
 		const locationData = soefinding.findingJson.data.filter(d => d.Location == loc)
@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			name: loc,
 			data: years.map(y => {
 				const item = locationData.find(ld => ld.Year == y)
-				if (item)
+				if (item && item["Heritage places open"] == "No Data – event not held")
+					return "No Data<br>event not held"
+				else if (item)
 					return item["Heritage places open"]
 				else
 					return ""
@@ -40,8 +42,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			name: loc,
 			data: years.map(y => {
 				const item = locationData.find(ld => ld.Year == y)
-				if (item)
-					return item["Visitors"]
+				if (item && item.Visitors == "No Data – event not held")
+					return "No Data<br>event not held"
+				else if (item)
+					return item.Visitors
 				else
 					return ""
 			})
@@ -76,8 +80,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.findingContent[q.name].categories = []
 		const newData = [] // 
 		soefinding.findingContent[q.name].app3[0].data.forEach((d, i) => {
-			if (!isNaN(parseInt(d))) {
-				newData.push(d)
+			if (d != "") {
+				if (d == "No Data – event not held") 
+					newData.push(0)
+				else
+					newData.push(d)
 				soefinding.findingContent[q.name].categories.push(years[i])
 			}
 		})
@@ -107,8 +114,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.findingContent[q.name].categories = []
 		const newData = [] // 
 		soefinding.findingContent[q.name].app4[0].data.forEach((d, i) => {
-			if (!isNaN(parseInt(d))) {
-				newData.push(d)
+			if (d != "") {
+				if (d == "No Data – event not held") 
+					newData.push(0)
+				else
+					newData.push(d)
 				soefinding.findingContent[q.name].categories.push(years[i])
 			}
 		})
@@ -138,7 +148,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `People visiting heritage places in ${soefinding.state.currentRegionName}`
 		},
 		methods: {
-			formatter1: val => isNaN(parseInt(val)) ? "" : val.toLocaleString(),
+			//formatter1: val => isNaN(parseInt(val)) ? "" : val.toLocaleString(),
+			formatter1: val => val.toLocaleString(),
+			formatter3: val => val == 0 ? "No Data — event not held" : val.toLocaleString(),
 		}
 	})
 
