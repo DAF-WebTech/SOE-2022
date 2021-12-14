@@ -52,6 +52,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
+	//todo, we will need to rewrite this page to accommodate the expected regions
+	//this is just to make sure the page works without error
+	soefinding.regionNames.forEach(r => soefinding.findingContent[r] = {})
+
 
 	new Vue({
 		el: "#chartContainer",
@@ -65,9 +69,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 	
-		window.soefinding.onRegionChange = function () {
-			soefinding.loadFindingHtml()
-		}
+	window.soefinding.onRegionChange = function () {
+		soefinding.loadFindingHtml()
+	}
 
 
 })
