@@ -64,5 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val.toLocaleString()
 		}
 	})
+	
+		window.soefinding.onRegionChange = function () {
+			soefinding.loadFindingHtml()
+		}
+
 
 })
