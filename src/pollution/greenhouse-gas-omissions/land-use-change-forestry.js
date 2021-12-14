@@ -36,20 +36,22 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: yearKeys.map(y => d[y])
 		}
 	})
+	stateSectorSeries.sort(function (a, b) {
+		return b.data[b.data.length - 1] - a.data[a.data.length - 1]
+	})
+
 
 	const options2 = soefinding.getDefaultAreaChartOptions()
-//	options2.forceNiceScale = false
+	delete options2.forceNiceScale
 	options2.stroke = { width: 2 }
 	options2.xaxis.categories = yearKeys
 	options2.xaxis.title.text = "Year"
-//	options2.yaxis.max = 125
-//	options2.yaxis.min = -25
-//	options2.yaxis.tickAmount = 6
 	options2.yaxis.title.text = "Tonnes of carbon dioxide equivalent (million)"
-	//options2.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, { maximumFractionDigits: 2})}M`
+	options2.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, { maximumFractionDigits: 2 })}M`
 	options2.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}
+
 
 	soefinding.state.chart2 = {
 		options: options2,
