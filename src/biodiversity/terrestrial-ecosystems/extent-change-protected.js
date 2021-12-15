@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.chart3.options.tooltip.y = soefinding.state.chart1.options.tooltip.y
 	soefinding.state.chart3.options.xaxis.tickPlacement = "on"
 	soefinding.state.chart3.options.yaxis.labels.formatter = soefinding.state.chart1.options.yaxis.labels.formatter
-
+	soefinding.state.chart3.options.tooltip.shared = false
 
 
 
