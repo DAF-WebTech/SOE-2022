@@ -17,11 +17,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (region == "Reef Water Quality report card") {
 			soefinding.findingContent[region] = {
 				series: {
-					headings: ["Year", "Identified pressure", "Per cent (%) of land in priority areas<br>managed using best management practice systems<br>for water quality outcomes (soil, nutrient and pesticides)"],
+					headings: ["Year", "Progress toward the 2025 land management target", "Per cent (%) of land in priority areas managed using best management practice systems for water quality outcomes (soil, nutrient and pesticides)"],
 					data: data.map(d => {
 						return [
 							d.Year,
-							d.Subcatchment,
+							d["Identified pressure"],
 							d["Per cent of land in priority areas managed using best management practice systems for water quality outcomes (soil, nutrient and pesticides)"]
 						]
 					})
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 			}
 		}
-	}
+	} 
 
 	const noData = ["Queensland", "Healthy Land and Water South East Queensland report card",
 		"Fitzroy Basin report card", "Gladstone Harbour report card", "Mackay–Whitsunday–Isaac report card",
