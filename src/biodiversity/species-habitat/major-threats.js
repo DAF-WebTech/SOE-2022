@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	)
 
 	const options = soefinding.getDefaultBarChartOptions()
-	options.chart.height = 500
+	options.chart.height = 600
 	options.xaxis.categories = chartItems.map(d => d.Threat.replace("-", "—"))
 	options.xaxis.categories.push("Others")
 	options.xaxis.labels.trim = true
