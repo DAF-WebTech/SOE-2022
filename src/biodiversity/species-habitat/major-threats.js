@@ -30,11 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			horizontal: true,
 		}
 	}
-	options.xaxis.title.text = "Threat"
+	options.xaxis.title.text = "Number of threatened species"
 	options.yaxis.labels.minWidth = 300
 	options.yaxis.labels.maxWidth = 300
 	options.yaxis.title.offsetX = 15
-	options.yaxis.title.text = "Number of threatened species"
+	options.yaxis.title.text = "Threat"
 
 
 	soefinding.state.chart1 = {
