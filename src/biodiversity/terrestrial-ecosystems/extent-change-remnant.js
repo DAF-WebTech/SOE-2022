@@ -155,6 +155,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
 	options3.yaxis.labels.minWidth = 30
 	options3.yaxis.title.text = "Hectares lost"
+	options3.tooltip.shared = false
+
 
 
 	soefinding.state.chart3 = {
