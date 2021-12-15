@@ -32,11 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	});
 
-	soefinding.state.chart1.series.sort(function (a, b) {
-		return b.data[0] - a.data[0]
-	})
-
-
 
 	soefinding.state.chart1.options = soefinding.getDefaultBarChartOptions();
 	soefinding.state.chart1.options.chart.stacked = true;
@@ -68,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.chart3.options = JSON.parse(JSON.stringify(soefinding.state.chart1.options))
 	soefinding.state.chart3.options.chart.type = "line"
 	soefinding.state.chart3.options.chart.stacked = false;
-	soefinding.state.chart3.options.legend.inverseOrder = false
+	//soefinding.state.chart3.options.legend.inverseOrder = false
 	soefinding.state.chart3.options.tooltip.y = soefinding.state.chart1.options.tooltip.y
 	soefinding.state.chart3.options.xaxis.tickPlacement = "on"
 	soefinding.state.chart3.options.yaxis.labels.formatter = soefinding.state.chart1.options.yaxis.labels.formatter
