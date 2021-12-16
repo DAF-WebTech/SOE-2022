@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
+	options1.chart.id = "chart1"
 	options1.tooltip.y = {
 		formatter: val => val.toLocaleString()
 	}
@@ -42,17 +43,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	const options2 = JSON.parse(JSON.stringify(options1))
+	delete options2.chart.id
 	delete options2.chart.stacked
 	options2.yaxis.labels.formatter = options1.yaxis.labels.formatter
 	options2.tooltip.y = options1.tooltip.y
 	soefinding.state.chart2 = {
-		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
+		series: soefinding.findingContent.Gulf.series2, //arbitrary default, will be overwritten by onRegionChange
 		options: options2,
 		chartactive: true
 	}
 
 
 	const YEAR = "TODO YEAR"
+
 
 	new Vue({
 		el: "#chartContainer",
@@ -72,6 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.onRegionChange = function () {
 		console.log("onRegionChange", soefinding.state.currentRegionName)
 
+		toggleDivDisplay()
+
 		//options1.chart.stacked = soefinding.state.currentRegionName == "Queensland"
 		if (soefinding.state.currentRegionName != "Queensland")
 			soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
@@ -79,4 +84,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		soefinding.loadFindingHtml()
 	}
+
 })
+
+function toggleDivDisplay() {
+	document.getElementById("qldDiv").style.display = soefinding.state.currentRegionName == "Queensland" ? "block" : "none"
+	document.getElementById("regionDiv").style.display = soefinding.state.currentRegionName != "Queensland" ? "block" : "none"
+
+}
+
+
+window.addEventListener("load", function () {
+	window.setTimeout(toggleDivDisplay, 1)
+})
+
