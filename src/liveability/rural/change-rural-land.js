@@ -90,6 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 
 	}
+
+	soefinding.findingContent.Queensland.series3 = [0, 0] // not used but needed to avoid error
+
 	soefinding.state.series4["Burnett Mary"].checked = true
 
 
@@ -136,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// chart 4 already done in loop
 
-	new Vue({
+	soefinding.vueApp = new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
@@ -167,20 +170,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart1.options.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
-		ApexCharts.exec("chart1", "updateOptions", {
-			xaxis: { categories: soefinding.state.chart1.options.xaxis.categories }
-		}, true)
-		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
-		soefinding.state.chart2.options.xaxis.categories[1] = soefinding.findingContent[soefinding.state.currentRegionName].series2LatestYear
-		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
+		soefinding.vueApp.chart1.options.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
+		soefinding.vueApp.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
 
-		soefinding.state.chart3.options.labels[0] = soefinding.state.currentRegionName + " NRM Region"
-		ApexCharts.exec("chart1", "updateOptions", {
-			labels: soefinding.state.chart3.options.labels
-		}, true)
-		soefinding.state.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
+		soefinding.vueApp.chart2.options.xaxis.categories[1] = soefinding.findingContent[soefinding.state.currentRegionName].series2LatestYear
+		soefinding.vueApp.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
+
+		soefinding.vueApp.chart3.options.labels[0] = soefinding.state.currentRegionName + " NRM Region"
+		soefinding.vueApp.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
 
 		soefinding.loadFindingHtml()
 	}
