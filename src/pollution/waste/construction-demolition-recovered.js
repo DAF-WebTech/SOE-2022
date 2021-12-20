@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	//1. column chart for qld for the last four years
 	const qldItem = soefinding.findingJson.data.find(d => d.Material == "Total")
 	const fourYearSeries = [{
-		name: "Total",
+		name: "Tonnes",
 		data: lastFourYears.map(y => qldItem[y])
 	}]
 
