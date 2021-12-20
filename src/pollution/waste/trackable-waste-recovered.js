@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const wasteSeries = wasteItems.map(d => d[latestYear])
 
 	const options2 = soefinding.getDefaultPieChartOptions()
+	options2.colors = options2.colors.concat(["#33b2df", "#546E7A", "#d4526e", "#13d8aa", "#A5978B"])
 	options2.xaxis.categories = ["Waste description", latestYear]
 	options2.labels = wasteItems.map(d => d["Waste description"])
 	options2.tooltip = {
