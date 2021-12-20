@@ -69,8 +69,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	const regionSeries = regionItems.map(d => d[latestYear])
 
 	const options3 = soefinding.getDefaultPieChartOptions()
-	options3.xaxis.categories = ["Waste Region", "Tonnes"] //ndash
 	options3.labels = regionItems.map(d => d["Waste region"].replace("-", "–"))
+	options3.tooltip.y = {
+		formatter: (val, options) => {
+			const percent = options.globals.seriesPercent[options.seriesIndex][0]
+			return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+		}
+	}
+	options3.xaxis.categories = ["Waste Region", "Tonnes"]
 
 	soefinding.state.chart3 = {
 		options: options3,
