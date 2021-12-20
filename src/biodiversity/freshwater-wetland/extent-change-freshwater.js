@@ -150,13 +150,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options5 = soefinding.getDefaultLineChartOptions()
-	options5.xaxis.categories = series5Keys
+	options5.xaxis.categories = series5Keys.map(k => k.replace("-", "–")) //ndash
 	options5.xaxis.tickPlacement = "between"
 	options5.xaxis.title = "Year"
 	options5.yaxis.title = "Change in hectares"
 	delete options5.yaxis.forceNiceScale
 	options5.yaxis.labels.formatter = val => soefinding.convertToUnicodeMinus(val)
-	console.log("options5", options5)
 
 	soefinding.state.chart5 = {
 		options: options5,
