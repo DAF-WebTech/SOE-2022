@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options2 = soefinding.getDefaultPieChartOptions()
+	options2.chart.type = "donut"
 	options2.chart.id = "chart2"
 	options2.labels = seriesNames
 	options2.xaxis = { categories: ["Drainage division", "Hectares"] }
@@ -68,7 +69,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 
-	soefinding.findingContent.Queensland = { series2: [1, 1, 1] }// dummy values, never used
+	soefinding.findingContent.Queensland = { 
+		series2: [1, 2, 3] 
+	}// dummy values, never used
 
 
 	soefinding.state.chart2 = {
@@ -78,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	// chart 3 shared
+	// series 3 is shared between chart 3 (qld) and chart 4 (regional)
 	const series3Names = [...seriesNames, "Total"]
 	const series3items = soefinding.findingJson.data.filter(d => d["Drainage division"] != "Other"
 		&& d["Drainage division"] != "Queensland"
@@ -100,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 
 	const options3 = soefinding.getDefaultColumnChartOptions()
-	//options3.plotOptions = { bar: { barHeight: "90%" } }
 	options3.tooltip.y = { formatter: val => val } 
 	options3.xaxis.categories = series3Names
 	options3.xaxis.title.text = "Wetland system"
@@ -112,30 +114,77 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.yaxis.tickAmount = 5
 	options3.yaxis.labels.formatter = val => Math.round(val)
 
+
 	soefinding.state.chart3 = {
+		options: options3,
+		series: soefinding.findingContent.Queensland.series3,
+		chartactive: true,
+	}
+
+
+	soefinding.state.chart4 = {
 		options: options3,
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
 		chartactive: true,
 	}
 
 
+	let series5currentRegion = ""
+	const series5Parse = JSON.parse(document.getElementById("jsonData2").textContent)
+	const series5Keys = series5Parse.meta.fields.slice(2) 
+	soefinding.findingContent.Other = {} // not used but it's simpler if it's there
+	series5Parse.data.forEach(d => {
+		if (series5currentRegion != d["Drainage division"]) {
+			soefinding.findingContent[d["Drainage division"]].series5 = [{
+				name: d["Wetland system"],
+				data: series5Keys.map(k => d[k])
+			}]
 
-	new Vue({
+			series5currentRegion = d["Drainage division"]
+		}
+		else
+			soefinding.findingContent[d["Drainage division"]].series5.push({
+				name: d["Wetland system"],
+				data: series5Keys.map(k => d[k])
+			})
+	})
+
+	const options5 = soefinding.getDefaultLineChartOptions()
+	options5.xaxis.categories = series5Keys
+	options5.xaxis.tickPlacement = "between"
+	options5.xaxis.title = "Year"
+	options5.yaxis.title = "Change in hectares"
+	delete options5.yaxis.forceNiceScale
+	options5.yaxis.labels.formatter = val => soefinding.convertToUnicodeMinus(val)
+	console.log("options5", options5)
+
+	soefinding.state.chart5 = {
+		options: options5,
+		series: soefinding.findingContent[soefinding.state.currentRegionName].series5,
+		chartactive: true,
+	}
+
+
+
+
+	const YEAR = "TODO YEAR"
+
+	soefinding.vueApp = new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Freshwater wetland systems extent by region, 2024  TODO fix year`,
-			heading2: () => `Proportion of freshwater wetland systems extent in ${soefinding.state.currentRegionName}, 2024 TODO fix year`,
-			heading3: () => {
-				if (soefinding.state.currentRegionName == "Queensland")
-					return "Freshwater wetland systems percentage of pre-clear extent remaining, 2017 TODO fix year"
-				else
-					return `Freshwater wetland system percentage of pre-clear extent remaining in ${soefinding.state.currentRegionName}, 2017 TODO fix year`
+			heading1: () => `Freshwater wetland systems extent by region, 2024  ${YEAR}`,
+			heading2: () => `Proportion of freshwater wetland systems extent in ${soefinding.state.currentRegionName}, ${YEAR}`,
+			heading3: () => `"Freshwater wetland systems percentage of pre-clear extent remaining, ${YEAR}`,
+			heading4: () => `Freshwater wetland system percentage of pre-clear extent remaining in ${soefinding.state.currentRegionName}, ${YEAR}`,
+			heading5: function() {
+				return `Trends in change (loss or gain) in freshwater wetland systems in ${this.currentRegionName}` 
 			}
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
-			formatter3: val => val.toFixed(1)
+			formatter3: val => val.toFixed(1),
+			formatter5: val => soefinding.convertToUnicodeMinus(val)
 		}
 	})
 
@@ -143,31 +192,34 @@ document.addEventListener("DOMContentLoaded", function () {
 	window.soefinding.onRegionChange = function () {
 		// set the data series in each of the vue apps, for the current region
 
-// 		if (this.state.currentRegionName == "Queensland") {
-// 			ApexCharts.exec("chart1", "updateSeries", series1)
-// 			soefinding.state.chart1.series = series1
-// 			ApexCharts.exec("chart1", "render")
-// 		}
+		toggleDisplayDivs()
 
 		// chart 2
-		if (this.state.currentRegionName != "Queensland") {
-			//ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-			soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
+		if (this.vueApp.currentRegionName != "Queensland") {
+			this.vueApp.chart2.series = this.findingContent[this.state.currentRegionName].series2
+			this.vueApp.chart4.series = this.findingContent[this.state.currentRegionName].series3
 		}
 
-		// chart 3
-		//ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
-		//soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
+
+		this.vueApp.chart5.series = this.findingContent[this.state.currentRegionName].series5
 
 
-
-		// but we also need this for the chart to update
-		//		ApexCharts.exec("chart1", "updateOptions", {
-		//			xaxis: { categories: this.findingContent[this.state.currentRegionName].groups }
-		//		}, true)
-		// this works on the table
-		//		options1.xaxis.categories = this.findingContent[this.state.currentRegionName].groups
 
 		soefinding.loadFindingHtml()
 	}
+})
+
+
+function toggleDisplayDivs() {
+	Array.from(document.querySelectorAll("div.displayQld")).forEach( function(d) {
+		d.style.display = soefinding.state.currentRegionName == "Queensland" ? "block" : "none"
+	})
+	Array.from(document.querySelectorAll("div.displayRegional")).forEach( function(d) {
+		d.style.display = soefinding.state.currentRegionName != "Queensland" ? "block" : "none"
+	})
+
+}
+
+window.addEventListener("load", function() {
+	window.setTimeout(toggleDisplayDivs, 1)
 })
