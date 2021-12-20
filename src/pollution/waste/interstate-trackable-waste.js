@@ -126,8 +126,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options4 = soefinding.getDefaultBarChartOptions()
 	options4.chart.stacked = true
+	options4.tooltip.y = { formatter: val => val.toLocaleString() }
 	options4.xaxis.categories = Object.keys(wasteTypes)
+	options4.xaxis.labels.hideOverlappingLabels = false
+	options4.xaxis.labels.trim = true
+	options4.xaxis.tickPlacement = "between"
 	options4.xaxis.title.text = "Tonnes"
+	options4.yaxis.labels.formatter = val => val >= 1000 ? `${val / 1000}K` : val
 	options4.yaxis.title.text = "Waste description"
 
 	soefinding.state.chart4 = {
