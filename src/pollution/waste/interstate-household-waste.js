@@ -18,18 +18,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
-	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
-	options1.xaxis.title.text = "Year"
-	options1.yaxis.title.text = "Tonnes (million)"
-	options1.yaxis.labels.formatter = val => `${(val / 1000000)}M`
-	options1.tooltip.shared = false
+	options1.markers = { size: 4 } // line chart only
+	options1.tooltip.shared = false // line chart only
 	options1.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
+	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
+	options1.xaxis.title.text = "Year"
 	options1.yaxis.forceNiceScale = false
-	options1.yaxis.min = 0
+	options1.yaxis.labels.formatter = val => `${(val / 1000000)}M`
 	options1.yaxis.max = 1250000
+	options1.yaxis.min = 0
 	options1.yaxis.tickAmount = 5
+	options1.yaxis.title.text = "Tonnes (million)"
 
 
 	soefinding.state.chart1 = {
