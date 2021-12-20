@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 1. stacked columns, waste by type
 	let wasteTypes = soefinding.findingJson.data.filter(d => d["Waste type"] != "All")
-	wasteTypes.sort(function(a, b) {
+	wasteTypes.sort(function (a, b) {
 		return b[latestYear] - a[latestYear]
 	})
 	const wasteTypeSeries = wasteTypes.map(d => {
@@ -21,16 +21,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.chart.stacked = true
 	options1.legend.inverseOrder = true
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
-    options1.xaxis.title.text = "Year"
-    options1.yaxis.title.text = "Tonnes"
-    options1.yaxis.labels.formatter = val =>  `${val/1000000}M`
-    options1.tooltip.y = {
-        formatter: val => `${val.toLocaleString()}`
-    }
-    options1.yaxis.forceNiceScale = false
-    options1.yaxis.min = 0
-    options1.yaxis.max = 1250000
-    options1.yaxis.tickAmount = 5
+	options1.xaxis.title.text = "Year"
+	options1.yaxis.title.text = "Tonnes"
+	options1.yaxis.labels.formatter = val => `${val / 1000000}M`
+	options1.tooltip.y = {
+		formatter: val => `${val.toLocaleString()}`
+	}
+	options1.yaxis.forceNiceScale = false
+	options1.yaxis.min = 0
+	options1.yaxis.max = 1250000
+	options1.yaxis.tickAmount = 5
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -40,21 +40,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	//2. line chart,yearly trend
-    const wasteConstructionDemolition = soefinding.findingJson.data.find(d => d["Waste type"] == "Construction and demolition")
-    const wasteConstructionDemolitionSeries = [{ name: "Tonnes", data:yearKeys.map(y => wasteConstructionDemolition[y])}]
+	const wasteConstructionDemolition = soefinding.findingJson.data.find(d => d["Waste type"] == "Construction and demolition")
+	const wasteConstructionDemolitionSeries = [{ name: "Tonnes", data: yearKeys.map(y => wasteConstructionDemolition[y]) }]
 
 	const options2 = soefinding.getDefaultLineChartOptions()
 	options2.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
-    options2.xaxis.title.text = "Year"
-    options2.yaxis.title.text = "Tonnes"
-    options2.yaxis.labels.formatter = val => val < 1000000 ? `${val/1000}K` : `${val/1000000}M` 
-    options2.tooltip.y = {
-        formatter: val => `${val.toLocaleString()}`
-    }
-    options1.yaxis.forceNiceScale = false
-    options1.yaxis.min = 0
-    options1.yaxis.max = 1200000
-    options1.yaxis.tickAmount = 6
+	options2.xaxis.title.text = "Year"
+	options2.yaxis.title.text = "Tonnes"
+	options2.yaxis.labels.formatter = val => val < 1000000 ? `${val / 1000}K` : `${val / 1000000}M`
+	options2.tooltip.y = {
+		formatter: val => `${val.toLocaleString()}`
+	}
+	options1.yaxis.forceNiceScale = false
+	options1.yaxis.min = 0
+	options1.yaxis.max = 1200000
+	options1.yaxis.tickAmount = 6
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// 3. pie, latest, not sent to landfill 
 	//2018-19 Not sent to landfill
 	const LATEST_NOT_SENT = "2018-19 Not sent to landfill"
-	wasteTypes.sort(function(a, b) {
+	wasteTypes.sort(function (a, b) {
 		return b[LATEST_NOT_SENT] - a[LATEST_NOT_SENT]
 	})
 	wasteTypes = wasteTypes.filter(d => d[LATEST_NOT_SENT] != null)
@@ -74,23 +74,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options3 = soefinding.getDefaultPieChartOptions()
 	options3.labels = wasteTypes.map(d => d["Waste type"])
+	options3.tooltip.y = {
+		formatter: (val, options) => {
+			const percent = options.globals.seriesPercent[options.seriesIndex][0]
+			return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+		}
+	}
 	options3.xaxis.categories = ["Waste type", "Tonnes"] // not needed for chart, but vue uses them for table headings
 
 	soefinding.state.chart3 = {
 		options: options3,
 		series: notSentLandfillSeries,
 		chartactive: true,
-	};
+	}
 
 
 	// 4 stacked columns, latest year, other and landfill
-	const keys = ["2018-19 Received by Landfill", LATEST_NOT_SENT]   
-	const latestOtherLandfillSeries = keys.map(k =>
-	{
-      return {
-      	name: k.replace ("-", "–"), // ndash
-      	data: wasteTypes.map(d => d[k])
-      }
+	const keys = ["2018-19 Received by Landfill", LATEST_NOT_SENT]
+	const latestOtherLandfillSeries = keys.map(k => {
+		return {
+			name: k.replace("-", "–"), // ndash
+			data: wasteTypes.map(d => d[k])
+		}
 	})
 
 
@@ -99,9 +104,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options4.xaxis.categories = wasteTypes.map(d => d["Waste type"].split(" ")) //keys
 	options4.xaxis.title.text = "Type of interstate construction and demolition waste received"
 	options4.yaxis.title.text = "Tonnes (million)"
-	options4.yaxis.labels.formatter = val => { 
+	options4.yaxis.labels.formatter = val => {
 		if (val == 0) return 0
-		if (val >= 1000000) return "1M" 
+		if (val >= 1000000) return "1M"
 		return `${(val / 1000).toFixed(0)}K`
 	}
 	options4.tooltip.y = {
@@ -128,10 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? ""
 		},
-		mounted: function() { 
-//           const divs = document.querySelectorAll("div.region-info")
-//           divs[0].querySelector("th").textContent = "Waste type"
-//           divs[1].querySelector("th").textContent = "Year range"
+		mounted: function () {
 		}
 
 	})
