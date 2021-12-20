@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 1. stacked column, waste type yearly
 	const sectorItems = soefinding.findingJson.data.filter(d => d["Waste type"] !== "All")
-	sectorItems.sort(function(a, b) {
-	  return b[latestYear] - a[latestYear]
+	sectorItems.sort(function (a, b) {
+		return b[latestYear] - a[latestYear]
 	})
 	const wasteTypeSeries = sectorItems.map(d => {
 		return {
@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Tonnes (million)"
 	options1.yaxis.labels.formatter = val => `${(val / 1000000)}M`
+	options1.tooltip.shared = false
 	options1.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.tooltip.y = {
 		formatter: val => `${val}`
 	}
-	
+
 
 
 	soefinding.state.chart2 = {
@@ -92,29 +93,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 4 stacked columns, latest year, other and landfill
-	const keys = ["2018-19 Received by Landfill", "2018-19 Other"]   
-	const latestOtherLandfillSeries = keys.map(k =>
-	{
-      return {
-      	name: k.replace("-", "–").split(" "),  //ndash
-      	data: sectorItems.map(d => d[k])
-      }
+	const keys = ["2018-19 Received by Landfill", "2018-19 Other"]
+	const latestOtherLandfillSeries = keys.map(k => {
+		return {
+			name: k.replace("-", "–").split(" "),  //ndash
+			data: sectorItems.map(d => d[k])
+		}
 	})
 
 
 	const options4 = soefinding.getDefaultBarChartOptions()
 	options4.chart.stacked = true
-	options4.xaxis.categories = sectorItems.map(d => d["Waste type"].split(" ")) 
+	options4.xaxis.categories = sectorItems.map(d => d["Waste type"].split(" "))
 	options4.xaxis.title.text = "Type of interstate household waste received"
 	options4.yaxis.title.text = "Tonnes (million)"
 	options4.yaxis.labels.formatter = val => val == 0 ? 0 : (val >= 100000 ? `${(val / 1000000).toFixed(1)}m` : `${(val / 1000)}k`)
 	options4.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
-	delete options4.xaxis.tickPlacement 
-	
-
-
+	delete options4.xaxis.tickPlacement
 
 
 	soefinding.state.chart4 = {
@@ -137,6 +134,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
 			formatter2: val => val?.toLocaleString() ?? 0,
+			onStackedRadioClick: function () {
+				this.chart1.options.chart.type = "bar"
+				this.chart1.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart1.options.chart.type = "line"
+				this.chart1.options.chart.stacked = false
+			}
 		}
 	})
 })
