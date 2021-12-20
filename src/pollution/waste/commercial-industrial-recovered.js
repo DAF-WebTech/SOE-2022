@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
 		}
 	}
+	options3.colors = options3.colors.concat(["#33b2df", "#546E7A", "#d4526e", "#13d8aa", "#A5978B"])
 
 	soefinding.state.chart3 = {
 		options: options3,
