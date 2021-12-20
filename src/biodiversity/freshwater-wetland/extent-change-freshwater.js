@@ -1,10 +1,3 @@
-/*
-there's a bug here between charts one and two
-if you comment one out in the markup, the other works fine
-but if you have them both, then there are console errors when you change regions.
-TODO: chart 4
-*/
-
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -151,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options5 = soefinding.getDefaultLineChartOptions()
 	options5.xaxis.categories = series5Keys.map(k => k.replace("-", "–")) //ndash
-	options5.xaxis.tickPlacement = "between"
 	options5.xaxis.title = "Year"
 	options5.yaxis.title = "Change in hectares"
 	delete options5.yaxis.forceNiceScale
