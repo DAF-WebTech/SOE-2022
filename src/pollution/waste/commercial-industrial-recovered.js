@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		data: yearKeys.map(y => excludingGreenItem[y])
 	}]
 
-	const options2 =  soefinding.getDefaultLineChartOptions()
+	const options2 = soefinding.getDefaultLineChartOptions()
 	options2.xaxis.categories = yearKeys.map(y => [y.slice(0, 4) + "–", y.slice(5)]) // ndash
 	options2.xaxis.axisTicks = { show: false }
 	options2.xaxis.tickPlacement = "between"
@@ -69,8 +69,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	const regionSeries = regionItems.map(d => d[latestYear])
 
 	const options3 = soefinding.getDefaultPieChartOptions()
-	options3.xaxis.categories = ["Material", "Tonnes"] //ndash
+	options3.xaxis.categories = ["Material", "Tonnes"]
 	options3.labels = regionItems.map(d => d.Material)
+	options3.tooltip.y = {
+		formatter: (val, options) => {
+			const percent = options.globals.seriesPercent[options.seriesIndex][0]
+			return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+		}
+	}
 
 	soefinding.state.chart3 = {
 		options: options3,
