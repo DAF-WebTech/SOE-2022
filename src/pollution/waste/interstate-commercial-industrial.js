@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	};
 
-	const YEAR = soefinding.meta.fields.slice(-1).replace("-", "–") // endash
+	const LATEST_YEAR = soefinding.findingJson.meta.fields[soefinding.findingJson.meta.fields.length - 1].replace("-", "–") // endash
 
 	new Vue({
 		el: "#chartContainer",
@@ -125,8 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => "Interstate commercial and industrial waste received, by waste type",
 			heading2: () => "Trend in total interstate commercial and industrial waste received",
-			heading3: () => `Proportion of interstate commercial and industrial waste received, ${YEAR} Not sent to landfill`,
-			heading4: () => `Interstate commercial and industrial waste received by landfill and other, ${YEAR}`
+			heading3: () => `Proportion of interstate commercial and industrial waste received, ${LATEST_YEAR} Not sent to landfill`,
+			heading4: () => `Interstate commercial and industrial waste received by landfill and other, ${LATEST_YEAR}`
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? ""
