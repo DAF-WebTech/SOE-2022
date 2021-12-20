@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// groupings
 	const materials = {}
-	const extents = { Queensland: [], Australia: [] } // they're in the wrong order in our data file
+	const extents = { Australia: [], Queensland: [], }
 	const sites = {}
 	soefinding.findingJson.data.forEach(d => {
 		if (!materials[d.Material])
@@ -29,13 +29,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	const countAllSeries = Object.keys(extents).map(e => {
 		return {
 			name: e,
-			data: extents[e].filter(d => d.Measure == "Count" && d.Site == "All").map(d => Math.ceil(d[latestYear]))
+			data: extents[e].filter(d => d.Measure == "Count" && d.Site == "All" && d.Material != "Large items").map(d => Math.ceil(d[latestYear]))
 		}
 	})
 
 
 	const options1 = soefinding.getDefaultBarChartOptions()
-	options1.xaxis.categories = Object.keys(materials)
+	options1.xaxis.categories = Object.keys(materials).filter(m => m != "Large items")
 	options1.xaxis.title.text = "Litter Type"
 	options1.yaxis.title.text = "Number of items per 100m²"
 
@@ -50,16 +50,17 @@ document.addEventListener("DOMContentLoaded", function () {
 	const volumeAllSeries = Object.keys(extents).map(e => {
 		return {
 			name: e,
-			data: extents[e].filter(d => d.Measure == "Volume" && d.Site == "All").map(d => d[latestYear])
+			data: extents[e].filter(d => d.Measure == "Volume"/* && d.Site == "All"*/).map(d => d[latestYear])
 		}
 	})
 
 	const options2 = JSON.parse(JSON.stringify(options1))
+	options2.xaxis.categories = Object.keys(materials)
 	options2.yaxis.title.text = "Litres per 100m²"
 	options2.yaxis.tickAmount = 4
 	options2.yaxis.max = 2.0
 	options2.yaxis.labels.formatter = val => val.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-	
+
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -75,7 +76,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.labels.formatter = val => `${val.toFixed(0)}`
-	options3.tooltip = { y: {formatter: val => val } }
+	options3.tooltip = { y: { formatter: val => val } }
+	const options4 = JSON.parse(JSON.stringify(options3))
+	options4.tooltip = options4.tooltip
 
 	Object.keys(extents).forEach((e, i) => {
 		const countAllItems = soefinding.findingJson.data.filter(d =>
@@ -92,8 +95,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		})
 
-		soefinding.state[`chart${i + 3}`] = {
-			options: options3,
+		soefinding.state[i == 0 ? "chart3" : "chart4"] = {
+			options: i == 0 ? options3 : options4,
 			series: countAllSeries,
 			chartactive: true,
 		}
@@ -104,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options5 = JSON.parse(JSON.stringify(options3))
 	options5.xaxis.categories = Object.keys(sites)  // not large items
 	options5.yaxis.labels.formatter = val => Math.round(val)
-	options5.tooltip = { y: { formatter: (val, options) => (options.seriesIndex == 0 ? val : val.toFixed(1))}}
+	options5.tooltip = { y: { formatter: (val, options) => (options.seriesIndex == 0 ? val : val.toFixed(1)) } }
 
 
 	Object.keys(extents).forEach((e, i) => {
@@ -156,8 +159,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options7 = JSON.parse(JSON.stringify(options5))
 	options7.yaxis.labels.formatter = val => Math.round(val)
 	options7.tooltip.y.formatter = function (val) {
-				return val
-			}
+		return val
+	}
 
 	soefinding.state.chart7 = {
 		options: options7,
@@ -195,14 +198,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			case "Glass":
 				myOptions.yaxis.max = 2
 				myOptions.yaxis.labels.formatter = val => Math.round(val)
-				myOptions.tooltip = { y: {formatter: val => val } }
+				myOptions.tooltip = { y: { formatter: val => val } }
 				break
 			case "Metal":
 			case "Paper":
 			case "Plastic":
 			case "Other":
 				myOptions.yaxis.labels.formatter = val => Math.round(val)
-				myOptions.tooltip = { y: {formatter: val => val } }
+				myOptions.tooltip = { y: { formatter: val => val } }
 				break
 		}
 
@@ -237,6 +240,15 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val,
 			formatter2: val => val.toLocaleString(undefined, { minimumFractionDigits: 3 }),
 			formatter3: val => val == null ? null : Number.isInteger(val) ? val : val.toLocaleString(undefined, { minimumFractionDigits: 1 }),
+			onStackedRadioClick: function (chart) {
+				chart.options.chart.type = "bar"
+				chart.options.chart.stacked = true
+			},
+			onLineRadioClick: function (chart) {
+				chart.options.chart.type = "line"
+				chart.options.chart.stacked = false
+			}
+
 		}
 	})
 })
