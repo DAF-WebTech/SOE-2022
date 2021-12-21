@@ -131,7 +131,15 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Interstate constrution and demolition waste received by landfill and other, 2018–2019"
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString() ?? ""
+			formatter1: val => val?.toLocaleString() ?? "",
+			onStackedRadioClick: function () {
+				this.chart1.options.chart.type = "bar"
+				this.chart1.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart1.options.chart.type = "line"
+				this.chart1.options.chart.stacked = false
+			}
 		},
 		mounted: function () {
 		}
