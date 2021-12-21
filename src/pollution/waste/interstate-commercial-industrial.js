@@ -17,8 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
-	const options1 = soefinding.getDefaultColumnChartOptions()
-	//options1.legend.inverseOrder = true
+	const options1 = soefinding.getDefaultStackedColumnChartOptions()
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // ndash
 	options1.xaxis.title.text = "Year"
 	delete options1.xaxis.tickPlacement
