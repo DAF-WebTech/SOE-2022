@@ -247,8 +247,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			onLineRadioClick: function (chart) {
 				chart.options.chart.type = "line"
 				chart.options.chart.stacked = false
+				this.chart1.options.markers = { size: 4 } // ignored by column chart
+				this.chart1.options.tooltip.shared = false
 			}
-
 		}
 	})
 })

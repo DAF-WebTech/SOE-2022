@@ -139,6 +139,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			onLineRadioClick: function () {
 				this.chart1.options.chart.type = "line"
 				this.chart1.options.chart.stacked = false
+				this.chart1.options.markers = { size: 4 } // ignored by column chart
+				this.chart1.options.tooltip.shared = false
 			}
 		},
 		mounted: function () {

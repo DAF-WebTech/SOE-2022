@@ -188,6 +188,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			onLineRadioClick: function () {
 				this.chart3.options.chart.type = "line"
 				this.chart3.options.chart.stacked = false
+				this.chart3.options.markers = { size: 4 } // ignored by column chart
+				this.chart3.options.tooltip.shared = false
 			}
 		}
 	})
