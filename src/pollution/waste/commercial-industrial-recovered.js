@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
-			formatter1: val => val?.toLocaleString() ?? "Not recorded",
+			formatter2: val => val?.toLocaleString() ?? "Not recorded",
 		}
 	})
 })

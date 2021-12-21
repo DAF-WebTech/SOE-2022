@@ -81,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	// chart 4, just a plain table, not using component
 	soefinding.state.chart4 = {
 		headings: soefinding.findingJson.meta.fields,
-		data: [[]],
 		data: soefinding.findingJson.data.map(d => soefinding.findingJson.meta.fields.map(f => {
 			if (f == "Date") {
 				const date = new Date(d.Date)
