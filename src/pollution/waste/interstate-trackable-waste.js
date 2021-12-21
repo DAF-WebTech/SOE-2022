@@ -124,16 +124,20 @@ document.addEventListener("DOMContentLoaded", function () {
 		return b.data.reduce((a, c) => a + c) - a.data.reduce((a, c) => a + c)
 	})
 
-	const options4 = soefinding.getDefaultBarChartOptions()
-	options4.chart.stacked = true
-	options4.tooltip.y = { formatter: val => val.toLocaleString() }
-	options4.xaxis.categories = Object.keys(wasteTypes)
-	options4.xaxis.labels.hideOverlappingLabels = false
-	options4.xaxis.labels.trim = true
-	options4.xaxis.tickPlacement = "between"
-	options4.xaxis.title.text = "Tonnes"
-	options4.yaxis.labels.formatter = val => val >= 1000 ? `${val / 1000}K` : val
-	options4.yaxis.title.text = "Waste description"
+    const options4 = soefinding.getDefaultBarChartOptions()
+    options4.chart.stacked = true
+    options4.tooltip.y = { formatter: val => val.toLocaleString() }
+    options4.xaxis.categories = Object.keys(wasteTypes) // ignored but table needs it
+    options4.xaxis.labels.formatter = val => val >= 1000 ? `${val / 1000}K` : val
+    options4.plotOptions = {
+          bar: {
+            horizontal: true
+          }
+    }
+    options4.xaxis.tickPlacement = "between"
+    options4.xaxis.title.text = "Tonnes"
+    options4.yaxis.labels.maxWidth = 400
+    options4.yaxis.title.text = "Waste description"
 
 	soefinding.state.chart4 = {
 		options: options4,
