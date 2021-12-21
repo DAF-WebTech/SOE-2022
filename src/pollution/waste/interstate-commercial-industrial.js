@@ -128,7 +128,15 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => `Interstate commercial and industrial waste received by landfill and other, ${LATEST_YEAR}`
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString() ?? ""
+			formatter1: val => val?.toLocaleString() ?? "",
+			onStackedRadioClick: function () {
+				this.chart1.options.chart.type = "bar"
+				this.chart1.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart1.options.chart.type = "line"
+				this.chart1.options.chart.stacked = false
+			}
 		}
 
 	})
