@@ -136,6 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			onLineRadioClick: function () {
 				this.chart1.options.chart.type = "line"
 				this.chart1.options.chart.stacked = false
+				this.chart1.options.tooltip.shared = false
 			}
 		}
 
