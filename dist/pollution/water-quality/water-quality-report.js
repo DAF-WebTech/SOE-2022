@@ -1,0 +1,2 @@
+document.addEventListener("DOMContentLoaded",function(){soefinding.regionNames.forEach(n=>soefinding.findingContent[n]={}),window.soefinding.onRegionChange=function(){soefinding.loadFindingHtml()}});
+//# sourceMappingURL=water-quality-report.js.map

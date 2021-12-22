@@ -1,0 +1,24 @@
+{
+  "name": "SOE-2024",
+  "version": "1.0.0",
+  "description": "SOE 2022 dev work",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsup src --sourcemap --minify  --target es2020"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DAF-WebTech/SOE-2024.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DAF-WebTech/SOE-2024/issues"
+  },
+  "homepage": "https://github.com/DAF-WebTech/SOE-2024#readme",
+  "devDependencies": {
+    "tsup": "^5.11.7"
+  }
+}
