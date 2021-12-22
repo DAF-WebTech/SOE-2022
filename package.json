@@ -1,11 +1,11 @@
 {
-  "name": "SOE-2024",
+  "name": "soe2024",
   "version": "1.0.0",
   "description": "SOE 2022 dev work",
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsup src --sourcemap --minify  --target es2020"
+    "build": "npx tsup src --sourcemap --minify-whitespace --target esnext --keep-names"
   },
   "repository": {
     "type": "git",
