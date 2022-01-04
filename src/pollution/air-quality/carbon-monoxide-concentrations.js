@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultBarChartOptions()
 	options1.xaxis.categories = soefinding.yearKeys
 	options1.xaxis.title.text = "Year"
-	options1.xaxis.axisTicks = {show: false }
+	options1.xaxis.axisTicks = { show: false }
 	options1.xaxis.labels.rotateAlways = true
 	options1.tooltip.y = { formatter: val => `${val} days` }
 	options1.yaxis.title.text = "Number of days"
@@ -38,7 +38,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		},
 		methods: {
-			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? "" }
+			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? "" },
+			onStackedRadioClick: function () {
+				this.chart1.options.chart.type = "bar"
+				this.chart1.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart1.options.chart.type = "line"
+				this.chart1.options.chart.stacked = false
+				this.chart1.options.markers = { size: 4 } // ignored by column chart
+				this.chart1.options.tooltip.shared = false
+			}
 		}
 	});
 })
