@@ -25,14 +25,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.tickAmount = 3
 	options1.yaxis.min = 0
 	options1.yaxis.max = 3
-    options1.tooltip.y = {
-    	formatter: function (val) {
-    		return `${val} day${val > 1 ? "s" : ""}`;
-        }
-    }
-    options1.yaxis.labels.formatter = function (val) {
-    	return val
-    }	
+	options1.tooltip.y = {
+		formatter: function (val) {
+			return `${val} day${val > 1 ? "s" : ""}`;
+		}
+	}
+	options1.yaxis.labels.formatter = function (val) {
+		return val
+	}
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -56,16 +56,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options2 = soefinding.getDefaultBarChartOptions()
 	options2.xaxis.categories = soefinding.yearKeys
 	options2.xaxis.title.text = "Year"
-	options2.xaxis.tickPlacement = "between"
+	delete options2.xaxis.tickPlacement //= "between"
 	options2.yaxis.title.text = "Parts per million"
 	options2.yaxis.forceNiceScale = false
 	options2.yaxis.max = 0.12
 	options2.yaxis.min = 0
 	options2.yaxis.tickAmount = 6
 	options2.yaxis.labels.formatter = val => val.toFixed(2)
-  options2.tooltip.y = { formatter: val=> `${val} ppm` }
-        
-    
+	options2.tooltip.y = { formatter: val => `${val} ppm` }
+
+
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -82,8 +82,16 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: function () { return `Annual maximum 1-hour average ozone concentrations` },
 		},
 		methods: {
-		    formatter1: function(val) { return val },
-		    formatter2: function(val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" }
+			formatter1: function (val) { return val },
+			formatter2: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" },
+			onStackedRadioClick: function () {
+				this.chart2.options.chart.type = "bar"
+			},
+			onLineRadioClick: function () {
+				this.chart2.options.chart.type = "line"
+				this.chart2.options.markers = { size: 4 } // ignored by column chart
+				this.chart2.options.tooltip.shared = false
+			}
 		}
 	});
 
