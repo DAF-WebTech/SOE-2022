@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.yearKeys = soefinding.findingJson.meta.fields.slice(2);
-	
+
 	//chart 1 24 hour PM10 concentrations exceeded (days)
 	const daysExceeded10 = soefinding.findingJson.data.filter(d => {
 		return d["Air quality standard"] == "24 hour PM10 concentrations exceeded (days)"
@@ -68,15 +68,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options3 = JSON.parse(JSON.stringify(options1))
 	options3.yaxis.labels.formatter = val => val.toFixed(0)
-	options3.tooltip.y = {formatter: val => val }
+	options3.tooltip.y = { formatter: val => val }
 
 	soefinding.state.chart3 = {
 		options: options3,
 		series: concentrations10Series,
 		chartactive: true,
 	};
-	
-	
+
+
 	//chart 4 annual average PM2.5
 	const concentrations25 = soefinding.findingJson.data.filter(d => {
 		return d["Air quality standard"] == "Annual average PM2.5 concentrations (micrograms/m3)"
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options4.yaxis.max = 10
 	options4.yaxis.tickAmount = 5
 	options4.yaxis.labels.formatter = val => val.toFixed(0)
-	options4.tooltip.y = {formatter: val => val }
+	options4.tooltip.y = { formatter: val => val }
 
 	soefinding.state.chart4 = {
 		options: options4,
@@ -114,7 +114,16 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: function (val) { return val?.toLocaleString() ?? "" },
-			formatter2: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 1 }) ?? "" }
+			formatter2: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 1 }) ?? "" },
+			onStackedRadioClick: function (chart) {
+				chart.options.chart.type = "bar"
+			},
+			onLineRadioClick: function (chart) {
+				chart.options.chart.type = "line"
+				chart.options.chart.stacked = false
+				chart.options.markers = { size: 4 } // ignored by column chart
+				chart.options.tooltip.shared = false
+			}
 		}
 	});
 
