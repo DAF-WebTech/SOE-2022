@@ -1,6 +1,11 @@
 "use strict"
 
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+
 document.addEventListener("DOMContentLoaded", function () {
+
+
 
 	soefinding.fields = soefinding.findingJson.meta.fields.slice(2);
 	const names = [
@@ -32,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	options1.stroke = { width: 2 }
 
-	const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 	options1.tooltip.x = {
 		formatter: function (val) {
 			const d = new Date(val)
@@ -56,6 +60,109 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.labels.formatter = val => val.toFixed(1) 
 
 
+
+/*********************************************
+these are for the brush chart
+*********************************************/
+
+soefinding.state.seriesLine = coSeries
+soefinding.state.seriesArea = coSeries
+
+soefinding.state.optionsLine = {
+	chart: {
+		id: 'chartLine',
+		type: 'line',
+		height: 230,
+		toolbar: {
+			autoSelected: 'pan',
+			show: false
+		}
+	},
+	legend: {
+		show: false
+	},
+	colors: ["#008FFB", "#00E396", "#FEB019", "#FF4560", "#775DD0"],
+	stroke: {
+		width: 3
+	},
+	dataLabels: {
+		enabled: false
+	},
+	fill: {
+		opacity: 1,
+	},
+	markers: {
+		size: 0
+	},
+	xaxis: {
+		type: 'datetime'
+	},
+	yaxis: { 
+		labels: {
+			formatter: val => val.toFixed(1) 
+		}
+	},
+	tooltip: {
+		shared: false,
+		x: {
+			formatter: function (val) {
+				const d = new Date(val)
+					return `${months[d.getMonth()]} ${d.getFullYear()}`
+			}
+		},
+		y: {
+			formatter: function (val) {
+				return val ? `${val} µg/m³` : "—"
+			}
+		}
+	}
+}
+
+soefinding.state.optionsArea = {
+	chart: {
+		id: 'chart1',
+		height: 130,
+		type: 'line',
+		brush:{
+			target: 'chartLine',
+			enabled: true
+		},
+		selection: {
+			enabled: true,
+			xaxis: {
+				min: new Date('1 Jan 2015').getTime(),
+				max: new Date('31 Dec 2019').getTime()
+			}
+		},
+	},
+	colors: ["#008FFB", "#00E396", "#FEB019", "#FF4560", "#775DD0"],
+// 	fill: {
+// 		type: 'gradient',
+// 		gradient: {
+// 			opacityFrom: 0.91,
+// 			opacityTo: 0.1,
+// 		}
+//	},
+	xaxis: {
+		type: 'datetime',
+		tooltip: {
+			enabled: false
+		}
+	},
+	yaxis: {
+		tickAmount: 2,
+		labels: {
+			formatter: val => val.toFixed(1) 
+		}
+	}
+}
+
+
+
+
+/*********************************************
+end brush chart
+*********************************************/
 
 
 	soefinding.state.chart1 = {
