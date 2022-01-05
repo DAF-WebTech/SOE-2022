@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	soefinding.state.chart5 = {
- 	options: options5,
+		options: options5,
 		series: fuelTypeSeries,
 		chartactive: true,
 		extra: "extra checkboxes and shit"
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		return {
 			vehicleType: k,
 			checked: k == "Cars",
-			series: vehicles[k].data.map(d => { 
+			series: vehicles[k].data.map(d => {
 				return {
 					name: d["Fuel Type"],
 					data: yearKeys.map(k => d[k])
@@ -226,8 +226,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options6.xaxis.categories = yearKeys
 	options6.xaxis.title.text = "Year"
 	options6.yaxis.title.text = "Registrations"
-	options6.yaxis.labels.formatter = function(val) { 
-		const value = val >= 1000000 ? `${(val / 1000000).toFixed(1)}M` : 
+	options6.yaxis.labels.offsetX = 15
+	options6.yaxis.labels.formatter = function (val) {
+		const value = val >= 1000000 ? `${(val / 1000000).toFixed(1)}M` :
 			(val >= 1000 ? `${(val / 1000).toFixed(1)}K` : `${val}`)
 		const retval = value.replace(/\.0/g, "")
 		return retval
