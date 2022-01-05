@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// create the vue instance for first chart, our column chart
 	const options1 = soefinding.getDefaultBarChartOptions()
 	options1.xaxis.categories = soefinding.yearKeys
-	options1.xaxis.tickPlacement = "between"
+	delete options1.xaxis.tickPlacement
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Parts per million"
 	options1.yaxis.tickAmount = 6
@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		formatter: val => `${val} ppm`
 	}
 	options1.yaxis.labels.formatter = val => val.toFixed(2)
+
+	options1.legend.inverseOrder = true
 
 	// create vue instance for first chart
 	soefinding.state.chart1 = {
@@ -53,6 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	delete options2.yaxis.tickAmount
 	delete options2.yaxis.min
 	delete options2.yaxis.max
+	options2.tooltip.y = {
+		formatter: val => `${val} days`
+	}
 
 
 	// create the vue instance for second chart, 
