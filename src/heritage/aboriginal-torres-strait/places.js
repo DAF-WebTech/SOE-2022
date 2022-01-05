@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.findingContent.Queensland = { series: [] }
 	soefinding.findingJson.data.forEach(d => {
-		soefinding.findingContent[d.Region] = { 
+		soefinding.findingContent[d.Region] = {
 			series: [{
 				name: "Places",
 				data: years.map(y => d[y])
@@ -27,8 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.forceNiceScale = false
 	options1.yaxis.max = 10
 	options1.yaxis.min = 0
-	options1.yaxis.tickAmount = 10
-
 
 
 	soefinding.state.chart1 = {
@@ -50,13 +48,44 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			onStackedRadioClick: function () {
+				this.chart1.options.chart.type = "bar"
+				this.chart1.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart1.options.chart.type = "line"
+				this.chart1.options.chart.stacked = false
+				this.chart1.options.markers = { size: 4 } // ignored by column chart
+				this.chart1.options.tooltip.shared = false
+			}
 		}
 	})
 
 
 	window.soefinding.onRegionChange = function () {
+
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series
+
+		if (soefinding.state.currentRegionName != "Queensland") {
+			// revert to column chart
+			soefinding.state.chart1.options.chart.type = "bar"
+			soefinding.state.chart1.options.chart.stacked = true
+		}
+		if (soefinding.state.currentRegionName == "Queensland") {
+			if (document.getElementById("lineRadio").checked) {
+				// show as line chart
+				soefinding.state.chart1.options.chart.type = "line"
+				soefinding.state.chart1.options.chart.stacked = false
+				soefinding.state.chart1.options.markers = { size: 4 } // ignored by column chart
+				soefinding.state.chart1.options.tooltip.shared = false
+			}
+			// force a redraw
+			const chartContainer = document.getElementById("chartContainer")
+			chartContainer.style.display = "none"
+			chartContainer.style.display = "block"
+		}
+
 
 		soefinding.loadFindingHtml()
 	}
