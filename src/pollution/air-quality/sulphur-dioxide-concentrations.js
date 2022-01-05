@@ -26,11 +26,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.max = 1.5
 
 	options1.tooltip.y = {
-    	formatter: val => `${val} ppm`
-    }
-    options1.yaxis.labels.formatter = val =>  val.toFixed(2)
+		formatter: val => `${val} ppm`
+	}
+	options1.yaxis.labels.formatter = val => val.toFixed(2)
 
-    // create vue instance for first chart
+	// create vue instance for first chart
 	soefinding.state.chart1 = {
 		options: options1,
 		series: hourAverageSeries,
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	delete options2.yaxis.tickAmount
 	delete options2.yaxis.min
 	delete options2.yaxis.max
-    	
+
 
 	// create the vue instance for second chart, 
 	soefinding.state.chart2 = {
@@ -72,9 +72,18 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: function () { return `Number of days when the 1-hour sulphur dioxide concentrations exceed the air NEPM standards` },
 		},
 		methods: {
-		    formatter1: function(val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" },
-		    formatter2: function(val) { return val?.toLocaleString() }
+			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" },
+			formatter2: function (val) { return val?.toLocaleString() },
+			onStackedRadioClick: function (chart) {
+				chart.options.chart.type = "bar"
+			},
+			onLineRadioClick: function (chart) {
+				chart.options.chart.type = "line"
+				chart.options.markers = { size: 4 } // ignored by column chart
+				chart.options.tooltip.shared = false
+			}
+
 		}
-	});
+	})
 
 })
