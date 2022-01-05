@@ -42,11 +42,17 @@ document.addEventListener("DOMContentLoaded", function () {
 		series2Fields.forEach(f => series2Keys.push(`${y} ${f}`))
 	})
 
+	const options2 = soefinding.getDefaultStackedColumnChartOptions()
+	options2.xaxis.categories = options1.xaxis.categories
+	options2.xaxis.title.text = "Year"
+	options2.yaxis.title.text = "Number of species"
+
 	const species = soefinding.findingJson.data.map(d => {
 		return { 
 			name: d.Group, 
 			checked: false,
 			chartactive: true,
+			options: JSON.parse(JSON.stringify(options2)),
 			data: series2Fields.map(f => { 
 				return {
 					name: f[0].toUpperCase() + f.slice(1), 
@@ -58,10 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	species[0].checked = true
 	soefinding.state.species = species
 
-	soefinding.state.options2 = soefinding.getDefaultStackedColumnChartOptions()
-	soefinding.state.options2.xaxis.categories = options1.xaxis.categories
-	soefinding.state.options2.xaxis.title.text = "Year"
-	soefinding.state.options2.yaxis.title.text = "Number of species"
 
 
 
@@ -73,7 +75,28 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: () => `Numbers of threatened ${soefinding.biota} (<i>Nature Conservation Act 1992</i> Extinct, Extinct in the Wild, Critically Endangered, Endangered, and Vulnerable) by species group`
 		},
 		methods: {
-			formatter1: val => val
+			formatter1: val => val,
+			onStackedRadioClick: function (options) {
+				if (options.chart) {
+					options.chart.type = "bar"
+					options.chart.stacked = true
+				} else {
+					this.options1.chart.type = "bar"
+					this.options1.chart.stacked = true
+				}
+			},
+			onLineRadioClick: function (options) {
+				if (options.chart) {
+					options.chart.type = "line"
+					options.chart.stacked = false
+					options.markers = { size: 4 } // ignored by column chart
+				}
+				else {
+					this.chart1.options.chart.type = "line"
+					this.chart1.options.chart.stacked = false
+	                this.chart1.options.markers = { size: 4 } // ignored by column chart
+				}
+			}
 		}
 	})
 })
