@@ -25,12 +25,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.yaxis.tickAmount = 10
 	options1.yaxis.min = 0
 	options1.yaxis.max = .1
-    options1.tooltip.y = {
-    	formatter: val => `${val} ppm`
-    }
-    options1.yaxis.labels.formatter = val =>  val.toFixed(2)
+	options1.tooltip.y = {
+		formatter: val => `${val} ppm`
+	}
+	options1.yaxis.labels.formatter = val => val.toFixed(2)
 
-    // create vue instance for first chart
+	// create vue instance for first chart
 	soefinding.state.chart1 = {
 		options: options1,
 		series: hourAverageSeries,
@@ -51,8 +51,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = JSON.parse(JSON.stringify(options1))
 	options2.yaxis.max = .01
-    options2.yaxis.labels.formatter = val => val.toFixed(3)
-    	
+	options2.yaxis.labels.formatter = val => val.toFixed(3)
+
 
 	// create the vue instance for second chart, 
 	soefinding.state.chart2 = {
@@ -71,8 +71,16 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: function () { return `Annual average nitrogen dioxide concentrations` },
 		},
 		methods: {
-		    formatter1: function(val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" },
-		    formatter2: function(val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 4 }) ?? "" }
+			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" },
+			formatter2: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 4 }) ?? "" },
+			onStackedRadioClick: function (chart) {
+				chart.options.chart.type = "bar"
+			},
+			onLineRadioClick: function (chart) {
+				chart.options.chart.type = "line"
+				chart.options.markers = { size: 4 } // ignored by column chart
+				chart.options.tooltip.shared = false
+			}
 		}
 	});
 
