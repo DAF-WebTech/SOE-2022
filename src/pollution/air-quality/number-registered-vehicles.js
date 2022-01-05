@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options6.xaxis.categories = yearKeys
 	options6.xaxis.title.text = "Year"
 	options6.yaxis.title.text = "Registrations"
-	options6.yaxis.labels.offsetX = 5
+	options6.yaxis.labels.offsetX = 7
 	options6.yaxis.labels.formatter = function (val) {
 		const value = val >= 1000000 ? `${(val / 1000000).toFixed(1)}M` :
 			(val >= 1000 ? `${(val / 1000).toFixed(1)}K` : `${val}`)
