@@ -203,25 +203,42 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	// chart 6 is the chart that responds to check box clicks
+	// chart 6 is all the charts that responds to check box clicks
+	// break down of registrations by vehicle type 
+	soefinding.state.vehicles = Object.keys(vehicles).map((k, i) => {
+		return {
+			vehicleType: k,
+			checked: k == "Cars",
+			series: vehicles[k].data.map(d => { 
+				return {
+					name: d["Fuel Type"],
+					data: yearKeys.map(k => d[k])
+				}
+			}),
+			chartactive: true
+		}
+	})
+
+
 	soefinding.state.fuelTypes = fuelTypeSeries.map(ft => ft.name)
 
 	const options6 = soefinding.getDefaultLineChartOptions()
-	//options6.legend.show = false
-	options6.legend.onItemClick = { toggleDataSeries: false }
-	options6.chart.id = "chart6"
 	options6.xaxis.categories = yearKeys
 	options6.xaxis.title.text = "Year"
 	options6.yaxis.title.text = "Registrations"
-	options6.yaxis.labels.formatter = val => val >= 1000000 ? `${Math.round(val / 1000000)}M` : (val >= 1000 ? `${Math.round(val / 1000)}K` : val)
+	options6.yaxis.labels.formatter = function(val) { 
+		const value = val >= 1000000 ? `${(val / 1000000).toFixed(1)}M` : 
+			(val >= 1000 ? `${(val / 1000).toFixed(1)}K` : `${val}`)
+		const retval = value.replace(/\.0/g, "")
+		return retval
+	}
 	options6.tooltip.y = {
 		formatter: val => `${val?.toLocaleString() ?? ""}`
 	}
 
+
 	soefinding.state.chart6 = {
 		options: options6,
-		series: fuelTypeSeries,
-		chartactive: true,
 	}
 
 
@@ -237,22 +254,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading3: () => "Number of registered vehicles by vehicle type",
 			heading4: () => `Proportion of electrified vehicle registrations in ${latestYear}`,
 			heading5: () => "Number of registered vehicles by fuel type",
-			heading6: () => ""
 		},
 		methods: {
-			formatter1: val => val.toLocaleString(), //reüse for 3, 4, 5
+			heading6: (vehicleType) => `Registrations of ${vehicleType} by fuel type`,
+			formatter1: val => val?.toLocaleString() ?? "", //reüse for 3, 4, 5
 			formatter2: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
-			toggleSeries: evt => {
-				ApexCharts.exec("chart6", "toggleSeries", evt.currentTarget.value)
-			}
-
 		},
-		mounted: function () {
-			// for whatever f-ed up reason, vue can't bind accent-color
-			Array.from(document.querySelectorAll("input[type=checkbox")).forEach((cb, i) => {
-				cb.style.accentColor = options6.colors[i]
-			})
-		}
-
 	})
 })
