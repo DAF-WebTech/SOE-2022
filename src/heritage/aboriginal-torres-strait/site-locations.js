@@ -25,19 +25,19 @@ document.addEventListener("DOMContentLoaded", function () {
 			Site: site,
 		}
 		years.forEach(y => newItem[y] = data.reduce((acc, curr) => {
- 			return acc + curr[y]
- 		}, 0))
+			return acc + curr[y]
+		}, 0))
 
-	
+
 		regions.get("Queensland").push(newItem)
 	}
 
 	// chart 1 stacked column
 	for (let [region, data] of regions) {
-		data.sort(function(a, b) {
+		data.sort(function (a, b) {
 			return b[latestYear] - a[latestYear]
 		})
-		soefinding.findingContent[region] = { 
+		soefinding.findingContent[region] = {
 			series1: data.map(d => {
 				return {
 					name: d.Site,
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = soefinding.getDefaultPieChartOptions()
 	options2.labels = soefinding.findingContent[soefinding.state.currentRegionName].series2Labels
-	options2.tooltip.y = { 
+	options2.tooltip.y = {
 		formatter: (val, options) => {
 			const percent = options.globals.seriesPercent[options.seriesIndex][0]
 			return `${val.toLocaleString()} ha (${percent.toFixed(1)}%)`
@@ -89,25 +89,35 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: function () {
 				if (this.currentRegionName == "Queensland")
 					return "Change in number of locations, by site type"
-				else 
+				else
 					return `Change in number of locations by site type in ${this.currentRegionName} cultural heritage region`
 			},
 			heading2: function () {
 				if (this.currentRegionName == "Queensland")
 					return `Proportion of locations by site type, ${latestYear}`
-				else 
+				else
 					return `Proportion of locations by site type in ${this.currentRegionName} cultural heritage region, ${latestYear}`
 			},
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString() ?? ""
+			formatter1: val => val?.toLocaleString() ?? "",
+			onStackedRadioClick: function () {
+				this.chart1.options.chart.type = "bar"
+				this.chart1.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart1.options.chart.type = "line"
+				this.chart1.options.chart.stacked = false
+				this.chart1.options.markers = { size: 4 } // ignored by column chart
+				this.chart1.options.tooltip.shared = false
+			}
 		}
 	})
 
 
 	window.soefinding.onRegionChange = function () {
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
-		
+
 		soefinding.state.chart2.options.labels = soefinding.findingContent[soefinding.state.currentRegionName].series2Labels
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
 
