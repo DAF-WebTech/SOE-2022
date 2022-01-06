@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const latestYear = years.at(-1)
 
 	//will use for series 1
-	const yearsTotals = years.map(y=> 0)
+	const yearsTotals = years.map(y => 0)
 	let total = 0
 
 	soefinding.findingJson.data.forEach(d => {
@@ -19,18 +19,18 @@ document.addEventListener("DOMContentLoaded", function () {
 			yearsTotals[i] += d[y]
 			total += d[y]
 		})
-	
+
 	})
 
 	//sort
-	soefinding.findingJson.data.sort(function(a, b) {
+	soefinding.findingJson.data.sort(function (a, b) {
 		return b.Total - a.Total
-	})	
+	})
 
 
 	// series 1 table
 	const series1 = [...yearsTotals, total]
-	const options1 = { 
+	const options1 = {
 		labels: [...years, "Total"],
 		xaxis: { categories: ["Year", "Places<br>removed"] }
 	}
@@ -49,6 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options2 = soefinding.getDefaultPieChartOptions()
 	options2.labels = series2items.map(d => d.LGA)
 	options2.xaxis = { categories: ["LGA", "Total"] }
+	options2.tooltip.y = {
+		formatter: (val, options) => {
+			const percent = options.globals.seriesPercent[options.seriesIndex][0]
+			return `${val.toLocaleString()}ha (${percent.toFixed(0)}%)`
+		}
+	}
+
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -63,9 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			name: d.LGA,
 			data: [...years.map(y => d[y]), d.Total]
 		}
-	}) 
+	})
 
-	const options3 = { 
+	const options3 = {
 		xaxis: { categories: [...years, "Total"] }
 	}
 
