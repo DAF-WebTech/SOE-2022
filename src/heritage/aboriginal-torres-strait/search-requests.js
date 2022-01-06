@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Number of requests"
 	options1.yaxis.labels.formatter = val => `${val / 1000}k`
-	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
+	options1.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -65,10 +65,22 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `Proportion of cultural heritage search requests by category, ${latestYear}`
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			onStackedRadioClick: function () {
+				this.chart1.options.chart.type = "bar"
+				this.chart1.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart1.options.chart.type = "line"
+				this.chart1.options.chart.stacked = false
+				this.chart1.options.markers = { size: 4 } // ignored by column chart
+				this.chart1.options.tooltip.shared = false
+
+			}
+
 		}
 	})
-	
+
 	window.soefinding.onRegionChange = function () {
 		soefinding.loadFindingHtml()
 	}
