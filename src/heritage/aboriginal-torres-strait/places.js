@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			soefinding.state.chart1.options.chart.stacked = true
 		}
 		if (soefinding.state.currentRegionName == "Queensland") {
-			if (document.getElementById("lineRadio").checked) {
+			if (document.getElementById("lineRadio")?.checked) {
 				// show as line chart
 				soefinding.state.chart1.options.chart.type = "line"
 				soefinding.state.chart1.options.chart.stacked = false
