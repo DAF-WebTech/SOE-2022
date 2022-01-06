@@ -15,11 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: years.map(y => {
 				const item = locationData.find(ld => ld.Year == y)
 				if (item && item["Heritage places open"] == "No Data – event not held")
-					return "No Data<br>event not held"
+					return 0
 				else if (item)
 					return item["Heritage places open"]
 				else
-					return ""
+					return null
 			})
 		}
 	})
@@ -28,6 +28,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.categories = years
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Number of places"
+	options1.tooltip.y = {
+		formatter: function(val, options) {
+			if (val == 0)
+				return "no data — event not held"
+			else
+				return val.toLocaleString()
+		}
+	}
+
+
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -43,11 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: years.map(y => {
 				const item = locationData.find(ld => ld.Year == y)
 				if (item && item.Visitors == "No Data – event not held")
-					return "No Data<br>event not held"
+					return 0
 				else if (item)
 					return item.Visitors
 				else
-					return ""
+					return null
 			})
 		}
 	})
@@ -55,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options2 = JSON.parse(JSON.stringify(options1))
 	options2.yaxis.title.text = "Number of visitors"
 	options2.yaxis.labels.formatter = val => `${val / 1000}k`
-	options2.tooltip.y = { formatter: val => val.toLocaleString() }
+	options2.tooltip.y.formatter = options1.tooltip.y.formatter
 
 
 	soefinding.state.chart2 = {
@@ -148,9 +158,26 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `People visiting heritage places in ${soefinding.state.currentRegionName}`
 		},
 		methods: {
-			//formatter1: val => isNaN(parseInt(val)) ? "" : val.toLocaleString(),
-			formatter1: val => val.toLocaleString(),
-			formatter3: val => val == 0 ? "No Data — event not held" : val.toLocaleString(),
+			formatter1: function(val) { 
+				if (val == null)
+					return ""
+				else if (val == 0)
+					return "No Data<br>event not held"
+				else
+					return val.toLocaleString()
+			},
+			formatter3: val => val == 0 ? "No Data<br>event not held" : val.toLocaleString(),
+			onStackedRadioClick: function (chart) {
+				chart.options.chart.type = "bar"
+				chart.options.chart.stacked = true
+			},
+			onLineRadioClick: function (chart) {
+				chart.options.chart.type = "line"
+				chart.options.chart.stacked = false
+				chart.options.markers = { size: 4 } 
+				chart.options.tooltip.shared = false
+			}
+
 		}
 	})
 
