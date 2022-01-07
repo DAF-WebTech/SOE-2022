@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	//4. table only, qld totals
 	const qldTotalSeries = [{
-		name: "Total",
+		name: "Tonnes",
 		data: yearKeys.map(y => qldTotal[y])
 	}]
 
