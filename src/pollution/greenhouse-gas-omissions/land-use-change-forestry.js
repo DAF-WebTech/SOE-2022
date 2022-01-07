@@ -62,17 +62,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 3. table only, qld yearly totals
 	const qldTotalItem = soefinding.findingJson.data.find(d => d.State == "Queensland" && d.Sector == "All")
-	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
+	const qldTotalSeries = [{
+		name: "Tonnes",
+		data: yearKeys.map(y => qldTotalItem[y])
+	}]
 
-	const options3 = {
-		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"] },
-		labels: yearKeys
+	const options3 = soefinding.getDefaultLineChartOptions()
+	options3.tooltip.y = {
+		formatter: val => `${val}M`
 	}
+	options3.xaxis.categories = yearKeys
+	options3.xaxis.labels.rotateAlways = true
+	options3.xaxis.title.text = "Year"
+	options3.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options3.yaxis.title.text = "Tonnes"
 
 	soefinding.state.chart3 = {
 		options: options3,
-		series: qldTotalSeries
-	};
+		series: qldTotalSeries,
+		chartactive: true
+	}
 
 
 	new Vue({
