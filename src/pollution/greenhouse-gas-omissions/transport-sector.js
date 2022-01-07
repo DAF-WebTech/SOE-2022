@@ -41,15 +41,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = JSON.parse(JSON.stringify(options1))
 	options2.labels = qldItems.map(d => d.Category)
+	options2.tooltip.y.formatter = options1.tooltip.y.formatter
 
 	soefinding.state.chart2 = {
-		options: options2, // reüse
+		options: options2,
 		series: qldSeries,
 		chartactive: true,
 	};
 
 
-	// 3. stacked area chart, trend in each sector
 	// 3. stacked area chart, trend in each sector
 	const qldTrendSeries = qldItems.map(d => {
 		return {
@@ -57,14 +57,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			data: yearKeys.map(y => d[y])
 		}
 	})
-	qldTrendSeries.sort(function(a, b) {
+	qldTrendSeries.sort(function (a, b) {
 		return b.data.at(-1) - a.data.at(-1)
 	})
 
 	const options3 = soefinding.getDefaultAreaChartOptions()
 	options3.legend.inverseOrder = true
 	options3.stroke = { width: 1 }
-	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 2})}M`
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, { maximumFractionDigits: 2 })}M`
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.labels.formatter = val => `${Math.round(val)}M`
@@ -79,17 +79,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 4. queensland totals table
 	const qldTotalItem = soefinding.findingJson.data.find(d => d.State == "Queensland" && d.Category == "All")
-	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
+	const qldTotalSeries = [{
+		name: "Total",
+		data: yearKeys.map(y => qldTotalItem[y])
+	}]
 
-	const options4 = {
-		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"] },
-		labels: yearKeys
+	const options4 = soefinding.getDefaultLineChartOptions()
+	options4.tooltip.y = {
+		formatter: val => val
 	}
-
+	options4.xaxis.categories = yearKeys
+	options4.xaxis.labels.rotateAlways = true
+	options4.xaxis.title.text = "Year"
+	options4.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options4.yaxis.title.text = "Tonnes"
 	soefinding.state.chart4 = {
 		options: options4,
-		series: qldTotalSeries
-	};
+		series: qldTotalSeries,
+		chartactive: true,
+	}
 
 
 	new Vue({
