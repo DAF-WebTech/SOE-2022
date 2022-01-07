@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = JSON.parse(JSON.stringify(options1))
 	options2.labels = qldItems.map(d => d.Category)
+	options2.tooltip.y.formatter = options1.tooltip.y.formatter
 
 	soefinding.state.chart2 = {
 		options: options2, // reüse
@@ -45,12 +46,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 3. stacked area chart, trend in each sector
 	const qldTrendSeries = qldItems.map(d => {
+		let name = d.Category
+		if (name.indexOf("and") > -1)
+			name = [name.substring(0, name.indexOf("and") - 1), name.substring(name.indexOf("and"))]
+		else if (name.indexOf(" ") > -1)
+			name = name.split(" ")
 		return {
-			name: d.Category,
+			name,
 			data: yearKeys.map(y => d[y])
 		}
 	})
-	qldTrendSeries.sort(function(a, b) {
+	qldTrendSeries.sort(function (a, b) {
 		return b.data.at(-1) - a.data.at(-1)
 	})
 
@@ -60,8 +66,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.legend.inverseOrder = true
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.stroke = {width: 1 }
-	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 2})}M`
+	options3.stroke = { width: 1 }
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, { maximumFractionDigits: 2 })}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}
@@ -75,17 +81,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 4 queensland totals table
 	const qldTotalItem = allStates.find(d => d.State == "Queensland")
-	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
+	const qldTotalSeries = [{
+		name: "Tonnes",
+		data: yearKeys.map(y => qldTotalItem[y])
+	}]
 
-	const options4 = {
-		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"] },
-		labels: yearKeys
+	const options4 = soefinding.getDefaultLineChartOptions()
+	options4.tooltip.y = {
+		formatter: val => val
 	}
+	options4.xaxis.categories = yearKeys
+	options4.xaxis.labels.rotateAlways = true
+	options4.xaxis.title.text = "Year"
+	options4.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options4.yaxis.title.text = "Tonnes"
+
 
 	soefinding.state.chart4 = {
 		options: options4,
-		series: qldTotalSeries
-	};
+		series: qldTotalSeries,
+		chartactive: true
+	}
+
 
 	new Vue({
 		el: "#chartContainer",
