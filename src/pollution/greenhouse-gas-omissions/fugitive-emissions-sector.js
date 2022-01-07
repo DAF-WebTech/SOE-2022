@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options2 = JSON.parse(JSON.stringify(options1))
 	options2.chart.type = "donut"
 	options2.labels = qldItems.map(d => d.Category)
+	options2.tooltip.y.formatter = options1.tooltip.y.formatter
 
 	soefinding.state.chart2 = {
 		options: options2, // reüse
@@ -59,10 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options3 = soefinding.getDefaultAreaChartOptions()
+	options3.stroke = { width: 1 }
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 1})}M`
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, { maximumFractionDigits: 1 })}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}
@@ -76,17 +78,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 4. queensland totals table
 	const qldTotalItem = soefinding.findingJson.data.find(d => d.State == "Queensland" && d.Category == "All")
-	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
+	const qldTotalSeries = [{
+		name: "Tonnes",
+		data: yearKeys.map(y => qldTotalItem[y])
+	}]
 
-	const options4 = {
-		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"] },
-		labels: yearKeys
+	const options4 = soefinding.getDefaultLineChartOptions()
+	options4.tooltip.y = {
+		formatter: val => `${val}M`
 	}
+	options4.xaxis.categories = yearKeys
+	options4.xaxis.labels.rotateAlways = true
+	options4.xaxis.title.text = "Year"
+	options4.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options4.yaxis.title.text = "Tonnes"
 
 	soefinding.state.chart4 = {
 		options: options4,
-		series: qldTotalSeries
-	};
+		series: qldTotalSeries,
+		chartactive: true
+	}
 
 
 	new Vue({
