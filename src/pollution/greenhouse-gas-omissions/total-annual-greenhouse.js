@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 2})}M`
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, { maximumFractionDigits: 2 })}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}
@@ -100,16 +100,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	//4. table only, qld totals
-	const qldTotalSeries = yearKeys.map(y => qldTotal[y])
+	const qldTotalSeries = [{
+		name: "Total",
+		data: yearKeys.map(y => qldTotal[y])
+	}]
 
-	const options4 = {
-		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"]  },
-		labels: yearKeys
-	}
+	const options4 = JSON.parse(JSON.stringify(options3))
+	options4.xaxis.categories = yearKeys
+	options4.yaxis.labels.formatter = options3.yaxis.labels.formatter
+	options4.yaxis.min = 0
+	options4.xaxis.labels.rotateAlways = true
+
+
 
 	soefinding.state.chart4 = {
 		options: options4,
-		series: qldTotalSeries
+		series: qldTotalSeries,
+		chartactive: true,
 	};
 
 
