@@ -37,11 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	qldItems.sort(function (a, b) {
 		return b[latestYear] - a[latestYear]
 	})
-	const qldSeries = qldItems.map(d => d[latestYear])
+	const qldSeries = qldItems.filter(d => d[latestYear] != "Data is confidential")
+		.map(d => d[latestYear])
 
 	const options2 = JSON.parse(JSON.stringify(options1))
-	options2.chart.type = "donut"
-	options2.labels = qldItems.map(d => d.Category)
+	options2.labels = qldItems.filter(d => d[latestYear] != "Data is confidential").map(d => d.Category)
+	options2.tooltip.y.formatter = options1.tooltip.y.formatter
 
 	soefinding.state.chart2 = {
 		options: options2, // reüse
@@ -54,15 +55,22 @@ document.addEventListener("DOMContentLoaded", function () {
 	const qldTrendSeries = qldItems.map(d => {
 		return {
 			name: d.Category,
-			data: yearKeys.map(y => d[y])
+			data: yearKeys.map(y => d[y] == "Data is confidential" ? null : d[y])
 		}
 	})
+	qldTrendSeries.sort(function (a, b) {
+		if (a.data.at(-1) == null || b.data.at(-1) == null)
+			return b.data[6] - a.data[6]
+		else
+			return b.data.at(-1) - a.data.at(-1)
+	})//doesn't seem to work
 
 	const options3 = soefinding.getDefaultAreaChartOptions()
+	options3.stroke = { width: 1 }
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 3})}M`
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, { maximumFractionDigits: 2 })}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}
@@ -76,17 +84,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 4. queensland totals table
 	const qldTotalItem = soefinding.findingJson.data.find(d => d.State == "Queensland" && d.Category == "All")
-	const qldTotalSeries = yearKeys.map(y => qldTotalItem[y])
+	const qldTotalSeries = [{
+		name: "Tonnes",
+		data: yearKeys.map(y => qldTotalItem[y])
+	}]
 
-	const options4 = {
-		xaxis: { categories: ["Year", "Emissions<br>(million tonnes)"] },
-		labels: yearKeys
+
+	const options4 = soefinding.getDefaultLineChartOptions()
+	options4.tooltip.y = {
+		formatter: val => `${val}M`
 	}
+	options4.xaxis.categories = yearKeys
+	options4.xaxis.labels.rotateAlways = true
+	options4.xaxis.title.text = "Year"
+	options4.yaxis.labels.formatter = val => `${Math.round(val)}M`
+	options4.yaxis.title.text = "Tonnes"
 
 	soefinding.state.chart4 = {
 		options: options4,
-		series: qldTotalSeries
-	};
+		series: qldTotalSeries,
+		chartactive: true
+	}
+
 
 
 	new Vue({
