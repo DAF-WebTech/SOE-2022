@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options4 = soefinding.getDefaultLineChartOptions()
 	options4.tooltip.y = {
-		formatter: val => val
+		formatter: val => `${val}M`
 	}
 	options4.xaxis.categories = yearKeys
 	options4.xaxis.labels.rotateAlways = true
