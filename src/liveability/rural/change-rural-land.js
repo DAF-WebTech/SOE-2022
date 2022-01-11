@@ -20,13 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	const qldTotal = regions.get("Queensland").find(d => d.Use == "total area mapped")["total area mapped"]
 	soefinding.state.series4 = {} 
 	// we need these now because the individual options for chart 4 will be based on this
-	const options1 = soefinding.getDefaultStackedColumnChartOptions()
+	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.chart.id = "chart1"
+	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
+	delete options1.xaxis.tickPlacement
 	options1.xaxis.title.text = "Year"
-	options1.yaxis.title.text = "Hectares"
 	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : (val >= 1000 ? `${val/1000}K` : val)
 	options1.yaxis.labels.minWidth = 30
-	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
+	options1.yaxis.title.text = "Hectares"
 
 
 	// create series for each region
