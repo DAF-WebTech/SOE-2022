@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => `Mean late dry season ground cover (%), ${latestYear}`,
 			heading2: function() { 
-				return  `Mean late dry season ground cover (%) ${this.currentRegionName == "Queensland" ? "accross" :"in"} ${this.currentRegionName}`
+				return  `Mean late dry season ground cover (%) ${this.currentRegionName == "Queensland" ? "across" :"in"} ${this.currentRegionName}`
 			}
 
 		},
