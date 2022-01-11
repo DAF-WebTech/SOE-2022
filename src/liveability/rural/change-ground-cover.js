@@ -13,26 +13,26 @@ document.addEventListener("DOMContentLoaded", function () {
 			name: "Groundcover (%)",
 			data: series1Items.map(d => d[latestYear]),
 			type: "column"
-		}, 
+		},
 		{
 			name: "All year mean",
 			data: series1Items.map(d => d.AllYearMean),
 			type: "line"
 		}
 	]
-	
-	const  options1 = soefinding.getDefaultLineChartOptions()
+
+	const options1 = soefinding.getDefaultLineChartOptions()
+	options1.stroke = {
+		width: [0, 4]
+	}
 	options1.xaxis.categories = series1Items.map(d => d.Region)
 	options1.xaxis.title.text = "Region"
-	options1.yaxis.title.text = "Groundcover (%)"
-	options1.yaxis.labels.formatter = val => Math.round(val)
 	options1.tooltip.y = { formatter: val => val }
+	options1.yaxis.forceNiceScale = false
+	options1.yaxis.labels.formatter = val => Math.round(val)
 	options1.yaxis.min = 0
 	options1.yaxis.max = 100
-	options1.yaxis.forceNiceScale = false
-	//options1.fill = { opacity: 1 }
-	
-
+	options1.yaxis.title.text = "Groundcover (%)"
 
 	soefinding.state.chart1 = {
 		series: series1,
@@ -41,15 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
 	soefinding.findingJson.data.forEach(d => {
-		soefinding.findingContent[d.Region] = { 
+		soefinding.findingContent[d.Region] = {
 			series2: [
 				{
-					name: "Groundcover (%)", 
+					name: "Groundcover (%)",
 					data: years.map(y => d[y])
 				}
-			] 
+			]
 		}
 	})
 
@@ -65,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.xaxis.tickPlacement = "between"
 	options2.xaxis.axisTicks = { show: false }
 
-
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
 		options: options2,
@@ -73,15 +71,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
 			heading1: () => `Mean late dry season ground cover (%), ${latestYear}`,
-			heading2: function() { 
-				return  `Mean late dry season ground cover (%) ${this.currentRegionName == "Queensland" ? "across" :"in"} ${this.currentRegionName}`
+			heading2: function () {
+				return `Mean late dry season ground cover (%) ${this.currentRegionName == "Queensland" ? "across" : "in"} ${this.currentRegionName}`
 			}
 		},
 		methods: {
@@ -90,13 +86,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 
-
-
 	window.soefinding.onRegionChange = function () {
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
 
 		soefinding.loadFindingHtml()
 	}
-
-
 })
