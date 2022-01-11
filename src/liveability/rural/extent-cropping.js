@@ -29,13 +29,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 
-	const options = soefinding.getDefaultStackedColumnChartOptions()
-	options.xaxis.categories = [...years]
-	options.xaxis.title.text = "Year"
-	options.yaxis.title.text = "Hectares (millions)"
-	options.yaxis.labels.formatter = val => `${Number.isInteger(val) ? val : val.toFixed(3)}M`
+	const options = soefinding.getDefaultColumnChartOptions()
 	options.legend.showForNullSeries = false
-	options.tooltip.y = { formatter: val => `${(val * 1000000).toLocaleString()}ha` }
+	options.tooltip.y = { formatter: val => `${val} million ha` }
+	options.xaxis.categories = [...years]
+	delete options.xaxis.tickPlacement
+	options.xaxis.title.text = "Year"
+	delete options.yaxis.forceNiceScale
+	options.yaxis.labels.formatter = val => `${val.toFixed(2)}M`
+	options.yaxis.title.text = "Hectares (millions)"
 
 	soefinding.state.chart1 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series,
@@ -55,13 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val?.toFixed(2) ?? "n/a",
-			onStackedRadioClick: function () {
+			onColumnRadioClick: function () {
 				this.chart1.options.chart.type = "bar"
-				this.chart1.options.chart.stacked = true
 			},
 			onLineRadioClick: function () {
 				this.chart1.options.chart.type = "line"
-				this.chart1.options.chart.stacked = false
 				this.chart1.options.markers = { size: 4 } // ignored by column chart
 				this.chart1.options.tooltip.shared = false
 			}
