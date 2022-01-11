@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.findingJson.data.forEach(d => {
 		if (!regions.has(d.Region))
 			regions.set(d.Region, [])
-		
+
 		regions.get(d.Region).push(d)
 
 		years.add(d.Year)
@@ -42,24 +42,31 @@ document.addEventListener("DOMContentLoaded", function () {
 		options,
 		chartactive: true,
 	}
-	 	
-
 
 
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function() { return  `Cropped area (million ha) by season in ${this.currentRegionName}`
-		}
+			heading1: function () {
+				return `Cropped area (million ha) by season in ${this.currentRegionName}`
+			}
 
 		},
 		methods: {
-			formatter1: val => val?.toFixed(2) ?? "n/a"
+			formatter1: val => val?.toFixed(2) ?? "n/a",
+			onStackedRadioClick: function () {
+				this.chart1.options.chart.type = "bar"
+				this.chart1.options.chart.stacked = true
+			},
+			onLineRadioClick: function () {
+				this.chart1.options.chart.type = "line"
+				this.chart1.options.chart.stacked = false
+				this.chart1.options.markers = { size: 4 } // ignored by column chart
+				this.chart1.options.tooltip.shared = false
+			}
 		}
 	})
-
-
 
 
 	window.soefinding.onRegionChange = function () {
@@ -67,6 +74,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		soefinding.loadFindingHtml()
 	}
-
 
 })
