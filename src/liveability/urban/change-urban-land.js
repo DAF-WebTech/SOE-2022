@@ -59,12 +59,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.chart.type = "donut"
 	options2.labels = ["Urban", "Non-Urban"]
 	options2.xaxis.categories = ["", "Hectares"]
-	options2.tooltip = {
-		y: {
-			formatter: (val, options) => {
-				const percent = options.globals.seriesPercent[options.seriesIndex][0]
-				return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
-			}
+	options2.tooltip.y = {
+		formatter: (val, options) => {
+			const percent = options.globals.seriesPercent[options.seriesIndex][0]
+			return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
 		}
 	}
 
@@ -89,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.chart.type = "donut"
 	options3.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels3
 	options3.xaxis.categories = ["", "Hectares"]
-	options3.tooltip = { y: { formatter: options1.tooltip.y.formatter } }
+	options3.tooltip.y = { formatter: options2.tooltip.y.formatter }
 
 	soefinding.state.chart3 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
