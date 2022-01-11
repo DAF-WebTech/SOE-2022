@@ -60,7 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.xaxis.tickPlacement = "between"
 	options3.xaxis.title.text = "Regional plan area"
 	options3.yaxis.forceNiceScale = false
-	options3.yaxis.labels.formatter = (val) => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}K`
+	options3.yaxis.labels.formatter = (val) => val >= 1000000 ? `${val / 1000000}M` : ( val >= 1000 ? `${val / 1000}K` : val)
+	options3.yaxis.labels.minWidth = 30
 	options3.yaxis.max = 1500000
 	options3.yaxis.min = 0
 	options3.yaxis.tickAmount = 6
