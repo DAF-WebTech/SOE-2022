@@ -27,19 +27,20 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.findingContent[regionName] = {
 			html: "",
 			app1: series
-		};
-
+		}
 	}
 
 	const options1 = soefinding.getDefaultLineChartOptions()
-	options1.markers.size = 0
 	options1.stroke = {width: 1.5}
+	options1.markers.size = 0
 	options1.xaxis.categories = soefinding.yearKeys
+ 	options1.xaxis.labels.formatter = (val) => val % 4 == 0 ? val : ""
 	options1.xaxis.tickAmount = 32
 	delete options1.xaxis.tickPlacement
 	options1.xaxis.title.text = "Year";
-	options1.yaxis.labels.formatter = val => val.toLocaleString()
+	options1.yaxis.labels.formatter = val => val
 	options1.yaxis.title.text = "Rainfall (millimetres)";
+
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -59,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? "" }
 		}
 	})
-
 })
 
 
