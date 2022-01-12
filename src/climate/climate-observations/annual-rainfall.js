@@ -37,8 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		formatter: val => soefinding.yearKeys[val-1]
 	}
 	options1.xaxis.categories = soefinding.yearKeys
- 	options1.xaxis.labels.formatter = (val) => val % 4 == 0 ? val : ""
-	options1.xaxis.tickAmount = 32
+	const YEAR_GAP = 4
+ 	options1.xaxis.labels.formatter = (val) => val % YEAR_GAP == 0 ? val : ""
+	options1.xaxis.tickAmount = Math.floor(soefinding.yearKeys / YEAR_GAP)
 	delete options1.xaxis.tickPlacement
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.labels.formatter = val => val
