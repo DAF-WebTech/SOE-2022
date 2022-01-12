@@ -33,10 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options1 = soefinding.getDefaultBarChartOptions()
-	options1.xaxis.categories = locationItems.map(d => d.Name)
+	options1.xaxis.categories = locationItems.map(d => d.Name.split(" "))
 	options1.xaxis.title.text = "Station"
 	options1.yaxis.title.text = "Mean annual pan evaporation (millimetres)"
- 	options1.yaxis.labels.formatter = val => Math.round(val).toLocaleString()
+	options1.yaxis.labels.formatter = val => Math.round(val).toLocaleString()
 	options1.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.chart1 = {
@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options2 = soefinding.getDefaultLineChartOptions()
 	options2.xaxis.categories = soefinding.yearKeys
+	options2.xaxis.labels.formatter = (val) => val % 2 == 0 ? val : ""
 	options2.xaxis.title.text = "Year"
 	options2.yaxis.title.text = "Annual pan evaporation (millimetres)"
 	options2.yaxis.labels.formatter = val => Math.round(val).toLocaleString()
@@ -83,9 +84,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 	if (soefinding.state.currentRegionName == "Queensland")
-	  soefinding.state.chart2.series = soefinding.findingContent["Cairns Airport"].app2 // need a default
+		soefinding.state.chart2.series = soefinding.findingContent["Cairns Airport"].app2 // need a default
 	else
-      soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].app2
+		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].app2
 
 	new Vue({
 		el: "#chartContainer",
@@ -102,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	if (soefinding.state.currentRegionName == "Queensland")
 		soefinding.onRegionChange()
 
-
 })
 
 
@@ -114,9 +114,9 @@ soefinding.onRegionChange = function () {
 	if (this.state.currentRegionName == "Queensland") {
 		// toggle visibility of first region-info, which is for Queensland
 		try {
-		regionInfos[0].style.display = "block"
-		regionInfos[1].style.display = "none"
-		} catch(e) {
+			regionInfos[0].style.display = "block"
+			regionInfos[1].style.display = "none"
+		} catch (e) {
 			// i don't know why there's only one sometimes
 		}
 	}
