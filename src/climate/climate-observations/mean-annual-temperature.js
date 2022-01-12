@@ -20,13 +20,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		app1: qldMeanAnomalySeries
 	}
 
-	const options1 = soefinding.getDefaultBarChartOptions();
+	const options1 = soefinding.getDefaultBarChartOptions()
+	options1.tooltip.x = { formatter: val => yearKeys[val - 1] }
+	options1.tooltip.y = { formatter: val => val >= 0 ? val : `-${Math.abs(val)}` }
 	options1.xaxis.categories = yearKeys
+	options1.xaxis.labels.formatter = (val) => val % 5 == 0 ? val : ""
+	options1.xaxis.tickPlacement = "on"
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Temperature anomaly (degrees celsius)";
-	options1.tooltip.y = {
-			formatter: val => val >= 0 ? val : `-${Math.abs(val)}`
-		}
+
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -62,13 +64,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	const options2 = soefinding.getDefaultLineChartOptions()
-	options2.stroke = { width: 1.5 }
 	options2.markers.size = 0
+	options2.stroke = { width: 1.5 }
+	options2.tooltip.x = { formatter: val => yearKeys[val - 1] }
+	options2.tooltip.y = { formatter: val => (val == null ? "n/a" : val.toFixed(2)) }
 	options2.xaxis.categories = yearKeys
+	options2.xaxis.labels.formatter = (val) => val % 5 == 0 ? val : ""
 	options2.xaxis.title.text = "Year"
 	options2.yaxis.title.text = "Temperature (degrees celsius)"
 	options2.yaxis.labels.formatter = val => Math.round(val)
-	options2.tooltip.y = { formatter: val => (val == null ? "n/a" : val.toFixed(2)) }
 
 
 	soefinding.state.chart2 = {
