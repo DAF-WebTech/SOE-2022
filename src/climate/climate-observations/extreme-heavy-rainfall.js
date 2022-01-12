@@ -29,20 +29,23 @@ document.addEventListener("DOMContentLoaded", function () {
 	// and one for queensland
 	soefinding.findingContent.Queensland = { html: "" }
 
-
+	const YEAR_GAP = 4
 	const options1 = soefinding.getDefaultLineChartOptions();
-	options1.stroke = { width: 1.5 }
 	options1.markers.size = 3
+	options1.stroke = { width: 1.5 }
+	options1.tooltip.x = { formatter: val => yearKeys[val-1] }
+	options1.tooltip.y = { formatter: val => val == null ? "n/a" : val }
 	options1.xaxis.categories = yearKeys
-	options1.xaxis.title.text = "Year";
-	options1.yaxis.title.text = "Temperature (degrees celsius)";
+	options1.xaxis.labels.formatter = val => val % YEAR_GAP == 0 ? val : ""
+	options1.xaxis.tickAmount = Math.floor(yearKeys.length / YEAR_GAP)
+	delete options1.xaxis.tickPlacement
+	options1.xaxis.title.text = "Year"
 	options1.yaxis.labels.formatter = val => Math.round(val)
-	options1.tooltip.y = {
-		formatter: val => (val == null ? "n/a" : val.toFixed(1))
-	}
+	options1.yaxis.title.text = "Number of days"
+
 
 	soefinding.state.chart1 = {
-		series: soefinding.findingContent[soefinding.state.currentRegionName],
+		series: soefinding.findingContent.Palmerville.app1, // need a default
 		options: options1,
 		chartactive: true,
 	}
