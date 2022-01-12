@@ -26,20 +26,24 @@ document.addEventListener("DOMContentLoaded", function () {
 			app1: series
 		}
 	})
-	soefinding.findingContent.Queensland = {html: ""}
+	soefinding.findingContent.Queensland = { html: "" }
 
 
 	const options1 = soefinding.getDefaultLineChartOptions();
-	options1.stroke = { width: 1.5 }
 	options1.markers.size = 3
-	options1.xaxis.categories = yearKeys
-	options1.xaxis.title.text = "Year";
-	options1.yaxis.title.text = "Temperature (degrees celsius)";
-	options1.yaxis.labels.formatter = val => Math.round(val)
+	options1.stroke = { width: 1.5 }
+	options1.tooltip.x = { formatter: val => yearKeys[val - 1] }
 	options1.tooltip.y = { formatter: val => val == null ? "n/a" : val.toFixed(1) }
+	options1.xaxis.categories = yearKeys
+	options1.xaxis.labels.formatter = val => val % 4 == 0 ? val : ""
+	options1.xaxis.labels.rotateAlways = true
+	options1.xaxis.tickPlacement = "on"
+	options1.xaxis.title.text = "Year"
+	options1.yaxis.labels.formatter = val => Math.round(val)
+	options1.yaxis.title.text = "Temperature (degrees celsius)"
 
 	soefinding.state.chart1 = {
-		series: soefinding.findingContent[soefinding.state.currentRegionName],
+		series: soefinding.findingContent["Brisbane Airport"].app1, // needs a default
 		options: options1,
 		chartactive: true,
 	}
@@ -49,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function() { return `Trend in number of extreme hot days at ${this.currentRegionName}` },
+			heading1: function () { return `Trend in number of extreme hot days at ${this.currentRegionName}` },
 		},
 		methods: {
 			formatter1: val => val
