@@ -18,6 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.tooltip.y = {
 		formatter: val => val < 0 ? `−${Math.abs(val)}` : val
 	}
+	options1.xaxis.labels.formatter = (val) => val % 10 == 0 ? val : ""
+
+
+
+
 
 	const options2 = JSON.parse(JSON.stringify(options1))
 	options2.yaxis.tickAmount = 6
@@ -26,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.yaxis.labels.formatter = options1.yaxis.labels.formatter
 	options2.tooltip.y.formatter = options1.tooltip.y.formatter
 	options2.yaxis.forceNiceScale = false
+	options2.xaxis.labels.formatter = options1.xaxis.labels.formatter
 
 	locations.forEach((loc, i) => {
 
@@ -42,6 +48,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		options1.xaxis.categories = anomalyYears
 
+		options1.tooltip.x = { formatter: val => options1.xaxis.categories[val - 1] }
+		options1.xaxis.tickAmount = options1.xaxis.categories.length
+
+
 		soefinding.state[`chart${i * 2 + 1}`] = {
 			options: options1,
 			series: anomalySeries,
@@ -49,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		};
 
 		//chart 2, column, Annual mean sea surface temperature 10-year rolling average
-		const annualMeanItems = anomalyItems.filter(d => d["Ten year rolling average"] != null)
+		const annualMeanItems = anomalyItems
 		const annualMeanYears = []
 		const annualMeanSeries = [{
 			name: "Ten-year rolling average",
@@ -60,6 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		}]
 
 		options2.xaxis.categories = annualMeanYears
+
+		options2.tooltip.x = { formatter: val => options2.xaxis.categories[val - 1] }
+		options2.xaxis.tickAmount = options2.xaxis.categories.length
 
 		soefinding.state[`chart${i * 2 + 2}`] = {
 			options: options2,
