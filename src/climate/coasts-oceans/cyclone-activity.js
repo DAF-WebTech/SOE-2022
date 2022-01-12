@@ -3,11 +3,11 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 	const series = [{
-		name: "Count",
+		name: "Cyclones",
 		data: soefinding.findingJson.data.map(d => d.Count)
 	}]
 
-	const options = soefinding.getDefaultBarChartOptions()
+	const options = soefinding.getDefaultLineChartOptions()
 	options.xaxis.categories = soefinding.findingJson.data.map(d => d.Year)
 	options.xaxis.title.text = "Year"
 	options.yaxis.title.text = "Number of cyclones"
