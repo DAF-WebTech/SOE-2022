@@ -28,16 +28,17 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 	soefinding.findingContent.Queensland = { html: "" }
 
-
-	const options1 = soefinding.getDefaultLineChartOptions();
+	
+	const options1 = soefinding.getDefaultLineChartOptions()
 	options1.markers.size = 3
 	options1.stroke = { width: 1.5 }
 	options1.tooltip.x = { formatter: val => yearKeys[val - 1] }
-	options1.tooltip.y = { formatter: val => val == null ? "n/a" : val.toFixed(1) }
+	options1.tooltip.y = { formatter: val => val == null ? "n/a" : val }
 	options1.xaxis.categories = yearKeys
-	options1.xaxis.labels.formatter = val => val % 4 == 0 ? val : ""
-	options1.xaxis.labels.rotateAlways = true
-	options1.xaxis.tickPlacement = "on"
+	const YEAR_GAP = 4
+	options1.xaxis.labels.formatter = val => val % YEAR_GAP == 0 ? val : ""
+	options1.xaxis.tickAmount = Math.floor(yearKeys.length / YEAR_GAP) 
+	delete options1.xaxis.tickPlacement
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.labels.formatter = val => Math.round(val)
 	options1.yaxis.title.text = "Temperature (degrees celsius)"
