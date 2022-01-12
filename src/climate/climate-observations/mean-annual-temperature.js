@@ -24,7 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.tooltip.x = { formatter: val => yearKeys[val - 1] }
 	options1.tooltip.y = { formatter: val => val >= 0 ? val : `-${Math.abs(val)}` }
 	options1.xaxis.categories = yearKeys
-	options1.xaxis.labels.formatter = (val) => val % 5 == 0 ? val : ""
+	const YEAR_GAP = 5
+	options1.xaxis.labels.formatter = (val) => val % YEAR_GAP == 0 ? val : ""
+	options1.xaxis.tickAmount = Math.floor(yearKeys.length / YEAR_GAP) 
 	options1.xaxis.tickPlacement = "on"
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Temperature anomaly (degrees celsius)";
@@ -114,7 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		}
 	})
-
 })
 
 
