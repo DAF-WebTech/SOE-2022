@@ -33,13 +33,17 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultLineChartOptions()
 	options1.stroke = {width: 1.5}
 	options1.markers.size = 0
+	options1.tooltip.x = { 
+		formatter: val => soefinding.yearKeys[val-1]
+	}
 	options1.xaxis.categories = soefinding.yearKeys
  	options1.xaxis.labels.formatter = (val) => val % 4 == 0 ? val : ""
 	options1.xaxis.tickAmount = 32
 	delete options1.xaxis.tickPlacement
-	options1.xaxis.title.text = "Year";
+	options1.xaxis.title.text = "Year"
 	options1.yaxis.labels.formatter = val => val
-	options1.yaxis.title.text = "Rainfall (millimetres)";
+	options1.yaxis.title.text = "Rainfall (millimetres)"
+
 
 
 	soefinding.state.chart1 = {

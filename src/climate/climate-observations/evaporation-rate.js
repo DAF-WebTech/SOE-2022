@@ -70,12 +70,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options2 = soefinding.getDefaultLineChartOptions()
+	options2.tooltip.x = { formatter: val => soefinding.yearKeys[val-1] }
+	options2.tooltip.y = { formatter: val => val?.toLocaleString() ?? "n/a" }
 	options2.xaxis.categories = soefinding.yearKeys
 	options2.xaxis.labels.formatter = (val) => val % 2 == 0 ? val : ""
 	options2.xaxis.title.text = "Year"
 	options2.yaxis.title.text = "Annual pan evaporation (millimetres)"
 	options2.yaxis.labels.formatter = val => Math.round(val).toLocaleString()
-	options2.tooltip.y = { formatter: val => val?.toLocaleString() ?? "n/a" }
 
 
 	soefinding.state.chart2 = {
