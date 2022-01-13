@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (val >= 1000000) return "1M"
 		return `${val / 1000}K`
 	}
-	options4.yaxis.labels.minWidth = 20
+	options4.yaxis.labels.minWidth = 30
 	options4.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
