@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options4.tooltip.y = {
 		formatter: val => `${(val)?.toLocaleString() ?? "n/a"}`
 	}
-	options4.yaxis.labels.minWidth = 100
+	options4.yaxis.labels.minWidth = 30
 
 	soefinding.state.chart4 = {
 		options: options4,
