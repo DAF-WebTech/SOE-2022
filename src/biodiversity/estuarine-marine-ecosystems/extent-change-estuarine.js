@@ -141,10 +141,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options5 = soefinding.getDefaultLineChartOptions()
 	options5.xaxis.categories = years
 	options5.xaxis.tickPlacement = "between"
-	options5.xaxis.title = "Year"
+	options5.xaxis.title.text = "Year"
 	delete options5.yaxis.forceNiceScale
 	options5.yaxis.labels.formatter = val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(0)}`, // a better minus sign
-		options5.yaxis.title = "Change in hectares of wetland system"
+		options5.yaxis.title.text = "Change in hectares of wetland system"
 
 	soefinding.state.chart5 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series5,
