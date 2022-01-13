@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
-	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
+	options1.tooltip.y = { formatter: val => val.toLocaleString() }
 	options1.xaxis.categories = series1items.map(d => {
 		if (d["Drainage division"].startsWith("North East")) //separate into two lines
 			return [
@@ -62,8 +62,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 
-	soefinding.findingContent.Queensland = { 
-		series2: [1, 2, 3] 
+	soefinding.findingContent.Queensland = {
+		series2: [1, 2, 3]
 	}// dummy values, never used
 
 
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 
 	const options3 = soefinding.getDefaultColumnChartOptions()
-	options3.tooltip.y = { formatter: val => val } 
+	options3.tooltip.y = { formatter: val => val }
 	options3.xaxis.categories = series3Names
 	options3.xaxis.title.text = "Wetland system"
 	delete options3.xaxis.tickPlacement
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	let series5currentRegion = ""
 	const series5Parse = JSON.parse(document.getElementById("jsonData2").textContent)
-	const series5Keys = series5Parse.meta.fields.slice(2) 
+	const series5Keys = series5Parse.meta.fields.slice(2)
 	soefinding.findingContent.Other = {} // not used but it's simpler if it's there
 	series5Parse.data.forEach(d => {
 		if (series5currentRegion != d["Drainage division"]) {
@@ -144,8 +144,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const options5 = soefinding.getDefaultLineChartOptions()
 	options5.xaxis.categories = series5Keys.map(k => k.replace("-", "–")) //ndash
-	options5.xaxis.title = "Year"
-	options5.yaxis.title = "Change in hectares"
+	options5.xaxis.title.text = "Year"
+	options5.yaxis.title.text = "Change in hectares"
 	delete options5.yaxis.forceNiceScale
 	options5.yaxis.labels.formatter = val => soefinding.convertToUnicodeMinus(val)
 
@@ -168,8 +168,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `Proportion of freshwater wetland systems extent in ${soefinding.state.currentRegionName}, ${YEAR}`,
 			heading3: () => `"Freshwater wetland systems percentage of pre-clear extent remaining, ${YEAR}`,
 			heading4: () => `Freshwater wetland system percentage of pre-clear extent remaining in ${soefinding.state.currentRegionName}, ${YEAR}`,
-			heading5: function() {
-				return `Trends in change (loss or gain) in freshwater wetland systems in ${this.currentRegionName}` 
+			heading5: function () {
+				return `Trends in change (loss or gain) in freshwater wetland systems in ${this.currentRegionName}`
 			}
 		},
 		methods: {
@@ -202,15 +202,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function toggleDisplayDivs() {
-	Array.from(document.querySelectorAll("div.displayQld")).forEach( function(d) {
+	Array.from(document.querySelectorAll("div.displayQld")).forEach(function (d) {
 		d.style.display = soefinding.state.currentRegionName == "Queensland" ? "block" : "none"
 	})
-	Array.from(document.querySelectorAll("div.displayRegional")).forEach( function(d) {
+	Array.from(document.querySelectorAll("div.displayRegional")).forEach(function (d) {
 		d.style.display = soefinding.state.currentRegionName != "Queensland" ? "block" : "none"
 	})
 
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
 	window.setTimeout(toggleDisplayDivs, 1)
 })
