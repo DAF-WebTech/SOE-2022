@@ -43,18 +43,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (year_keys.map(yk => d[yk]).every(v => v == null))
 			return;
 
-		
+
 		if (d[subregion_key] == null) {
 			d[subregion_key] = d[region_key]
 		}
 
 		if (!soefinding.state.regionData[d[region_key]]) {
 			soefinding.state.regionData[d[region_key]] = {}
-			soefinding.findingContent[d[region_key]] = {html: ""}
+			soefinding.findingContent[d[region_key]] = { html: "" }
 		}
 
 		if (!soefinding.state.regionData[d[region_key]][d[subregion_key]]) {
-			soefinding.state.regionData[d[region_key]][d[subregion_key]] = { 
+			soefinding.state.regionData[d[region_key]][d[subregion_key]] = {
 				data: [],
 				chart1: [],
 				chart2: {}
@@ -62,8 +62,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 
 		// fix the data, replace n.p. with null
-		d.forEach(function(item, i) { 
-			if (String(item).indexOf("&") >= 0) 
+		d.forEach(function (item, i) {
+			if (String(item).indexOf("&") >= 0)
 				d[i] = item.replace("&", "and")
 		})
 
@@ -75,64 +75,67 @@ document.addEventListener("DOMContentLoaded", function () {
 	columnChartOptions.xaxis.categories = years.map(k => k.replace("-", "–")) // ndash
 	columnChartOptions.xaxis.title.text = "Year"
 	columnChartOptions.yaxis.title.text = "Tonnes"
-	columnChartOptions.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : ( val >= 1000 ? `${val/1000}K`: val)
+	columnChartOptions.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : (val >= 1000 ? `${val / 1000}K` : val)
+	columnChartOptions.yaxis.labels.minWidth = 30
 	columnChartOptions.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.lineChartOptions = soefinding.getDefaultLineChartOptions()
 
 
 	soefinding.state.lineChartOptions.xaxis.categories = years_value.map(k => k.replace("-", "–")) // ndash
-	soefinding.state.lineChartOptions.legend.showForNullSeries = false 
+	soefinding.state.lineChartOptions.legend.showForNullSeries = false
 	soefinding.state.lineChartOptions.yaxis.showForNullSeries = false
 	soefinding.state.lineChartOptions.xaxis.title.text = "Year"
 	soefinding.state.lineChartOptions.xaxis.tickPlacement = "between"
-	soefinding.state.lineChartOptions.tooltip.y = { formatter: val => { 
-		if (val == null)
-			return "n/a"
-		else
-			return `$${val.toLocaleString(undefined, {minimumFractionDigits: 2})}` 
-	}}
+	soefinding.state.lineChartOptions.tooltip.y = {
+		formatter: val => {
+			if (val == null)
+				return "n/a"
+			else
+				return `$${val.toLocaleString(undefined, { minimumFractionDigits: 2 })}`
+		}
+	}
 	soefinding.state.lineChartOptions.yaxis.title.text = "Value ($)"
 	soefinding.state.lineChartOptions.yaxis.labels.minWidth = 30
 	soefinding.state.lineChartOptions.yaxis.labels.formatter = val => {
 		if (val >= 1000000000)
-			return `${val/1000000000}B`
+			return `${val / 1000000000}B`
 		else if (val >= 1000000)
-			return `${val/1000000}M`
+			return `${val / 1000000}M`
 		else if (val >= 1000)
-			return `${val/1000}K`
-		else 
+			return `${val / 1000}K`
+		else
 			return val
 	}
 
 
-	
-	Object.keys(soefinding.state.regionData).forEach(function(regionName) {
-		Object.keys(soefinding.state.regionData[regionName]).forEach(function(subregionName) {
+
+	Object.keys(soefinding.state.regionData).forEach(function (regionName) {
+		Object.keys(soefinding.state.regionData[regionName]).forEach(function (subregionName) {
 
 			soefinding.state.regionData[regionName][subregionName].chart1 = soefinding.state.regionData[regionName][subregionName].data.map(d => {
 				let heading = `Production amount of ${d[product_key]} in ${regionName} `
 				if (regionName != "Queensland")
-					 heading += "NRM region"
+					heading += "NRM region"
 				if (regionName != subregionName)
 					heading += ` — ${subregionName}` // mdash
 
-				const zeroSeries = year_keys.reduce( function (acc, curr) {
-							return acc + d[curr]
-						}, 0) == 0
+				const zeroSeries = year_keys.reduce(function (acc, curr) {
+					return acc + d[curr]
+				}, 0) == 0
 
 				const options = JSON.parse(JSON.stringify(columnChartOptions))
+				options.tooltip.y = columnChartOptions.tooltip.y
+				options.yaxis.labels.formatter = columnChartOptions.yaxis.labels.formatter
 				options.yaxis.title.text = d[quantity_key]
-				options .tooltip.y = columnChartOptions.tooltip.y
-				options.yaxis.labels.formatter = columnChartOptions.yaxis.labels.formatter 
 
 				return { // column chart for each product
-						productName: d[product_key],
-						heading,
-						series: [{name: "Tonnes", data: year_keys.map(yk => d[yk])}],
-						chartactive: !zeroSeries,
-						zeroSeries,
-						options
+					productName: d[product_key],
+					heading,
+					series: [{ name: "Tonnes", data: year_keys.map(yk => d[yk]) }],
+					chartactive: !zeroSeries,
+					zeroSeries,
+					options
 				}
 			})
 
@@ -144,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				heading2 += ` — ${subregionName}`  // mdash
 
 			soefinding.state.regionData[regionName][subregionName].chart2 = {
-				heading2, 
+				heading2,
 				series: soefinding.state.regionData[regionName][subregionName].data.map(d => {
 					return {
 						name: d[product_key],
@@ -167,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				else if (val == 0)
 					return "0"
 				else
-					return val.toLocaleString(undefined, {minimumFractionDigits: 2})
+					return val.toLocaleString(undefined, { minimumFractionDigits: 2 })
 			}
 		}
 
