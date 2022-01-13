@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => "Proportion of marine wetlands within protected areas, 2024 TODO fix year",
+			heading1: () => "Extent of marine wetlands within protected areas, 2024 TODO fix year",
 			heading2: () => "Overall protection of marine wetlands, 2024 TODO fix year",
 		},
 		methods: {
