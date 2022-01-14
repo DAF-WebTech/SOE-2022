@@ -28,17 +28,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 
-	// series 1 table
-	const series1 = [...yearsTotals, total]
-	const options1 = {
-		labels: [...years, "Total"],
-		xaxis: { categories: ["Year", "Places<br>removed"] }
-	}
+	// series 1 line chart
+	const series1 = [{ name: "Year", data: [...yearsTotals] }]
+
+	const options1 = soefinding.getDefaultLineChartOptions()
+	options1.xaxis.categories = years
+	options1.xaxis.title.text = "Year"
+	options1.yaxis.title.text = "Places destroyed"
+	options1.yaxis.labels.formatter = val => val.toFixed(0)
 
 	soefinding.state.chart1 = {
 		options: options1,
 		series: series1,
-		chartactive: false,
+		chartactive: true,
 	}
 
 
