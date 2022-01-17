@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// group by region name
 	const regions = new Map()
 	soefinding.regionNames.forEach(r => regions.set(r, []))
-	
+
 	soefinding.findingJson.data.forEach(d => {
 		// normalise region names to match UI
 		d.Region = d.Region.replace(" NRM region", "")
@@ -18,20 +18,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// initialise items we will use this in the loop of regions
 	const qldTotal = regions.get("Queensland").find(d => d.Use == "total area mapped")["total area mapped"]
-	soefinding.state.series4 = {} 
+	soefinding.state.series4 = {}
 	// we need these now because the individual options for chart 4 will be based on this
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.chart.id = "chart1"
 	options1.tooltip.y = { formatter: val => `${val.toLocaleString()} ha` }
 	delete options1.xaxis.tickPlacement
 	options1.xaxis.title.text = "Year"
-	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : (val >= 1000 ? `${val/1000}K` : val)
+	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : (val >= 1000 ? `${val / 1000}K` : val)
 	options1.yaxis.labels.minWidth = 30
 	options1.yaxis.title.text = "Hectares"
 
 
 	// create series for each region
-	for(let [region, data] of regions) {
+	for (let [region, data] of regions) {
 		soefinding.findingContent[region] = {}
 		const keys = []
 
@@ -41,10 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			yearKeys.forEach((y, i) => {
 				if (firstIndex == -1 && d[y] != null)
 					firstIndex = i
-				if  (d[y] != null)
+				if (d[y] != null)
 					lastIndex = i
 			})
-			
+
 			keys[0] = firstIndex
 			keys[1] = lastIndex
 
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		// chart 2, a pie chart, same for qld and each region
 		soefinding.findingContent[region].series2LatestYear = soefinding.findingContent[region].series1categories[1]
 		soefinding.findingContent[region].series2 = data.filter(d => d.Use != "total area mapped").map(d => d[soefinding.findingContent[region].series2LatestYear])
-		const totalRural = soefinding.findingContent[region].series2.reduce((acc, curr) => acc+curr)
+		const totalRural = soefinding.findingContent[region].series2.reduce((acc, curr) => acc + curr)
 		const totalMapped = data.find(d => d.Use == "total area mapped")["total area mapped"]
 		const nonRural = totalMapped - totalRural
 		soefinding.findingContent[region].series2.push(nonRural)
@@ -109,13 +109,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// set up chart 2
 	const options2 = soefinding.getDefaultPieChartOptions()
-	options2.chart.type= "donut"
+	options2.chart.type = "donut"
 	options2.labels = ["Rural Land in Intensive Use", "Rural Land in Extensive Use", "Rural Land Not Settled", "Non Rural area"]
 	options2.xaxis.categories = ["Use", soefinding.findingContent[soefinding.state.currentRegionName].seriesLatestYear]
-	options2.tooltip = { y: { formatter: (val, options) => {
-		const percent = options.globals.seriesPercent[options.seriesIndex][0]
-		return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
-	}}}
+	options2.tooltip = {
+		y: {
+			formatter: (val, options) => {
+				const percent = options.globals.seriesPercent[options.seriesIndex][0]
+				return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+			}
+		}
+	}
 
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
@@ -144,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: function() { 
+			heading1: function () {
 				let retVal = `Rural area growth between ${soefinding.findingContent[this.currentRegionName].series1categories[0]} and ${soefinding.findingContent[this.currentRegionName].series1categories[1]}`
 				if (this.currentRegionName == "Queensland")
 					retVal += "*"
@@ -152,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					retVal += ` in ${this.currentRegionName}`
 				return retVal
 			},
-			heading2: function() {
+			heading2: function () {
 				let retVal = `Proportion of rural and other areas as at ${soefinding.findingContent[this.currentRegionName].series2LatestYear}`
 				if (this.currentRegionName == "Queensland")
 					retVal += "*"
@@ -160,12 +164,26 @@ document.addEventListener("DOMContentLoaded", function () {
 					retVal += ` in ${this.currentRegionName}`
 				return retVal
 			},
-			heading3: function() {
-				return `Proportion of Queensland made up of rural areas in ${this.currentRegionName} NRM region in ${soefinding.findingContent[this.currentRegionName].series2LatestYear}`	
+			heading3: function () {
+				return `Proportion of Queensland made up of rural areas in ${this.currentRegionName} NRM region in ${soefinding.findingContent[this.currentRegionName].series2LatestYear}`
 			}
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				let ret = (s / sum * 100).toFixed(1)
+
+				switch (this.currentRegionName) {
+					case "Desert Channels":
+						ret = (s / sum * 100).toFixed(2)
+					case "Torres Strait":
+						ret = (s / sum * 100).toFixed(2)
+					default:
+				}
+
+				return ret
+			}
 		}
 	})
 

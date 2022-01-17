@@ -32,14 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 	// 2. stacked columns, all states all sectors latest year
-	// 	const states = {}
-	// 	soefinding.findingJson.data.forEach(d => {
-	// 		if (d.Sector != "All" && d.Sector != "All (incl. LULUCF)") {
-	// 			if (!states[d.State])
-	// 				states[d.State] = []
-	// 			states[d.State].push(d)
-	// 		}
-	// 	})
 	const sectors = {}
 	soefinding.findingJson.data.forEach(d => {
 		if (d.Sector != "All" && d.Sector != "All (incl. LULUCF)") {
@@ -131,7 +123,12 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Total Queensland emissions"
 		},
 		methods: {
-			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) //reüse for 2, 3
+			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(1)
+			}
+
 		}
 	})
 })

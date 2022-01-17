@@ -260,6 +260,16 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading6: (vehicleType) => `Registrations of ${vehicleType} by fuel type`,
 			formatter1: val => val?.toLocaleString() ?? "", //reüse for 3, 4, 5
 			formatter2: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+			formatPercent2: function (s, i, series) {
+				if (s == 0) return 0
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(2)
+			},
+			formatPercent3: function (s, i, series) {
+				if (s == 0) return 0
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(3)
+			}
 		},
 	})
 })

@@ -63,9 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		formatter: (val, options) => {
 			const percent = options.globals.seriesPercent[options.seriesIndex][0]
 			let formatPercent = percent.toFixed(1)
-			if (formatPercent = "100.0")
+			if (formatPercent == "100.0")
 				formatPercent = "99.9"
-			return  `${val.toLocaleString()} (${formatPercent}%)`
+			return `${val.toLocaleString()} (${formatPercent}%)`
 		}
 	}
 
@@ -148,7 +148,38 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			formatPercent1: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				let decimalPlaces = 1
+				switch (this.currentRegionName) {
+					case "Desert Channels":
+						decimalPlaces = 2
+				}
+				return (s / sum * 100).toFixed(decimalPlaces)
+			},
+			formatPercent2: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				let decimalPlaces = 1
+				switch (this.currentRegionName) {
+					case "Cape York":
+					case "Desert Channels":
+					case "North Queensland Dry Tropics":
+					case "Reef":
+					case "Southern Gulf":
+					case "Wet Tropics":
+						decimalPlaces = 2
+						break
+					case "Northern Gulf":
+						decimalPlaces = 3
+						break
+					case "Torres Strait":
+						decimalPlaces = 4
+				}
+				return (s / sum * 100).toFixed(decimalPlaces)
+			}
+
+
 		}
 	})
 

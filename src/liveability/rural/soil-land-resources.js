@@ -41,7 +41,31 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading1: () => `Proportion of land by use in ${soefinding.state.currentRegionName}, 2019`
 		},
 		methods: {
-			formatter1: val => val == 0 ? 0 : val.toLocaleString(undefined, { minimumFractionDigits: 2 })
+			formatter1: val => val == 0 ? 0 : val.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+			formatPercent: function (s, i, series) {
+				if (s == 0)
+					return 0
+
+				const sum = series.reduce((acc, curr) => acc + curr)
+
+				let decimalPlaces = 1
+
+				switch (this.currentRegionName) {
+					case "Channel Country":
+					case "Desert Uplands":
+					case "Mitchell Grass Downs":
+					case "Mulga Lands":
+						decimalPlaces = 2
+						break
+					case "New England Tableland":
+						decimalPlaces = 4
+						break
+					default:
+				}
+
+				return (s / sum * 100).toFixed(decimalPlaces)
+			}
+
 		}
 	})
 

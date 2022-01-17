@@ -75,13 +75,22 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.chart.stacked = false
 				this.chart1.options.markers = { size: 4 } // ignored by column chart
 				this.chart1.options.tooltip.shared = false
+			},
+			formatPercent: function(s, i, series) {
+                const sum = series.reduce((acc, curr) => acc + curr )
+                return (s / sum * 100 ).toFixed(1)
+            }
 
-			}
 
 		}
 	})
 
 	window.soefinding.onRegionChange = function () {
+
+		soefinding.state.chart1.series = soefindingContent[this.currentRegionName].series1
+		soefinding.state.chart2.series = soefindingContent[this.currentRegionName].series2
+
+
 		soefinding.loadFindingHtml()
 	}
 

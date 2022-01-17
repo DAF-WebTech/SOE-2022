@@ -110,7 +110,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Queensland’s total fugitive emissions"
 		},
 		methods: {
-			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) //reüse for 2, 3
+			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+			formatPercent: function (s, i, series) {
+				if (s == 0) return 0
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(1)
+			}
+
+
 		}
 	})
 })

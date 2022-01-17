@@ -117,7 +117,12 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Queensland’s total industrial processes emissions"
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) ?? "confidential" //reüse for 2, 3
+			formatter1: val => val?.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) ?? "confidential",
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(1)
+			}
+
 		}
 	})
 })

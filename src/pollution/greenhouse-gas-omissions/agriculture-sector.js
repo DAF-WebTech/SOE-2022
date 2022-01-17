@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options3.xaxis.categories = yearKeys
 	options3.xaxis.title.text = "Year"
 	options3.yaxis.title.text = "Tonnes"
-	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, {maximumFractionDigits: 2})}M`
+	options3.yaxis.labels.formatter = val => `${val.toLocaleString(undefined, { maximumFractionDigits: 2 })}M`
 	options3.tooltip.y = {
 		formatter: val => `${(val * 1000000).toLocaleString()}`
 	}
@@ -108,7 +108,12 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Queensland’s total agriculture emissions"
 		},
 		methods: {
-			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) //reüse for 2, 3
+			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }), //reüse for 2, 3
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(2)
+			}
+
 		}
 	})
 })
