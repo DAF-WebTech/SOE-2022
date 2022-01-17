@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.chart2 = {
 		options: options2,
 		series: series2,
+		seriesSum: series2.reduce(function (acc, curr) { return acc + curr}, 0),
 		chartactive: true,
 	}
 
@@ -78,6 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
+			formatPercent: function(s) { 
+				return (s / this.chart2.seriesSum * 100 ).toFixed(1)
+			}
 		}
 	})
 })
