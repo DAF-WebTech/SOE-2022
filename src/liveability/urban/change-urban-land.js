@@ -62,7 +62,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.tooltip.y = {
 		formatter: (val, options) => {
 			const percent = options.globals.seriesPercent[options.seriesIndex][0]
-			return `${val.toLocaleString()} (${percent.toFixed(1)}%)`
+			let formatPercent = percent.toFixed(1)
+			if (formatPercent = "100.0")
+				formatPercent = "99.9"
+			return  `${val.toLocaleString()} (${formatPercent}%)`
 		}
 	}
 
