@@ -104,7 +104,12 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.chart.stacked = false
 				this.chart1.options.markers = { size: 4 } // ignored by column chart
 				this.chart1.options.tooltip.shared = false
+			},
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(1)
 			}
 		}
 	})
+
 })

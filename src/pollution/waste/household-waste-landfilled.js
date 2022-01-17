@@ -89,8 +89,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-
 	new Vue({
 		el: "#chartContainer",
 		data: soefinding.state,
@@ -101,6 +99,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(1)
+			},
 		}
 	})
+
 })

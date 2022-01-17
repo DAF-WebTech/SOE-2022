@@ -97,6 +97,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
 			formatter2: val => val?.toLocaleString() ?? "Not recorded",
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(2)
+			}
 		}
 	})
+
 })
