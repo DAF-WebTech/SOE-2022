@@ -52,8 +52,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	// series 1 is the last year values, in a pie chart
 	for (let [region, data] of regions) {
 		// series 1 is the last year values, in a pie chart
+		const series1 = data.map(d => d[latest])
+		const series1Sum = series1.reduce(function (acc, curr) { return acc + curr }, 0)
 		soefinding.findingContent[region] = {
-			series1: data.map(d => d[latest]),
+			series1,
+			series1Sum,
 			labels: data.map(d => d["Clearing type"])
 		}
 
@@ -97,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.state.chart1 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series1,
+		seriesSum: soefinding.findingContent[soefinding.state.currentRegionName].series1Sum,
 		options: options1,
 		chartactive: true,
 	}
@@ -168,7 +172,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			},
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			formatPercent: function (s) {
+				return (s / soefinding.findingContent[this.currentRegionName].series1Sum * 100).toFixed(1)
+			}
 		}
 	})
 
@@ -176,11 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	window.soefinding.onRegionChange = function () {
 
 		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-		//ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
 		soefinding.state.chart1.options.labels = this.findingContent[this.state.currentRegionName].labels
-		//ApexCharts.exec("chart1", "updateOptions", {
-		//	labels: this.findingContent[this.state.currentRegionName].labels
-		//}, true)
 
 		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
 

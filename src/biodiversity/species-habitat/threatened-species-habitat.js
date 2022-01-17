@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const regions = {}
 	soefinding.findingJson.data.forEach(d => {
-		if (! regions[d.Region] ) 
+		if (!regions[d.Region])
 			regions[d.Region] = []
 
 		d.Remnant = d[latestYear]
@@ -17,24 +17,26 @@ document.addEventListener("DOMContentLoaded", function () {
 		regions[d.Region].push(d)
 	})
 
-	const speciesNames = regions.Queensland.map(d => d.Group) 
+	const speciesNames = regions.Queensland.map(d => d.Group)
 
 	const series1Keys = ["Pre-clear", "Remnant"]
-	for(let region in regions) {
-		soefinding.findingContent[region] = {series1: series1Keys.map(k => {
-			return {
-				name: k,
-				data: regions[region].map(d => d[k])
-			}
-		})
-	}}
-	
+	for (let region in regions) {
+		soefinding.findingContent[region] = {
+			series1: series1Keys.map(k => {
+				return {
+					name: k,
+					data: regions[region].map(d => d[k])
+				}
+			})
+		}
+	}
+
 	function justify(s) {
 		const a = s.split(" ")
 		const ret = [a.shift()]
 		while (a.length > 0) {
-			if (ret[ret.length-1].length + a[0].length < 15)
-				ret[ret.length-1] += " " + a.shift()
+			if (ret[ret.length - 1].length + a[0].length < 15)
+				ret[ret.length - 1] += " " + a.shift()
 			else
 				ret.push(a.shift())
 		}
@@ -44,13 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.chart.id = "chart1"
 	options1.xaxis.categories = speciesNames.map(n => justify(n))
-	options1.xaxis.title.text =  `F${soefinding.biota.slice(1)} Group`
+	options1.xaxis.title.text = `F${soefinding.biota.slice(1)} Group`
 	options1.yaxis.title.text = "Hectares"
 	options1.yaxis.labels.formatter = val => {
-		if ( val >= 1000000 )
-			return `${val/1000000}M` 
-		else if (val >= 1000) 
-			return `${val/1000}K`
+		if (val >= 1000000)
+			return `${val / 1000000}M`
+		else if (val >= 1000)
+			return `${val / 1000}K`
 		else
 			return val
 	}
@@ -63,10 +65,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	
+
 	// chart 2  a stacked column percent chart
 	const series2Keys = ["Remnant", "Non-remnant"]
-	for(let region in regions) {
+	for (let region in regions) {
 		soefinding.findingContent[region].series2 = series2Keys.map(k => {
 			return {
 				name: k,
@@ -79,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options2 = soefinding.getPercentStackedBarChartOptions()
 	options2.chart.id = "chart2"
 	options2.xaxis.categories = speciesNames.map(n => justify(n))
-	options2.xaxis.title.text =  `F${soefinding.biota.slice(1)} Group`
+	options2.xaxis.title.text = `F${soefinding.biota.slice(1)} Group`
 	options2.yaxis.title.text = "Proportion"
 	options2.tooltip.y = { formatter: val => `${val.toLocaleString()}  ha.` } //todo
 	delete options2.yaxis.forceNiceScale
@@ -92,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// create the species items for checkbox list and series 3 data
 	soefinding.state.species = {}
-	speciesNames.forEach((s, i) => { 
+	speciesNames.forEach((s, i) => {
 		soefinding.state.species[s] = {
 			checked: i == 0,
 			name: s,
@@ -101,9 +103,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			regions: {},
 			nullSeries: false
 		}
-		for(let region in regions) {
+		for (let region in regions) {
 			const item = regions[region].find(d => d.Group == s)
-			soefinding.state.species[s].regions[region] = { 
+			soefinding.state.species[s].regions[region] = {
 				isSeries3Null: false, // some have all 0 for data, so we show just the table if that happens
 				series3: [{
 					name: "Habitat",
@@ -131,16 +133,22 @@ document.addEventListener("DOMContentLoaded", function () {
 	// chart 4 is a pie chart for qld only
 	speciesNames.forEach(s => {
 		soefinding.state.species[s].regions.Queensland.series4 = soefinding.findingJson.data
-				.filter(d => d.Group == s && d.Region != "Queensland")
-				.map(d => d["Pre-clear"])
+			.filter(d => d.Group == s && d.Region != "Queensland")
+			.map(d => d["Pre-clear"])
+		soefinding.state.species[s].regions.Queensland.series4Sum =
+			soefinding.state.species[s].regions.Queensland.series4.reduce(function (acc, curr) { return acc + curr }, 0)
 	})
 
 	soefinding.state.options4 = soefinding.getDefaultPieChartOptions()
 	soefinding.state.options4.labels = Object.keys(regions).slice(1)
-	soefinding.state.options4.tooltip = { y: { formatter: (val, options) => {
-		const percent = options.globals.seriesPercent[options.seriesIndex][0]
-		return `${val.toLocaleString()} ha (${percent.toFixed(1)}%)`
-	}}}
+	soefinding.state.options4.tooltip = {
+		y: {
+			formatter: (val, options) => {
+				const percent = options.globals.seriesPercent[options.seriesIndex][0]
+				return `${val.toLocaleString()} ha (${percent.toFixed(1)}%)`
+			}
+		}
+	}
 	soefinding.state.options4.xaxis.categories = ["Region", "Pre-clear (ha)"]
 
 
@@ -154,7 +162,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: function () { return `Proportion of pre-clear threatened ${this.currentSpecies} habitat by bioregion` }
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(1)
+			}
 		}
 	});
 

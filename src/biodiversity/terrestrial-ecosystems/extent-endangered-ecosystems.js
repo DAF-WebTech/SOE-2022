@@ -122,7 +122,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading5: () => `Proportion area of biodiversity status in ${soefinding.state.currentRegionName}, ${latestYear}`
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(1)
+			}
 		}
 	})
 

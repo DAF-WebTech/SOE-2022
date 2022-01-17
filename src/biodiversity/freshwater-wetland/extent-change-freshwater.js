@@ -43,8 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	// chart 2 pie chart for each region but not qld
 	const series2items = series1items.filter(d => d["Drainage division"] != "Other")
 	series2items.forEach(d => {
+		const series2 = seriesNames.map(n => d[n])
+		const series2Sum = series2.reduce(function (acc, curr) { return acc + curr }, 0)
 		soefinding.findingContent[d["Drainage division"]] = {
-			series2: seriesNames.map(n => d[n])
+			series2,
+			series2Sum
 		}
 	})
 
@@ -69,9 +72,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.state.chart2 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series2,
+		seriesSum: soefinding.findingContent[soefinding.state.currentRegionName].series2Sum,
 		options: options2,
 		chartactive: true,
 	}
+
 
 
 	// series 3 is shared between chart 3 (qld) and chart 4 (regional)
@@ -175,7 +180,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val.toLocaleString(),
 			formatter3: val => val.toFixed(1),
-			formatter5: val => soefinding.convertToUnicodeMinus(val)
+			formatter5: val => soefinding.convertToUnicodeMinus(val),
+			formatPercent: function (s) {
+				return (s / soefinding.findingContent[this.currentRegionName].series2Sum * 100).toFixed(1)
+			}
 		}
 	})
 

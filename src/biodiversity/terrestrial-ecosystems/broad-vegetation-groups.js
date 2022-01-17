@@ -48,14 +48,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 	}
 
+	for (const r in soefinding.findingContent) {
+		soefinding.findingContent[r].series2Sum = soefinding.findingContent[r].series2.reduce((acc, curr) => acc + curr)
+	}
+
 
 	const options1 = soefinding.getDefaultColumnChartOptions()
 	options1.chart.id = "chart1"
-	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
+	options1.tooltip.y = { formatter: val => val.toLocaleString() }
 	options1.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].groups
 	options1.xaxis.labels.trim = true
 	options1.xaxis.labels.hideOverlappingLabels = false
-	
+
 	options1.xaxis.tickPlacement = "between" // not a good option, but it fixes a bug
 	// where the chart xaxis did not redraw correctly when swapping between regions.,
 	// and then you click on one of the legends
@@ -63,11 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.title.text = "Hectares"
 
 	options1.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : `${val / 1000}k`
-	//	these options make it look better, but fail if you select a region
-	// 	options1.yaxis.forceNiceScale = false
-	// 	options1.yaxis.max = 30000000
-	// 	options1.yaxis.min = 0
-	// 	options1.yaxis.tickAmount = 6
 	options1.yaxis.title.text = "Broad Vegetation Group"
 
 	soefinding.state.chart1 = {
@@ -106,7 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading2: () => `Proportion of total remnant vegetation in protected areas in ${soefinding.state.currentRegionName}, 2017 TODO fix year`
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			formatPercent: function (s) {
+				return (s / soefinding.findingContent[this.currentRegionName].series2Sum * 100).toFixed(1)
+			}
 		}
 	})
 
