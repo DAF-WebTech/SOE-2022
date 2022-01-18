@@ -9,33 +9,32 @@ document.addEventListener("DOMContentLoaded", function () {
 	const series = [{
 		name: "Six month mean",
 		data: items.map(d => {
-			return { x: new Date(d.Year, d.Month-1), y: d["Six month mean"] }
+			return { x: new Date(d.Year, d.Month - 1), y: d["Six month mean"] }
 		})
 	}]
 
 
 	const options = soefinding.getDefaultLineChartOptions()
-  options.annotations = {
-  	/* sets a dark colour line on the 0 */
-  	yaxis: [
-    {
-      y: 0, 
-      strokeDashArray: 0,
-      borderColor: '#444',
-      borderWidth: 1,
-      opacity: 1
-    }
-  ]
-  }
+	options.annotations = { /* sets a dark colour line on the 0 */
+		yaxis: [
+			{
+				y: 0,
+				strokeDashArray: 0,
+				borderColor: '#444',
+				borderWidth: 1,
+				opacity: 1
+			}
+		]
+	}
 	options.grid = {
 		xaxis: {
-	        lines: {
-    	        show: true
-        	}
-    	}
-	} 
+			lines: {
+				show: true
+			}
+		}
+	}
 	options.markers.size = 0
-	options.stroke = {width: 1}
+	options.stroke = { width: 1 }
 	options.tooltip.x = { format: 'MMMM yyyy' }
 	options.tooltip.y = {
 		formatter: val => val < 0 ? `−${Math.abs(val).toFixed(1)}` : val.toFixed(1)
