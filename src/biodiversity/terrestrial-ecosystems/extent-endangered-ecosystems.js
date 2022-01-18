@@ -12,8 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		series1: fields.map(f => { return { name: f, data: [] } }),
 		series2: fields.map(f => { return { name: f, data: [] } }),
 		series3: fields.map(f => { return { name: f, data: yearKeys.map(y => 0) } }),
-		series4: [0, 0, 0], // not used, but we need a default
-		series5: [0, 0, 0], // not used, but we need a default
 	}
 	soefinding.findingJson.data.forEach((d, i) => {
 		// the data comes in groups of 3
@@ -82,12 +80,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.state.chart3 = {
 		options: options3,
-		series: soefinding.findingContent[soefinding.state.currentRegionName].series3,
+		series: soefinding.findingContent["Wet Tropics"].series3, /* just for a default, so the chart will draw */
 		chartactive: true,
 	}
 
 
 	const options4 = soefinding.getDefaultPieChartOptions()
+	options4.chart.id = "chart4"
 	options4.chart.type = "donut"
 	options4.labels = fields
 	options4.xaxis.categories = ["Biodiversity status", "Number of regional ecosystems"]
@@ -100,12 +99,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.state.chart4 = {
 		options: options4,
-		series: soefinding.findingContent[soefinding.state.currentRegionName].series4,
+		series: soefinding.findingContent["Wet Tropics"].series4, /* just for a default, so the chart will draw */
 		chartactive: true,
 	}
 
+	const options5 = JSON.parse(JSON.stringify(options4))
+	options5.chart.id = "chart5"
+	options5.tooltip.y = options4.tooltip.y
+
 	soefinding.state.chart5 = {
-		options: options4, //reüse
+		options: options5,
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series5,
 		chartactive: true,
 	}
@@ -127,26 +130,42 @@ document.addEventListener("DOMContentLoaded", function () {
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
 			}
-		}
+		},
+		mounted: toggleDisplayDivs
 	})
 
 
 
 	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
-		// chart 3
-		ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
+
+		toggleDisplayDivs()
+
+		// chart 3 is the shared chart
 		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
 
-		soefinding.state.chart4.series = this.findingContent[this.state.currentRegionName].series4
-		ApexCharts.exec("chart4", "updateSeries", this.findingContent[this.state.currentRegionName].series4)
-		ApexCharts.exec("chart4", "updateOptions", { labels: fields }, true)
+		if (this.state.currentRegionName != "Queensland") {
 
-		soefinding.state.chart5.series = this.findingContent[this.state.currentRegionName].series5
-		ApexCharts.exec("chart5", "updateSeries", this.findingContent[this.state.currentRegionName].series5)
-		ApexCharts.exec("chart5", "updateOptions", { labels: fields }, true)
+			soefinding.state.chart4.series = this.findingContent[this.state.currentRegionName].series4
+			ApexCharts.exec("chart4", "render")
+
+			soefinding.state.chart5.series = this.findingContent[this.state.currentRegionName].series5
+			ApexCharts.exec("chart5", "render")
+		}
+
 
 
 		soefinding.loadFindingHtml()
 	}
+
+
+	function toggleDisplayDivs() {
+		document.querySelector("div.displayQld").style.display = soefinding.state.currentRegionName == "Queensland" ? "block" : "none"
+		document.querySelector("div.displayRegional").style.display = soefinding.state.currentRegionName != "Queensland" ? "block" : "none"
+	}
+
+
+
 })
+
+
+
