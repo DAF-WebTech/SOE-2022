@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Proportion of Queensland’s emissions by sector, ${latestYear}`,
+			heading1: () => `Amount of Queensland’s emissions by sector, ${latestYear}`,
 			heading2: () => `Comparison of state and territory emissions by sector, ${latestYear}`,
 			heading3: () => `Trends in Queensland emissions, by sector`,
 			heading4: () => "Total Queensland emissions"

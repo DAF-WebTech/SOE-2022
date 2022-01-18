@@ -108,8 +108,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Proportion of stationary energy emissions by state, ${latestYear}`,
-			heading2: () => `Proportion of Queensland’s stationary energy emissions by category, ${latestYear}`,
+			heading1: () => `Amount of stationary energy emissions by state, ${latestYear}`,
+			heading2: () => `Amount of Queensland’s stationary energy emissions by category, ${latestYear}`,
 			heading3: () => "Trends in Queensland’s stationary energy emissions, by category",
 			heading4: () => "Queensland’s total stationary energy emissions"
 		},

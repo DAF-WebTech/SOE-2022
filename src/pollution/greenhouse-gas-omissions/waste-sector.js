@@ -112,8 +112,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Proportion of waste emissions by state, ${latestYear}`,
-			heading2: () => `Proportion of Queensland’s waste emissions by category, ${latestYear}`,
+			heading1: () => `Amount of waste emissions by state, ${latestYear}`,
+			heading2: () => `Amount of Queensland’s waste emissions by category, ${latestYear}`,
 			heading3: () => "Trends in Queensland’s waste emissions, by category",
 			heading4: () => "Queensland’s total waste emissions"
 		},
