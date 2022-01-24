@@ -46,4 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
+	soefinding.getResetMapDetails = function(place) {
+		return places[place]
+	}
+
+
 })
