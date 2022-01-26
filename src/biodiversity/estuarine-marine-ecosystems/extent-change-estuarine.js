@@ -50,13 +50,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// first regional chart, extent for region
 	const options2 = JSON.parse(JSON.stringify(options1))
-	delete options2.chart.id
+	options2.chart.id = "chart2"
 	delete options2.chart.stacked
 	options2.yaxis.labels.formatter = options1.yaxis.labels.formatter
 	options2.tooltip.y = options1.tooltip.y
+	options2.xaxis.tickPlacement = "between"
 
 	soefinding.state.chart2 = {
-		series: soefinding.findingContent.Gulf.series2, //arbitrary default, will be overwritten by onRegionChange
+		series: soefinding.findingContent.Gulf.series2, // arbitrary default, will be overwritten by onRegionChange
 		options: options2,
 		chartactive: true
 	}
@@ -83,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// chart 3 is the second qld chart, percentages
 	const options3 = soefinding.getDefaultColumnChartOptions()
+	options3.chart.id = "chart3"
 	options3.xaxis.categories = keys
 	options3.xaxis.tickPlacement = "between"
 	options3.xaxis.title.text = "Estuarine wetland"
@@ -99,7 +101,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// chart 4 is the second region chart
 	const options4 = soefinding.getDefaultColumnChartOptions()
+	options4.chart.id = "chart4"
 	options4.xaxis.categories = keys
+	options4.xaxis.tickPlacement = "between"
 	options4.xaxis.title.text = "Estuarine wetland"
 	options4.yaxis.forceNiceScale = false
 	options4.yaxis.labels.formatter = val => Math.round(val)
@@ -139,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 	const options5 = soefinding.getDefaultLineChartOptions()
+	options5.chart.id = "chart5"
 	options5.xaxis.categories = years
 	options5.xaxis.tickPlacement = "between"
 	options5.xaxis.title.text = "Year"
@@ -186,16 +191,24 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.onRegionChange = function () {
 		console.log("onRegionChange", soefinding.state.currentRegionName)
 
-		toggleDivDisplay()
-
-		//options1.chart.stacked = soefinding.state.currentRegionName == "Queensland"
 		if (soefinding.state.currentRegionName != "Queensland") {
-			soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-			soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].series4
+
+			soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
+
+			soefinding.state.chart4.series = this.findingContent[this.state.currentRegionName].series4
+		}
+		else {
+			// if you start on a region, and swap to qld
+			// the apex charts can't draw the columns properly
+			// so we manually force it to update
+			options1.series = this.findingContent.Queensland.series1
+			ApexCharts.exec("chart1", "updateOptions", options1)
+			options3.series = this.findingContent.Queensland.series3
+			ApexCharts.exec("chart3", "updateOptions", options3)
 
 		}
 
-		soefinding.state.chart5.series = soefinding.findingContent[soefinding.state.currentRegionName].series5
+		soefinding.state.chart5.series = this.findingContent[this.state.currentRegionName].series5
 
 		if (soefinding.state.currentRegionName == "Gulf")
 			options5.yaxis.labels.formatter = val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(2)}`
@@ -203,20 +216,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			options5.yaxis.labels.formatter = val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(0)}`
 
 
+
 		soefinding.loadFindingHtml()
 	}
 
-})
-
-
-function toggleDivDisplay() {
-	document.getElementById("qldDiv").style.display = soefinding.state.currentRegionName == "Queensland" ? "block" : "none"
-	document.getElementById("regionDiv").style.display = soefinding.state.currentRegionName != "Queensland" ? "block" : "none"
-}
-
-
-// all charts displayed by default, so hide the irrelevant ones
-window.addEventListener("load", function () {
-	window.setTimeout(toggleDivDisplay, 1)
 })
 
