@@ -21,13 +21,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options1 = soefinding.getDefaultStackedColumnChartOptions()
-	options1.xaxis.title.text = "Year"
+	options1.chart.id = "chart1"
+	options1.markers = { size: 4 } // ignored by column chart
+	options1.tooltip.shared = false
 	options1.xaxis.categories = years
-	options1.yaxis.title.text = "Number of places"
+	options1.xaxis.title.text = "Year"
 	options1.yaxis.forceNiceScale = false
 	options1.yaxis.max = 10
 	options1.yaxis.min = 0
-
+	options1.yaxis.title.text = "Number of places"
+	
 
 	soefinding.state.chart1 = {
 		series: soefinding.findingContent[soefinding.state.currentRegionName].series,
@@ -56,8 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			onLineRadioClick: function () {
 				this.chart1.options.chart.type = "line"
 				this.chart1.options.chart.stacked = false
-				this.chart1.options.markers = { size: 4 } // ignored by column chart
-				this.chart1.options.tooltip.shared = false
 			}
 		}
 	})
@@ -65,27 +66,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	window.soefinding.onRegionChange = function () {
 
+		ApexCharts.exec("chart1", "updateOptions", {
+			series: soefinding.findingContent[soefinding.state.currentRegionName].series
+		})
+
 		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series
-
-		if (soefinding.state.currentRegionName != "Queensland") {
-			// revert to column chart
-			soefinding.state.chart1.options.chart.type = "bar"
-			soefinding.state.chart1.options.chart.stacked = true
-		}
-		if (soefinding.state.currentRegionName == "Queensland") {
-			if (document.getElementById("lineRadio")?.checked) {
-				// show as line chart
-				soefinding.state.chart1.options.chart.type = "line"
-				soefinding.state.chart1.options.chart.stacked = false
-				soefinding.state.chart1.options.markers = { size: 4 } // ignored by column chart
-				soefinding.state.chart1.options.tooltip.shared = false
-			}
-			// force a redraw
-			const chartContainer = document.getElementById("chartContainer")
-			chartContainer.style.display = "none"
-			chartContainer.style.display = "block"
-		}
-
 
 		soefinding.loadFindingHtml()
 	}
