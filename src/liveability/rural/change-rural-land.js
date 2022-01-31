@@ -189,10 +189,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// keep the region-wide "more information links", update them each time a region is laoded
 	const moreInformationFinding = document.querySelector("div.more-information-finding")
+	const moreInformationFindingHtml = moreInformationFinding.outerHTML
 	const moreInformationRegionLinks = moreInformationFinding.querySelectorAll("li")
 	moreInformationFinding.parentElement.removeChild(moreInformationFinding)
-
-
 
 
 	window.soefinding.onRegionChange = function () {
@@ -211,6 +210,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			moreInformationRegionLinks.forEach(function(l) {
 				ul.appendChild(l)
 			})
+			if (ul == null) // not in this case, but a reference just in case
+				document.querySelector("div.finding-text-contents").insertAdjacentHTML("beforeend", moreInformationFindingHtml)
+			debugger;
 		})
 			
 	}
