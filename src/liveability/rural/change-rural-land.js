@@ -187,6 +187,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
+	// keep the region-wide "more information links", update them each time a region is laoded
+	const moreInformationFinding = document.querySelector("div.more-information-finding")
+	const moreInformationRegionLinks = moreInformationFinding.querySelectorAll("li")
+	moreInformationFinding.parentElement.removeChild(moreInformationFinding)
+
+
+
 
 	window.soefinding.onRegionChange = function () {
 
@@ -199,7 +206,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.vueApp.chart3.options.labels[0] = soefinding.state.currentRegionName + " NRM Region"
 		soefinding.vueApp.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
 
-		soefinding.loadFindingHtml()
+		soefinding.loadFindingHtml(function() {
+			const ul = document.querySelector("ul.morinfo")
+			moreInformationRegionLinks.forEach(function(l) {
+				ul.appendChild(l)
+			})
+		})
+			
 	}
 
 })
