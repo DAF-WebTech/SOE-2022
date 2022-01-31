@@ -212,7 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			})
 			if (ul == null) // not in this case, but a reference just in case
 				document.querySelector("div.finding-text-contents").insertAdjacentHTML("beforeend", moreInformationFindingHtml)
-			debugger;
 		})
 			
 	}
