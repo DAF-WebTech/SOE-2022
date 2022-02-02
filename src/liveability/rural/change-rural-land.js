@@ -192,6 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const moreInformationFindingHtml = moreInformationFinding.outerHTML
 	const moreInformationRegionLinks = moreInformationFinding.querySelectorAll("li")
 	moreInformationFinding.parentElement.removeChild(moreInformationFinding)
+	fixMoreInformationLinks()
 
 
 	window.soefinding.onRegionChange = function () {
@@ -205,15 +206,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.vueApp.chart3.options.labels[0] = soefinding.state.currentRegionName + " NRM Region"
 		soefinding.vueApp.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
 
-		soefinding.loadFindingHtml(function() {
-			const ul = document.querySelector("ul.morinfo")
-			moreInformationRegionLinks.forEach(function(l) {
-				ul.appendChild(l)
-			})
-			if (ul == null) // not in this case, but a reference just in case
-				document.querySelector("div.finding-text-contents").insertAdjacentHTML("beforeend", moreInformationFindingHtml)
-		})
+		soefinding.loadFindingHtml(fixMoreInformationLinks)
 			
+	}
+
+	function fixMoreInformationLinks() {
+		const ul = document.querySelector("ul.morinfo")
+		moreInformationRegionLinks.forEach(function(l) {
+			ul.appendChild(l)
+		})
+		if (ul == null) // not in this case, but a reference just in case
+			document.querySelector("div.finding-text-contents").insertAdjacentHTML("beforeend", moreInformationFindingHtml)
+
 	}
 
 })
