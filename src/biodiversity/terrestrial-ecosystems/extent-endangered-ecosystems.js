@@ -118,8 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Proportion of regional ecosystems by biodiversity status, ${latestYear}`,
-			heading2: () => `Proportion area of biodiversity status, ${latestYear}`,
+			heading1: () => `Extent of regional ecosystems by biodiversity status, ${latestYear}`,
+			heading2: () => `Extent of biodiversity status area, ${latestYear}`,
 			heading3: () => `Trends in extent of remnant vegetation, by biodiversity status in ${soefinding.state.currentRegionName}`,
 			heading4: () => `Proportion of regional ecosystems by biodiversity status in ${soefinding.state.currentRegionName}, ${latestYear}`,
 			heading5: () => `Proportion area of biodiversity status in ${soefinding.state.currentRegionName}, ${latestYear}`

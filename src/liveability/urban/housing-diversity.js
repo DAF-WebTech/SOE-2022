@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: function () {
 				if (this.currentRegionName == "Queensland")
-					return `Number of dwellings in ${this.year} Queensland census`
+					return `Proportion of dwellings in ${this.year} Queensland census`
 				else
 					return `Number of dwellings in ${this.currentRegionName} in ${this.year} Queensland census`
 			},

@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		el: "#chartContainer",
 		data: soefinding.state,
 		computed: {
-			heading1: () => `Proportion of total woody vegetation clearing, by bioregion`,
+			heading1: () => `Extent of total woody vegetation clearing, by bioregion`,
 			heading2: () => `Proportion of replacement landcover (clearing type) in ${soefinding.state.currentRegionName}`,
 			heading3: () => `Historic woody vegetation clearing in ${soefinding.state.currentRegionName}`,
 		},
