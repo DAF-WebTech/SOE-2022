@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => `Freshwater wetland systems extent by region, 2024  ${YEAR}`,
 			heading2: () => `Proportion of freshwater wetland systems extent in ${soefinding.state.currentRegionName}, ${YEAR}`,
-			heading3: () => `"Freshwater wetland systems percentage of pre-clear extent remaining, ${YEAR}`,
+			heading3: () => `Freshwater wetland systems percentage of pre-clear extent remaining, ${YEAR}`,
 			heading4: () => `Freshwater wetland system percentage of pre-clear extent remaining in ${soefinding.state.currentRegionName}, ${YEAR}`,
 			heading5: function () {
 				return `Trends in change (loss or gain) in freshwater wetland systems in ${this.currentRegionName}`
