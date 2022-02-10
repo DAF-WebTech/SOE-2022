@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		data: soefinding.state,
 		computed: {
 			heading1: function() { 
-				let retVal = "Proportion of freshwater wetland systems in protected areas"
+				let retVal = "Extent of freshwater wetland systems in protected areas"
 				if (this.currentRegionName != "Queensland")
 					retVal += ` in ${this.currentRegionName}`
 				retVal += ", 2024 (TODO fix year)"
