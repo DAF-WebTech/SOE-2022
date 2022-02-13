@@ -7,24 +7,30 @@ var esriSelect;
 var graphicsLayer;
 var simpleMarkerSymbol;
 var getGraphic;
+var pinImageUrl = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0010/1596583/pin-blue-32x99.png"
+var pinImageUrlSelected = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0008/1596887/pin-blue-outline-32x99.png"
 
-
-
+//todo refactor a bit
 function deselectPin() {
 	for (let pin in soefinding.regions) {
 		if (soefinding.regions[pin].map.selected) {
 			soefinding.regions[pin].map.selected = false;
+
 			// remove it
 			graphicsLayer.remove(soefinding.regions[pin].map.graphic);
 			delete soefinding.regions[pin].map.graphic;
-			// add it back with unselected colour
-			simpleMarkerSymbol.color = unselectedColour;
-			soefinding.regions[pin].map.graphic = getGraphic(pin);
+
+			// add it back with normal pin graphic
+			soefinding.regions[pin].map.graphic = getGraphic(pin)
 			graphicsLayer.add(soefinding.regions[pin].map.graphic);
 		}
 	}
 }
 
+
+						//response.results[0].graphic.symbol = simpleMarkerSymbol;
+						//response.results[0].graphic.symbol.url= pinImageUrlSelected
+						//soefinding.regions[name].map.selected = true;
 
 
 require([
@@ -93,12 +99,12 @@ require([
 
 		simpleMarkerSymbol = {
 			type: "picture-marker",  
-			url: "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0010/1596583/pin-blue-32x99.png",
+			url: pinImageUrl,
 			width: "32px",
 			height: "99px"
 		}
 		
-		// pin is the string of the name of station
+		// pin is the string of the name of station,
 		getGraphic = function (pin, selected) {
 
 			var point = {
@@ -139,9 +145,10 @@ require([
 						// find the pin that is selected, change its colour, set selected to false
 						deselectPin()
 						// find this pin and select it
-						simpleMarkerSymbol.color = selectedColour;
+						//simpleMarkerSymbol.color = selectedColour;
 
 						response.results[0].graphic.symbol = simpleMarkerSymbol;
+						response.results[0].graphic.symbol.url= pinImageUrlSelected
 						soefinding.regions[name].map.selected = true;
 
 						soefinding.onRegionSelect(name, "map", "pin")
