@@ -3,13 +3,25 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 	//get the json parsed data  
-	var jsonDataElement = document.getElementById("jsonData");
-	const parsed = JSON.parse(document.getElementById("jsonData").textContent)
+	const jsonDataElement = document.getElementById("jsonData");
+	const  textContent = jsonDataElement.textContent
+	const parsed = JSON.parse(textContent)
 	console.log(parsed);
 
+
+	soefinding.vueState.props = {
+		caption: "Status of fish stocks, 2024 TODO",
+		index: 1,
+		headings: ["Group", "Species", "Stock", "Stock status"],
+		numericColumns: [],
+		data: parsed.data,
+		formatter: val => val
+	}
+
+
 	new Vue({
-		el: "#chartContainer",
-		data: parsed,
+		el: "#vueApp",
+		data: soefinding.vueState,
 	})
 
 })
