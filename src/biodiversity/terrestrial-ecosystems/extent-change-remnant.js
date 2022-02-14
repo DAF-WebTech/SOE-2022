@@ -177,6 +177,23 @@ document.addEventListener("DOMContentLoaded", function () {
 		data: soefinding.state,
 		methods: {
 			formatter1: val => val.toLocaleString(),
+			formatPercent: function(s) { 
+				const sum = this.chart1.series.reduce((acc, curr) => acc+curr)
+				let fixed = 2
+				switch(this.currentRegionName) {
+					case "Queensland":
+					case "New England Tableland":
+					case "Wet Tropics":
+						fixed = 1
+						break
+					case "Einasleigh Uplands":
+						fixed = 3
+						break
+					case "Mitchell Grass Downs":
+						fixed = 4
+				}
+				return (s / sum * 100 ).toFixed(fixed)
+			},
 			onStackedRadioClick: function () {
 				this.chart3.options.chart.type = "bar"
 				this.chart3.options.chart.stacked = true
