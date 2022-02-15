@@ -100,8 +100,8 @@ require([
 		simpleMarkerSymbol = {
 			type: "picture-marker",  
 			url: pinImageUrl,
-			width: "32px",
-			height: "99px"
+			width: "24px",
+			height: "24px"
 		}
 		
 		// pin is the string of the name of station,
