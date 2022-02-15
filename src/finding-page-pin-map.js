@@ -7,8 +7,8 @@ var esriSelect;
 var graphicsLayer;
 var simpleMarkerSymbol;
 var getGraphic;
-var pinImageUrl = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0010/1596583/pin-blue-32x99.png"
-var pinImageUrlSelected = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0008/1596887/pin-blue-outline-32x99.png"
+var pinImageUrl = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0007/1597075/soe2024-pin-20220214.png"
+var pinImageUrlSelected = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0009/1597077/soe2024-pin-20220214-selected2.png"
 
 //todo refactor a bit
 function deselectPin() {
