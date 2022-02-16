@@ -5,10 +5,16 @@
 
 var esriSelect;
 var graphicsLayer;
-var simpleMarkerSymbol;
 var getGraphic;
-var pinImageUrl = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0007/1597075/soe2024-pin-20220214.png"
-var pinImageUrlSelected = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0009/1597077/soe2024-pin-20220214-selected2.png"
+if (window.location.url.includes("/climate/")) {
+	var pinImageUrl = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0007/1597075/soe2024-pin-20220214.png"
+	var pinImageUrlSelected = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0009/1597077/soe2024-pin-20220214-selected2.png"
+}
+else if (window.location.url.includes("/heritage/")){
+	var pinImageUrl = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0007/1597534/soe2024-pin-red.png"
+	var pinImageUrlSelected = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0008/1597535/soe2024-pin-red-selected.png"
+}
+
 
 //todo refactor a bit
 function deselectPin() {
@@ -21,16 +27,25 @@ function deselectPin() {
 			delete soefinding.regions[pin].map.graphic;
 
 			// add it back with normal pin graphic
-			soefinding.regions[pin].map.graphic = getGraphic(pin)
+			soefinding.regions[pin].map.graphic = getGraphic(pin, false)
 			graphicsLayer.add(soefinding.regions[pin].map.graphic);
 		}
 	}
 }
 
+function selectPin(pin) {
 
-						//response.results[0].graphic.symbol = simpleMarkerSymbol;
-						//response.results[0].graphic.symbol.url= pinImageUrlSelected
-						//soefinding.regions[name].map.selected = true;
+	soefinding.regions[pin].map.selected = true
+
+	delete soefinding.regions[pin].map.graphic;
+
+	// add it back with selected pin graphic
+	soefinding.regions[pin].map.graphic = getGraphic(pin, true)
+	soefinding.regions[pin].map.graphic.symbol.url = pinImageUrlSelected
+	graphicsLayer.add(soefinding.regions[pin].map.graphic)
+
+
+}
 
 
 require([
@@ -58,7 +73,7 @@ require([
 			zoom: soefinding.mapZoom,
 			constraints: {
 				minZoom: 3
-			}			
+			}
 		});
 
 		graphicsLayer = new GraphicsLayer();
@@ -97,13 +112,6 @@ require([
 
 
 
-		simpleMarkerSymbol = {
-			type: "picture-marker",  
-			url: pinImageUrl,
-			width: "24px",
-			height: "24px"
-		}
-		
 		// pin is the string of the name of station,
 		getGraphic = function (pin, selected) {
 
@@ -115,9 +123,14 @@ require([
 
 			return new Graphic({
 				geometry: point,
-				symbol: simpleMarkerSymbol,
+				symbol: {
+					type: "picture-marker",
+					url: selected ? pinImageUrlSelected : pinImageUrl,
+					width: "24px",
+					height: "24px"
+				},
 				name: pin
-			});
+			})
 
 		}
 
@@ -126,7 +139,7 @@ require([
 
 		for (let pin in soefinding.regions) {
 
-			const pointGraphic = getGraphic(pin);
+			const pointGraphic = getGraphic(pin, false);
 			soefinding.regions[pin].map.graphic = pointGraphic;
 			graphicsLayer.add(pointGraphic);
 
@@ -144,13 +157,7 @@ require([
 
 						// find the pin that is selected, change its colour, set selected to false
 						deselectPin()
-						// find this pin and select it
-						//simpleMarkerSymbol.color = selectedColour;
-
-						response.results[0].graphic.symbol = simpleMarkerSymbol;
-						response.results[0].graphic.symbol.url= pinImageUrlSelected
-						soefinding.regions[name].map.selected = true;
-
+						selectPin(name)
 						soefinding.onRegionSelect(name, "map", "pin")
 					}
 				}
@@ -179,8 +186,6 @@ require([
 
 		view.on("drag", function (event) {
 			if (event.action == "end") {
-				//console.log(esriView.center.latitude, esriView.center.longitude)
-				//console.log(esriView.zoom)
 				if (view.center.longitude < 138 || view.center.longitude > 154)
 					view.center = soefinding.mapCentre
 				if (view.center.latitude < -30 || view.center.latitude > -8)
@@ -198,6 +203,6 @@ require([
 			}
 		});
 
-
-	})
+	}
+)
 
