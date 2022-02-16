@@ -6,11 +6,11 @@
 var esriSelect;
 var graphicsLayer;
 var getGraphic;
-if (window.location.url.includes("/climate/")) {
+if (window.location.pathname.includes("/climate/")) {
 	var pinImageUrl = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0007/1597075/soe2024-pin-20220214.png"
 	var pinImageUrlSelected = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0009/1597077/soe2024-pin-20220214-selected2.png"
 }
-else if (window.location.url.includes("/heritage/")){
+else if (window.location.pathname.includes("/heritage/")){
 	var pinImageUrl = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0007/1597534/soe2024-pin-red.png"
 	var pinImageUrlSelected = "https://www.stateoftheenvironment.des.qld.gov.au/__data/assets/image/0008/1597535/soe2024-pin-red-selected.png"
 }
