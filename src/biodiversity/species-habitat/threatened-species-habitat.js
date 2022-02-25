@@ -151,7 +151,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	soefinding.state.options4.xaxis.categories = ["Region", "Pre-clear (ha)"]
 
-
+	soefinding.state.chart2.topleft = `${soefinding.biota[0].toUpperCase()}${soefinding.biota.substring(1)} Group`
+	soefinding.state.chart2.measure = "Hectares"
 
 	new Vue({
 		el: "#chartContainer",
@@ -166,6 +167,12 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatPercent: function (s, i, series) {
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
+			},
+			seriesIndexSum: function (series, i) {
+				var sum = series.reduce((acc, curr) => {
+					return acc + curr.data[i]
+				}, 0)
+				return sum
 			}
 		}
 	});
