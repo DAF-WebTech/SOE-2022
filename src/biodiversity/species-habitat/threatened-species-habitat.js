@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	soefinding.state.options4.xaxis.categories = ["Region", "Pre-clear (ha)"]
 
-	soefinding.state.chart2.topleft = `${soefinding.biota[0].toUpperCase()}${soefinding.biota.substring(1)} Group`
+	soefinding.state.chart2.topleft = "" // hoping they don't want it `${soefinding.biota[0].toUpperCase()}${soefinding.biota.substring(1)} Group`
 	soefinding.state.chart2.measure = "Hectares"
 
 	new Vue({
