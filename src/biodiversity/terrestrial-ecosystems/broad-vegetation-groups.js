@@ -97,9 +97,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => `Hectares of broad vegetation groups in protected areas in ${soefinding.state.currentRegionName}, 2017  TODO fix year`,
 			heading2: () => `Proportion of total remnant vegetation in protected areas in ${soefinding.state.currentRegionName}, 2017 TODO fix year`
@@ -110,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / soefinding.findingContent[this.currentRegionName].series2Sum * 100).toFixed(1)
 			}
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

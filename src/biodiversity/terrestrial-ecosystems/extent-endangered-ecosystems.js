@@ -114,9 +114,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => `Extent of regional ecosystems by biodiversity status, ${latestYear}`,
 			heading2: () => `Extent of biodiversity status area, ${latestYear}`,
@@ -132,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		},
 		mounted: toggleDisplayDivs
-	})
+	}).mount("#chartContainer")
 
 
 

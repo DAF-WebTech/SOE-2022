@@ -108,11 +108,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => {
 				let title = "Percent change in the number of fragmentation classes from previous reporting period"
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter2: val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(2)}`,
 			formatter3: val => `${val < 0 ? '−' : ''}${Math.abs(val)}`, // a better minus sign
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

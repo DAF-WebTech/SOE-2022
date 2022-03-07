@@ -107,11 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => `Extent of total woody vegetation clearing, by bioregion`,
 			heading2: () => `Proportion of replacement landcover (clearing type) in ${soefinding.state.currentRegionName}`,
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? ""
 		}
-	})
+	}).mount("#chartContainer")
 
 
 

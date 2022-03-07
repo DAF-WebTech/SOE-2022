@@ -69,11 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.chart3.options.yaxis.labels.formatter = soefinding.state.chart1.options.yaxis.labels.formatter
 	soefinding.state.chart3.options.tooltip.shared = false
 
-
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => `Cumulated number of each protected area`,
 			heading2: () => `Cumulated extent of all protected areas`,
@@ -82,6 +82,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? ""
 		}
-	})
+	}).mount("#chartContainer")
 
 })

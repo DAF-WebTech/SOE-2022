@@ -47,19 +47,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	// set subcatchments for current region
 	soefinding.state.subcatchments = soefinding.findingContent[soefinding.state.currentRegionName].subcatchments
 
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: function () { return `Loss of riparian woody vegetation in ${this.currentRegionName}` },
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
 		}
-	})
-
-
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {
