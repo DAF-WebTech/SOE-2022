@@ -52,16 +52,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: function () { return `Pressures identified in ${this.currentRegionName}` }
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? ""
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	soefinding.onRegionChange = function () {

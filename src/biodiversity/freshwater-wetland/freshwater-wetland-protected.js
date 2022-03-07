@@ -98,11 +98,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
-
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: function() { 
 				let retVal = "Extent of freshwater wetland systems in protected areas"
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val.toLocaleString()
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

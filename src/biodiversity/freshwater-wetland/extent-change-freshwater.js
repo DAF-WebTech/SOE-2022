@@ -160,14 +160,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
-
-
-
 	const YEAR = "TODO YEAR"
 
-	soefinding.vueApp = new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => `Freshwater wetland systems extent by region, 2024  ${YEAR}`,
 			heading2: () => `Proportion of freshwater wetland systems extent in ${soefinding.state.currentRegionName}, ${YEAR}`,
@@ -185,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / soefinding.findingContent[this.currentRegionName].series2Sum * 100).toFixed(1)
 			}
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {
