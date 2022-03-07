@@ -64,9 +64,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 	options1.events = {
-      mounted: function(chartContext, config) {
-        console.log("chart 1 mounted")
-      }
+		mounted: function (chartContext, config) {
+			console.log("chart 1 mounted")
+		}
 	}
 
 	options1.xaxis.categories = ["Broad vegetation group", "Hectares"] // these are the table headings
@@ -171,16 +171,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	soefinding.state.latestYear = latestYear
-	
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		methods: {
 			formatter1: val => val.toLocaleString(),
-			formatPercent: function(s) { 
-				const sum = this.chart1.series.reduce((acc, curr) => acc+curr)
+			formatPercent: function (s) {
+				const sum = this.chart1.series.reduce((acc, curr) => acc + curr)
 				let fixed = 2
-				switch(this.currentRegionName) {
+				switch (this.currentRegionName) {
 					case "Queensland":
 					case "New England Tableland":
 					case "Wet Tropics":
@@ -192,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					case "Mitchell Grass Downs":
 						fixed = 4
 				}
-				return (s / sum * 100 ).toFixed(fixed)
+				return (s / sum * 100).toFixed(fixed)
 			},
 			onStackedRadioClick: function () {
 				this.chart3.options.chart.type = "bar"
@@ -205,12 +207,12 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart3.options.tooltip.shared = false
 			}
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {
 
- 		// set the data series in each of the vue apps, for the current region
+		// set the data series in each of the vue apps, for the current region
 
 		// chart 1 is the pie chart, shared
 		soefinding.state.chart1.options.labels = this.findingContent[this.state.currentRegionName].labels1
@@ -226,10 +228,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		// chart 3, stacked column, shared
 		// take note!! we update series via the options, which seems to get around the bug
 		// where it errors if the new series has more items
-		ApexCharts.exec("chart3", "updateOptions", { series: this.findingContent[this.state.currentRegionName].series3})
+		ApexCharts.exec("chart3", "updateOptions", { series: this.findingContent[this.state.currentRegionName].series3 })
 		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
-		
-		
+
+
 
 		soefinding.loadFindingHtml();
 	}
