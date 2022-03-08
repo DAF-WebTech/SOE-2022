@@ -3,9 +3,9 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 
-	const years = [...new Set( soefinding.findingJson.data.map(d => d.Year))]
-	const entries = [...new Set( soefinding.findingJson.data.map(d => d.Entry))]
-	
+	const years = [...new Set(soefinding.findingJson.data.map(d => d.Year))]
+	const entries = [...new Set(soefinding.findingJson.data.map(d => d.Entry))]
+
 	const series1 = entries.map(e => {
 		return {
 			name: e,

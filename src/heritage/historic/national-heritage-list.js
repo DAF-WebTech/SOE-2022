@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}).mount("#chartContainer")
 
-	soefinding.getResetMapDetails = function(place) {
+	soefinding.getResetMapDetails = function (place) {
 		return places[place]
 	}
 

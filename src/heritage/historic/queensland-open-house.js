@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Number of places"
 	options1.tooltip.y = {
-		formatter: function(val, options) {
+		formatter: function (val, options) {
 			if (val == 0)
 				return "no data — event not held"
 			else
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const newData = [] // 
 		soefinding.findingContent[q.name].app3[0].data.forEach((d, i) => {
 			if (d != "") {
-				if (d == "No Data – event not held") 
+				if (d == "No Data – event not held")
 					newData.push(0)
 				else
 					newData.push(d)
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const newData = [] // 
 		soefinding.findingContent[q.name].app4[0].data.forEach((d, i) => {
 			if (d != "") {
-				if (d == "No Data – event not held") 
+				if (d == "No Data – event not held")
 					newData.push(0)
 				else
 					newData.push(d)
@@ -150,17 +150,17 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].app4
 
 
-		Vue.createApp({
-			components: myComponents,
-			data() {
-				return soefinding.state
-			},
-			computed: {
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
+		computed: {
 			heading1: () => `Heritage places open in ${soefinding.state.currentRegionName}`,
 			heading2: () => `People visiting heritage places in ${soefinding.state.currentRegionName}`
 		},
 		methods: {
-			formatter1: function(val) { 
+			formatter1: function (val) {
 				if (val == null)
 					return ""
 				else if (val == 0)
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			onLineRadioClick: function (chart) {
 				chart.options.chart.type = "line"
 				chart.options.chart.stacked = false
-				chart.options.markers = { size: 4 } 
+				chart.options.markers = { size: 4 }
 				chart.options.tooltip.shared = false
 			}
 		}
