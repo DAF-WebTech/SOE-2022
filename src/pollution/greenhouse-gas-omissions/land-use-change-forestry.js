@@ -84,9 +84,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Comparison of state and territory land use, land use change and forestry (LULUCF) emissions, ${latestYear}`,
 			heading2: () => "Trends in Queensland's net land use, land use change and forestry (LULUCF) emissions, by category",
@@ -95,5 +97,5 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 })
 		}
-	})
+	}).mount("#chartContainer")
 })

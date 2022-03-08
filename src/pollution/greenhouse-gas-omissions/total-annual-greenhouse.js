@@ -113,9 +113,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Amount of Queensland’s emissions by sector, ${latestYear}`,
 			heading2: () => `Comparison of state and territory emissions by sector, ${latestYear}`,
@@ -130,5 +132,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 
 		}
-	})
+	}).mount("#chartContainer")
 })
