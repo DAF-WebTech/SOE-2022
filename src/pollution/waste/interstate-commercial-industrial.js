@@ -118,9 +118,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const LATEST_YEAR = soefinding.findingJson.meta.fields[soefinding.findingJson.meta.fields.length - 1].replace("-", "–") // endash
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Interstate commercial and industrial waste received, by waste type",
 			heading2: () => "Trend in total interstate commercial and industrial waste received",
@@ -144,6 +146,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / sum * 100).toFixed(1)
 			},
 		}
-	})
+	}).mount("#chartContainer")
 
 })

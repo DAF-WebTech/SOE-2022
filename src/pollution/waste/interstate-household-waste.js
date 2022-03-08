@@ -123,9 +123,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Interstate household waste received, by waste type",
 			heading2: () => "Trend in total interstate household waste received",
@@ -151,6 +153,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / sum * 100).toFixed(1)
 			},
 		}
-	})
+	}).mount("#chartContainer")
 
 })

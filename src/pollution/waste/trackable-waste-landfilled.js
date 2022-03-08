@@ -63,9 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Trackable waste landfilled",
 			heading2: () => `Proportion of trackable waste landfilled by waste type, ${latestYear.replace("-", "–")}`,
@@ -77,6 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / sum * 100).toFixed(2)
 			},
 		}
-	})
+	}).mount("#chartContainer")
 
 })

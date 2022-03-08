@@ -218,9 +218,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Litter items by type, ${latestYear.replace("-", "–")}`,
 			heading2: () => `Volume of litter by type, ${latestYear.replace("-", "–")}`,
@@ -251,5 +253,5 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.tooltip.shared = false
 			}
 		}
-	})
+	}).mount("#chartContainer")
 })

@@ -86,9 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Commercial and industrial waste recovered",
 			heading2: () => "Trend in total commercial and industrial waste (excluding green waste) recovered",
@@ -102,6 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / sum * 100).toFixed(2)
 			}
 		}
-	})
+	}).mount("#chartContainer")
 
 })

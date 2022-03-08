@@ -89,9 +89,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Household waste landfilled, by collection type",
 			heading2: () => "Trend in total household waste landfilled",
@@ -104,6 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / sum * 100).toFixed(1)
 			},
 		}
-	})
+	}).mount("#chartContainer")
 
 })

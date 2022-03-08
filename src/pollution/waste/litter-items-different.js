@@ -76,10 +76,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options10 = JSON.parse(JSON.stringify(options9))
 	options10.yaxis.title.text = "Percentage difference in count (%)"
 	options10.tooltip.y = {
-			formatter: function (val) {
-				return `${val < 0 ? '−' : ''}${Math.abs(val)}%` // a better minus sign
-			}
+		formatter: function (val) {
+			return `${val < 0 ? '−' : ''}${Math.abs(val)}%` // a better minus sign
 		}
+	}
 
 	soefinding.state.chart10 = {
 		options: options10,
@@ -89,9 +89,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => headings[0],
 			heading2: () => headings[1],
@@ -108,5 +110,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val,
 			formatter2: val => `${val < 0 ? '−' : ''}${Math.abs(val)}`, // a better minus sign
 		}
-	})
+	}).mount("#chartContainer")
 })

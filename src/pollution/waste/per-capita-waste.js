@@ -69,9 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Household waste generated per capita",
 			heading2: () => "Trend in total household waste generated per capita",
@@ -80,5 +82,5 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
 		}
-	})
+	}).mount("#chartContainer")
 })

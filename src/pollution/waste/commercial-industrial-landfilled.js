@@ -85,9 +85,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Commercial and industrial waste landfilled",
 			heading2: () => "Trend in total commercial and industrial waste landfilled (excluding green waste)",
@@ -101,5 +103,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 
 		}
-	})
+	}).mount("#chartContainer")
 })
