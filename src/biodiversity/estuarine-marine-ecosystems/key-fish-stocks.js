@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	//get the json parsed data  
 	const jsonDataElement = document.getElementById("jsonData");
-	const  textContent = jsonDataElement.textContent
+	const textContent = jsonDataElement.textContent
 	const parsed = JSON.parse(textContent)
 	console.log(parsed);
 
@@ -18,10 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		formatter: val => val
 	}
 
-
-	new Vue({
-		el: "#vueApp",
-		data: soefinding.vueState,
-	})
+	Vue.createApp({
+		data() {
+			return soefinding.vueState
+		},
+		components: myComponents,
+	}).mount("#vueApp")
 
 })

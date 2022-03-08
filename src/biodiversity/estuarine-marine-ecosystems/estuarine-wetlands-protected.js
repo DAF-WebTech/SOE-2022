@@ -68,11 +68,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => "Extent of estuarine wetlands within protected areas, 2024 TODO fix year",
 			heading2: () => "Overall protection of estuarine wetlands, 2024 TODO fix year",
@@ -83,5 +83,5 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / this.chart2.seriesSum * 100 ).toFixed(1)
 			}
 		}
-	})
+	}).mount("#chartContainer")
 })

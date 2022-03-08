@@ -161,9 +161,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	const YEAR = "TODO YEAR"
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => `Estuarine wetlands extent by region, ${YEAR}`,
 			heading2: function () {
@@ -185,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter2: val => val.toLocaleString(undefined, { minimumFractionDigits: 1 }),
 			formatter5: val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(2)}`,
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	soefinding.onRegionChange = function () {

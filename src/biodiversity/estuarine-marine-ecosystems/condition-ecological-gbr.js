@@ -24,10 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		rankings: ["Very High", "Good", "Poor", "Very Poor"]
 	}
 
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
+		components: myComponents,
 		computed: {
 			heading1: () => "Condition of ecological processes in the Great Barrier Reef, 2024 TODO fix year",
 		},
@@ -36,8 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			getdialurl1: function () {
 				return soefinding.getDialUrl(this.dial.number)
 			}
-
 		}
-	})
+	}).mount("#chartContainer")
 
 })
