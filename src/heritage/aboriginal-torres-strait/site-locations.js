@@ -82,9 +82,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () {
 				if (this.currentRegionName == "Queensland")
@@ -115,10 +117,8 @@ document.addEventListener("DOMContentLoaded", function () {
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
 			}
-
-
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {
