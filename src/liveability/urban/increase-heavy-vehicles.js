@@ -34,9 +34,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Number of light and heavy vehicles registered in Queensland`
 		},
@@ -53,5 +55,5 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.tooltip.shared = false
 			}
 		}
-	})
+	}).mount("#chartContainer")
 })

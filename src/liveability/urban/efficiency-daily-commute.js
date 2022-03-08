@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	options.yaxis.title.text = "Travel time (minutes per 10 kms)"
 	options.yaxis.labels.formatter = val => val
-	options.tooltip.y ={ formatter: val => val } 
+	options.tooltip.y = { formatter: val => val }
 
 
 	soefinding.state.chart1 = {
@@ -34,9 +34,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Average travel time in minutes per 10 kilometres`
 		},
@@ -44,5 +46,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val.toFixed(1)
 
 		}
-	});
+	}).mount("#chartContainer")
 })

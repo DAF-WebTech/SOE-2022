@@ -57,10 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 3. column chart for qld only, Median lot size
-	const series3Items = soefinding.findingJson.data.filter(d => 
-			d.Measure == "Median lot size" 
-			&& d[lotKeys[0]] != null
-			&& d["Regional Planning Area"] != "Queensland" )
+	const series3Items = soefinding.findingJson.data.filter(d =>
+		d.Measure == "Median lot size"
+		&& d[lotKeys[0]] != null
+		&& d["Regional Planning Area"] != "Queensland")
 	const series3 = lotKeys.map(k => {
 		return {
 			name: k,
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 4. column chart for each region, Median lot size
-	for(let regionName in soefinding.findingContent)
+	for (let regionName in soefinding.findingContent)
 		soefinding.findingContent[regionName].series4 = null //initialise, not all will have data
 	series3Items.forEach(d => {
 		soefinding.findingContent[d["Regional Planning Area"]].series4 = [{
@@ -105,10 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	// 5. column chart for qld only, urban lot registrations
-	const series5Items = soefinding.findingJson.data.filter(d => 
-			d.Measure == "Lot registrations" 
-			&& d[lotKeys[0]] != null
-			&& d["Regional Planning Area"] != "Queensland" )
+	const series5Items = soefinding.findingJson.data.filter(d =>
+		d.Measure == "Lot registrations"
+		&& d[lotKeys[0]] != null
+		&& d["Regional Planning Area"] != "Queensland")
 	const series5 = lotKeys.map(k => {
 		return {
 			name: k,
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	// 6. column chart for each region, lot registrations
-	for(let regionName in soefinding.findingContent)
+	for (let regionName in soefinding.findingContent)
 		soefinding.findingContent[regionName].series6 = null //initialise, not all will have data
 	series5Items.forEach(d => {
 		soefinding.findingContent[d["Regional Planning Area"]].series6 = [{
@@ -148,20 +148,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Mean population-weighted dwelling density for Queensland",
-			heading2: function() {
+			heading2: function () {
 				return `Mean population-weighted dwelling density for ${this.currentRegionName}`
 			},
 			heading3: () => "Change in median lot size in regions for Queensland",
-			heading4: function() {
+			heading4: function () {
 				return `Change in median lot size in regions for ${this.currentRegionName}`
 			},
 			heading5: () => "Change in number of urban lot registrations for Queensland",
-			heading6: function() {
+			heading6: function () {
 				return `Change in number of urban lot registrations for ${this.currentRegionName}`
 			},
 
@@ -170,9 +172,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val.toFixed(1),
 			formatter4: val => val
 		}
-	})
+	}).mount("#chartContainer")
 
-	
+
 	window.soefinding.onRegionChange = function () {
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
 		soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].series4

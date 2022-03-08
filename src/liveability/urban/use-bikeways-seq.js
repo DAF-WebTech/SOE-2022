@@ -30,9 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Daily use of bikeways ${years[0]} to ${years[years.length - 1]}`
 		},
@@ -40,6 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val?.toLocaleString() ?? ""
 
 		}
-	})
+	}).mount("#chartContainer")
 })
 

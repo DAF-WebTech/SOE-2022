@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options2.yaxis.max = 100
 	options2.yaxis.min = 90
 	options2.yaxis.tickAmount = 5
-	options2.tooltip.y = { formatter: val => `${val}%` } 
+	options2.tooltip.y = { formatter: val => `${val}%` }
 
 	soefinding.state.chart2 = {
 		options: options2,
@@ -53,9 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Percentage of network travel time reliability (%)`,
 			heading2: () => `Percentage of on-time reliability of public transport trips in South East Queensland`
@@ -64,5 +66,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val,
 			formatter2: val => val
 		}
-	});
+	}).mount("#chartContainer")
 })
