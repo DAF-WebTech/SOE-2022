@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 			}
 		}
-	} 
+	}
 
 	const noData = ["Queensland", "Healthy Land and Water South East Queensland report card",
 		"Fitzroy Basin report card", "Gladstone Harbour report card", "Mackay–Whitsunday–Isaac report card",
@@ -47,9 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.series = soefinding.findingContent[soefinding.state.currentRegionName].series
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () {
 				return `Pressures identified in ${this.currentRegionName}`
@@ -58,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val ?? "",
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {
