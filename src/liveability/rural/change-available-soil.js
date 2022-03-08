@@ -11,14 +11,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const keys = soefinding.findingJson.meta.fields.slice(1)
 
-    soefinding.findingContent.Queensland = {app1: [{name: "Change (ha)", data: keys.map(k => 0)}]}
+	soefinding.findingContent.Queensland = { app1: [{ name: "Change (ha)", data: keys.map(k => 0) }] }
 
 	soefinding.findingJson.data.forEach(d => {
-		soefinding.findingContent[d.Region] = {app1: [ { name: "Change (ha)", data: keys.map((k, i) => {
-            //first a side effect, sum up for qld
-            soefinding.findingContent.Queensland.app1[0].data[i] += d[k]
-			return d[k]
-			})}]
+		soefinding.findingContent[d.Region] = {
+			app1: [{
+				name: "Change (ha)", data: keys.map((k, i) => {
+					//first a side effect, sum up for qld
+					soefinding.findingContent.Queensland.app1[0].data[i] += d[k]
+					return d[k]
+				})
+			}]
 		}
 	})
 
@@ -52,17 +55,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Change in available soil and land resources in ${soefinding.state.currentRegionName}`,
 			heading2: () => "Percentage change in area between 1999 and 2019"
 		},
 		methods: {
-			formatter1: val => val == 0 ? 0 : val.toLocaleString({minimumFractionDigits: 2, maximumFractionDigits: 2})
+			formatter1: val => val == 0 ? 0 : val.toLocaleString({ minimumFractionDigits: 2, maximumFractionDigits: 2 })
 		}
-	});
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

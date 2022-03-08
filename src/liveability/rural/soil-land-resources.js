@@ -34,9 +34,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Proportion of land by use in ${soefinding.state.currentRegionName}, 2019`
 		},
@@ -62,12 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
 						break
 					default:
 				}
-
 				return (s / sum * 100).toFixed(decimalPlaces)
 			}
-
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

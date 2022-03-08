@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	const value_years = value_year_keys.map(yk => header[yk])
 
 	const nullRegions = [
-			"Queensland", "Cape York", "Desert Channels",
-			"Fitzroy Basin", "Northern Gulf", "Reef",
-			"Southern Gulf", "Southern Queensland", "Torres Strait"]
+		"Queensland", "Cape York", "Desert Channels",
+		"Fitzroy Basin", "Northern Gulf", "Reef",
+		"Southern Gulf", "Southern Queensland", "Torres Strait"]
 	nullRegions.forEach(n => soefinding.findingContent[n] = {})
 
 	const regions = new Map() // we use this in chart 3
@@ -96,10 +96,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Production amount of Fruit in ${this.currentRegionName} NRM region` },
 			heading2: function () { return `Production amount of Vegetables in ${this.currentRegionName} NRM region` },
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val.toLocaleString()
 		}
-	})
+	}).mount("#chartContainer")
 
 	window.soefinding.onRegionChange = function () {
 

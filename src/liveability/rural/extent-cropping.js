@@ -46,9 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () {
 				return `Cropped area (million ha) by season in ${this.currentRegionName}`
@@ -66,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.tooltip.shared = false
 			}
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

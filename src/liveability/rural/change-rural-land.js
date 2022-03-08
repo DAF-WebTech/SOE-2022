@@ -141,12 +141,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
-
 	// chart 4 already done in loop
 
-	soefinding.vueApp = new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () {
 				let retVal = `Rural area growth between ${soefinding.findingContent[this.currentRegionName].series1categories[0]} and ${soefinding.findingContent[this.currentRegionName].series1categories[1]}`
@@ -185,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				return ret
 			}
 		}
-	})
+	}).mount("#chartContainer")
 
 	// keep the region-wide "more information links", update them each time a region is laoded
 	const moreInformationFinding = document.querySelector("div.more-information-finding")
@@ -207,12 +209,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.vueApp.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
 
 		soefinding.loadFindingHtml(fixMoreInformationLinks)
-			
+
 	}
 
 	function fixMoreInformationLinks() {
 		const ul = document.querySelector("ul.morinfo")
-		moreInformationRegionLinks.forEach(function(l) {
+		moreInformationRegionLinks.forEach(function (l) {
 			ul.appendChild(l)
 		})
 		if (ul == null) // not in this case, but a reference just in case

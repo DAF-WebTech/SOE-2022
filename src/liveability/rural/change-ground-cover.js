@@ -71,9 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Mean late dry season ground cover (%), ${latestYear}`,
 			heading2: function () {
@@ -83,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val.toFixed(1)
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

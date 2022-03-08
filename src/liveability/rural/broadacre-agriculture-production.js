@@ -1,26 +1,3 @@
-/*
-soefinding.state.regionData = {
-	regionName:  {
-		subregionName: {
-			chart1: [ 
-				{ // column chart for each product
-					productName: "",
-					series: [],
-					options: {},
-					chartactive: true
-				}
-			], 
-			chart2: {} // line chart for production values 
-		},
-		subregionName: {},
-	},
-	regionName: {
-	}
-}
-*/
-
-
-
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -40,18 +17,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.findingContent = {}
 	soefinding.state.regionData = {}
 	soefinding.findingJson.data.forEach(d => {
-		
+
 		if (d[subregion_key] == null) {
 			d[subregion_key] = d[region_key]
 		}
 
 		if (!soefinding.state.regionData[d[region_key]]) {
 			soefinding.state.regionData[d[region_key]] = {}
-			soefinding.findingContent[d[region_key]] = {html: ""}
+			soefinding.findingContent[d[region_key]] = { html: "" }
 		}
 
 		if (!soefinding.state.regionData[d[region_key]][d[subregion_key]]) {
-			soefinding.state.regionData[d[region_key]][d[subregion_key]] = { 
+			soefinding.state.regionData[d[region_key]][d[subregion_key]] = {
 				data: [],
 				chart1: [],
 				chart2: {}
@@ -59,10 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 
 		// fix the data, replace n.p. with null
-		d.forEach(function(item, i) { 
-			if (item == "n.p.") 
+		d.forEach(function (item, i) {
+			if (item == "n.p.")
 				d[i] = null
-			else if (String(item).indexOf("&") >= 0) 
+			else if (String(item).indexOf("&") >= 0)
 				d[i] = item.replace("&", "and")
 		})
 
@@ -74,52 +51,54 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.columnChartOptions.xaxis.categories = years.map(k => k.replace("-", "–")) // ndash
 	soefinding.state.columnChartOptions.xaxis.title.text = "Year"
 	soefinding.state.columnChartOptions.yaxis.title.text = "Tonnes"
-	soefinding.state.columnChartOptions.yaxis.labels.formatter = val => val >= 1000000 ? `${val/1000000}M` : ( val >= 1000 ? `${val/1000}K`: val)
+	soefinding.state.columnChartOptions.yaxis.labels.formatter = val => val >= 1000000 ? `${val / 1000000}M` : (val >= 1000 ? `${val / 1000}K` : val)
 	soefinding.state.columnChartOptions.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.lineChartOptions = soefinding.getDefaultLineChartOptions()
 	soefinding.state.lineChartOptions.xaxis.categories = years_value.map(k => k.replace("-", "–")) // ndash
 	soefinding.state.lineChartOptions.xaxis.title.text = "Year"
 	soefinding.state.lineChartOptions.xaxis.tickPlacement = "between"
-	soefinding.state.lineChartOptions.tooltip.y = { formatter: val => { 
-		if (val == null)
-			return "n.p."
-		else
-			return `$${val.toLocaleString()}` 
-	}}
+	soefinding.state.lineChartOptions.tooltip.y = {
+		formatter: val => {
+			if (val == null)
+				return "n.p."
+			else
+				return `$${val.toLocaleString()}`
+		}
+	}
 	soefinding.state.lineChartOptions.yaxis.title.text = "Value ($)"
 	soefinding.state.lineChartOptions.yaxis.labels.minWidth = 30
 	soefinding.state.lineChartOptions.yaxis.labels.formatter = val => {
 		if (val >= 1000000000)
-			return `${val/1000000000}B`
+			return `${val / 1000000000}B`
 		else if (val >= 1000000)
-			return `${val/1000000}M`
+			return `${val / 1000000}M`
 		else if (val >= 1000)
-			return `${val/1000}K`
-		else 
+			return `${val / 1000}K`
+		else
 			return val
 	}
 
 
-	
-	Object.keys(soefinding.state.regionData).forEach(function(regionName) {
-		Object.keys(soefinding.state.regionData[regionName]).forEach(function(subregionName) {
+
+	Object.keys(soefinding.state.regionData).forEach(function (regionName) {
+		Object.keys(soefinding.state.regionData[regionName]).forEach(function (subregionName) {
 
 			soefinding.state.regionData[regionName][subregionName].chart1 = soefinding.state.regionData[regionName][subregionName].data.map(d => {
 				let heading = `Production amount of ${d[product_key]} in ${regionName} `
 				if (regionName != "Queensland")
-					 heading += "NRM region"
+					heading += "NRM region"
 				if (regionName != subregionName)
 					heading += ` — ${subregionName}` // mdash
 
 				const zeroSeries = year_keys.map(yk => d[yk]).every(val => val == 0)
-				
+
 				return { // column chart for each product
-						productName: d[product_key],
-						heading,
-						series: [{name: "Tonnes", data: year_keys.map(yk => d[yk])}],
-						chartactive: !zeroSeries,
-						zeroSeries
+					productName: d[product_key],
+					heading,
+					series: [{ name: "Tonnes", data: year_keys.map(yk => d[yk]) }],
+					chartactive: !zeroSeries,
+					zeroSeries
 				}
 			})
 
@@ -131,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				heading2 += ` — ${subregionName}`  // mdash
 
 			soefinding.state.regionData[regionName][subregionName].chart2 = {
-				heading2, 
+				heading2,
 				series: soefinding.state.regionData[regionName][subregionName].data.map(d => {
 					return {
 						name: d[product_key],
@@ -144,10 +123,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 
-	new Vue({
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		el: "#chartContainer",
 		data: soefinding.state,
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

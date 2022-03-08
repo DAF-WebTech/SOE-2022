@@ -1,24 +1,3 @@
-/*
-soefinding.state.regionData = {
-	regionName:  {
-		subregionName: {
-			chart1: [ 
-				{ // column chart for each product
-					productName: "",
-					series: [],
-					options: {},
-					chartactive: true
-				}
-			], 
-			chart2: {} // line chart for production values 
-		},
-		subregionName: {},
-	},
-	regionName: {
-	}
-}
-*/
-
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -160,9 +139,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		methods: {
 			tableCellFormatter: val => {
 				if (val == null)
@@ -173,8 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					return val.toLocaleString(undefined, { minimumFractionDigits: 2 })
 			}
 		}
-
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {
