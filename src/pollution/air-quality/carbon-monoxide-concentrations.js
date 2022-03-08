@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		data() {
 			return soefinding.state
 		},
-		data: soefinding.state,
 		computed: {
 			heading1: function () { return `Annual maximum 8-hour average carbon monoxide concentrations` },
 
