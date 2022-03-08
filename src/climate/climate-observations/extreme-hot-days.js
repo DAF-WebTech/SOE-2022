@@ -28,18 +28,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 	soefinding.findingContent.Queensland = { html: "" }
 
-	
+
 	const options1 = soefinding.getDefaultLineChartOptions()
 	options1.markers.size = 3
 	options1.stroke = { width: 1.5 }
-	options1.tooltip.x = { formatter: val => yearKeys[val-1] }
+	options1.tooltip.x = { formatter: val => yearKeys[val - 1] }
 	options1.tooltip.y = { formatter: val => val == null ? "n/a" : val }
 	options1.xaxis.categories = yearKeys
 
 	const YEAR_GAP = 5
 	options1.xaxis.labels.formatter = val => val % YEAR_GAP == 0 ? val : ""
 	options1.xaxis.labels.rotateAlways = true
-	options1.xaxis.tickAmount = Math.floor(yearKeys.length / YEAR_GAP) 
+	options1.xaxis.tickAmount = Math.floor(yearKeys.length / YEAR_GAP)
 	delete options1.xaxis.tickPlacement
 
 	options1.xaxis.title.text = "Year"
@@ -53,16 +53,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Trend in number of extreme hot days at ${this.currentRegionName}` },
 		},
 		methods: {
 			formatter1: val => val
 		}
-	})
+	}).mount("#chartContainer")
 })
 
 

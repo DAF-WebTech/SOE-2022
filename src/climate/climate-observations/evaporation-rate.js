@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 	const options2 = soefinding.getDefaultLineChartOptions()
-	options2.tooltip.x = { formatter: val => soefinding.yearKeys[val-1] }
+	options2.tooltip.x = { formatter: val => soefinding.yearKeys[val - 1] }
 	options2.tooltip.y = { formatter: val => val?.toLocaleString() ?? "n/a" }
 	options2.xaxis.categories = soefinding.yearKeys
 	options2.xaxis.labels.formatter = (val) => val % 2 == 0 ? val : ""
@@ -89,9 +89,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	else
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].app2
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Mean annual pan evaporation, ${soefinding.yearKeys[0]}–${latestYear}`,
 			heading2: () => `Trend in evaporation rate at ${soefinding.state.currentRegionName}`,
@@ -99,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1, }) ?? "" }
 		}
-	})
+	}).mount("#chartContainer")
 
 	if (soefinding.state.currentRegionName == "Queensland")
 		soefinding.onRegionChange()

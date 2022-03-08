@@ -104,9 +104,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Annual mean temperature anomaly, base ${yearKeys[0]}–${latestYear}`,
 			heading2: () => `Trend in annual mean temperature, ${soefinding.state.currentRegionName}`,
@@ -116,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter2: val => val?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? ""
 
 		}
-	})
+	}).mount("#chartContainer")
 
 })
 

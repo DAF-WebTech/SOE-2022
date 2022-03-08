@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const options1 = soefinding.getDefaultLineChartOptions();
 	options1.markers.size = 3
 	options1.stroke = { width: 1.5 }
-	options1.tooltip.x = { formatter: val => yearKeys[val-1] }
+	options1.tooltip.x = { formatter: val => yearKeys[val - 1] }
 	options1.tooltip.y = { formatter: val => val == null ? "n/a" : val }
 	options1.xaxis.categories = yearKeys
 	options1.xaxis.labels.formatter = val => val % YEAR_GAP == 0 ? val : ""
@@ -51,18 +51,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
-			heading1: function() { 
-				return`Trend in number of very heavy rainfall days at ${this.currentRegionName}`
+			heading1: function () {
+				return `Trend in number of very heavy rainfall days at ${this.currentRegionName}`
 			}
 		},
 		methods: {
 			formatter1: val => val
 		}
-	})
+	}).mount("#chartContainer")
 })
 
 

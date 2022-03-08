@@ -31,14 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	const options1 = soefinding.getDefaultLineChartOptions()
-	options1.stroke = {width: 1.5}
+	options1.stroke = { width: 1.5 }
 	options1.markers.size = 0
-	options1.tooltip.x = { 
-		formatter: val => soefinding.yearKeys[val-1]
+	options1.tooltip.x = {
+		formatter: val => soefinding.yearKeys[val - 1]
 	}
 	options1.xaxis.categories = soefinding.yearKeys
 	const YEAR_GAP = 4
- 	options1.xaxis.labels.formatter = (val) => val % YEAR_GAP == 0 ? val : ""
+	options1.xaxis.labels.formatter = (val) => val % YEAR_GAP == 0 ? val : ""
 	options1.xaxis.tickAmount = Math.floor(soefinding.yearKeys / YEAR_GAP)
 	delete options1.xaxis.tickPlacement
 	options1.xaxis.title.text = "Year"
@@ -54,9 +54,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Annual average rainfall for ${soefinding.state.currentRegionName}` },
 
@@ -64,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? "" }
 		}
-	})
+	}).mount("#chartContainer")
 })
 
 
