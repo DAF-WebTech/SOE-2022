@@ -65,12 +65,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.species = species
 
 
-
-
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Numbers of threatened ${soefinding.biota} (<i>Nature Conservation Act 1992</i> Extinct, Extinct in the Wild, Critically Endangered, Endangered, and Vulnerable) by species group`
 		},
@@ -98,5 +97,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 			}
 		}
-	})
+	}).mount("#chartContainer")
+	
 })
