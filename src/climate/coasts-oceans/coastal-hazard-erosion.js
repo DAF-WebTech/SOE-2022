@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options.xaxis.title.text = "Region"
 	options.yaxis.title.text = "Hectares"
 	options.yaxis.labels.formatter = val => `${val / 1000}k`
-	options.tooltip.y = { formatter: val => `${val.toLocaleString()} ha.` } 
+	options.tooltip.y = { formatter: val => `${val.toLocaleString()} ha.` }
 
 
 	soefinding.state.chart1 = {
@@ -29,9 +29,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Erosion prone area by region, 2016`
 		},
@@ -39,5 +41,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val.toLocaleString()
 
 		}
-	});
+	}).mount("#chartContainer")
 })

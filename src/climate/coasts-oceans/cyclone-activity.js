@@ -19,9 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Count of cyclones that cross the Queensland coast per calendar year`
 		},
@@ -29,5 +31,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val
 
 		}
-	});
+	}).mount("#chartContainer")
 })

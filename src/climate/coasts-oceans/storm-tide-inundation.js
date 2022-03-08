@@ -94,9 +94,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Cyclone ${Object.keys(cyclones)[0]}`,
 			heading2: () => `Cyclone ${Object.keys(cyclones)[1]}`,
@@ -104,13 +106,13 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading4: () => "Storm tide inundation incidences, 2018–2019",
 		},
 		methods: {
-			formatter1: val => { 
+			formatter1: val => {
 				const sign = val < 0 ? "−" : "" // use correct unicode
 				const amount = Math.abs(val).toFixed(2)
 				return sign + amount
 			}
 		}
-	});
+	}).mount("#chartContainer")
 
 
 })

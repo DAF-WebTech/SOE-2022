@@ -55,15 +55,17 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Southern Oscillation Index 1876–2020` },
 		},
 		methods: {
 			formatter1: val => val?.toFixed(2).replace("-", "−") ?? ""
 		},
-	})
+	}).mount("#chartContainer")
 
 })

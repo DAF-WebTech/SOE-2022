@@ -82,9 +82,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	})
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `${locations[0]} — Annual mean sea surface temperature anomaly` },
 			heading2: function () { return `${locations[0]} — Annual mean sea surface temperature 10-year rolling average` },
@@ -95,5 +97,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val < 0 ? `−${Math.abs(val).toFixed(2)}` : val.toFixed(2),
 			formatter2: val => val < 0 ? `−${Math.abs(val).toFixed(3)}` : val.toFixed(3)
 		}
-	});
+	}).mount("#chartContainer")
 })
