@@ -68,10 +68,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Annual maximum 1-hour average sulphur dioxide concentrations` },
 			heading2: function () { return `Number of days when the 1-hour sulphur dioxide concentrations exceed the air NEPM standards` },
@@ -89,6 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 
 		}
-	})
+	}).mount("#chartContainer")
 
 })

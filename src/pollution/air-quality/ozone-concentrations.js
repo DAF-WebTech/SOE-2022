@@ -74,9 +74,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Number of days when the 1-hour ozone concentrations exceed the Air NEPM standards` },
 			heading2: function () { return `Annual maximum 1-hour average ozone concentrations` },
@@ -93,6 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart2.options.tooltip.shared = false
 			}
 		}
-	});
+	}).mount("#chartContainer")
 
 })

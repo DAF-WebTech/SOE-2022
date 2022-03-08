@@ -101,10 +101,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Number of days when the 24-hour PM₁₀ concentrations exceeded the Air NEPM standards` },
 			heading2: function () { return `Number of days when the 24-hour PM₂.₅ concentrations exceeded the Air NEPM standards` },
@@ -125,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				chart.options.tooltip.shared = false
 			}
 		}
-	});
+	}).mount("#chartContainer")
 
 
 

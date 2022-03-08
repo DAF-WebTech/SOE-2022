@@ -31,9 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Proportion of annual average vehicle emissions by type in 2010`,
 		},
@@ -45,5 +47,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 
 		}
-	})
+	}).mount("#chartContainer")
 })

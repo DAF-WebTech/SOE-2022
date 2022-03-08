@@ -30,8 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		data: soefinding.state,
 		computed: {
 			heading1: function () { return `Annual maximum 8-hour average carbon monoxide concentrations` },
@@ -50,5 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.tooltip.shared = false
 			}
 		}
-	});
+	}).mount("#chartContainer")
 })
+
+
+

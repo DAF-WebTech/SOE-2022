@@ -67,9 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Percentage change trends in major air pollutant emissions since 2010",
 			heading2: () => "Trends in emissions for major air pollutants",
@@ -78,6 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val?.toLocaleString() ?? "",
 			formatter2: val => val?.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) ?? ""
 		}
-	});
+	}).mount("#chartContainer")
 
 })

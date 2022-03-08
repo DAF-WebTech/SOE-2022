@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	options1.xaxis.title.text = "Year"
 	options1.yaxis.title.text = "Kilometres travelled (billions)"
 	options1.tooltip.y = {
-		formatter: val => (val*1000000000).toLocaleString()
+		formatter: val => (val * 1000000000).toLocaleString()
 	}
 	options1.yaxis.labels.formatter = function (val) {
 		return val
@@ -30,10 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	};
 
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Trend in vehicle kilometres travelled (VKT)` },
 
@@ -41,5 +42,5 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 3 }) ?? "" }
 		}
-	})
+	}).mount("#chartContainer")
 })

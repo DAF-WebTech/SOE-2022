@@ -243,12 +243,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Proportion of vehicle registrations in ${latestYear}`,
 			heading2: () => "Proportion (%) of registered vehicles by type",
@@ -271,5 +270,5 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / sum * 100).toFixed(3)
 			}
 		},
-	})
+	}).mount("#chartContainer")
 })

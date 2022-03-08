@@ -63,9 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Annual maximum 1–hour average nitrogen dioxide concentrations` },
 			heading2: function () { return `Annual average nitrogen dioxide concentrations` },
@@ -82,6 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				chart.options.tooltip.shared = false
 			}
 		}
-	});
+	}).mount("#chartContainer")
 
 })

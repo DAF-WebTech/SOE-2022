@@ -32,9 +32,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Number of days when the 1-hour visibility-reducing particle concentrations exceed the Air EPP goal` },
 
@@ -52,5 +54,5 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.tooltip.shared = false
 			}
 		}
-	})
+	}).mount("#chartContainer")
 })
