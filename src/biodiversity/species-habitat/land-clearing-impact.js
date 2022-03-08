@@ -133,9 +133,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => {
 				let retVal = `Proportion of replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
@@ -177,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / soefinding.findingContent[this.currentRegionName].series1Sum * 100).toFixed(1)
 			}
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

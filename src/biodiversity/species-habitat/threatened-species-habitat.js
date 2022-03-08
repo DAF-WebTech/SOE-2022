@@ -154,9 +154,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.chart2.topleft = "" // hoping they don't want it `${soefinding.biota[0].toUpperCase()}${soefinding.biota.substring(1)} Group`
 	soefinding.state.chart2.measure = "Hectares"
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat and ${latestYear} remnant habitat by species group` },
 			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat that is remnant and non-remnant habitat, ${latestYear}` },
@@ -175,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				return sum
 			}
 		}
-	});
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

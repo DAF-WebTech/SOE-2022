@@ -47,16 +47,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Major threats to ${soefinding.biota} species, 2024 TODO fix year`,
 		},
 		methods: {
 			formatter1: val => val.toLocaleString()
 		}
-	})
+	}).mount("#chartContainer")
 
 })
 
