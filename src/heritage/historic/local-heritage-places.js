@@ -97,9 +97,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Proportion of local heritage places on local heritage registers by local government area, 2020 (TODO fix year)",
 			heading2: function () {
@@ -116,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				return (s / sum * 100).toFixed(1)
 			}
 		}
-	})
+	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {

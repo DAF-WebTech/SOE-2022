@@ -57,11 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Number of places on the heritage register in ${soefinding.state.currentRegionName}`,
 			heading2: () => `Number of places entered, removed and merged from the heritage register in ${soefinding.state.currentRegionName}, 2011–2020`
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val,
 		}
-	})
+	}).mount("#chartContainer")
 
 
 

@@ -38,13 +38,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.yearRange = `${years[0]}–${years.at(-1)}`
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		methods: {
 			formatter1: val => val,
 		}
-	})
+	}).mount("#chartContainer")
 
 	soefinding.getResetMapDetails = function(place) {
 		return places[place]

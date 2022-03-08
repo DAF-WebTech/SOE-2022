@@ -40,9 +40,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Queensland underwater cultural heritage entries updated in the AUCHD",
 			heading2: () => "Queensland underwater cultural heritage entries added to the AUCHD"
@@ -50,6 +52,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val.toLocaleString()
 		}
-	})
+	}).mount("#chartContainer")
 
 })

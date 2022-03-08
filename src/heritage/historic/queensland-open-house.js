@@ -150,10 +150,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].app4
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
-		computed: {
+		Vue.createApp({
+			components: myComponents,
+			data() {
+				return soefinding.state
+			},
+			computed: {
 			heading1: () => `Heritage places open in ${soefinding.state.currentRegionName}`,
 			heading2: () => `People visiting heritage places in ${soefinding.state.currentRegionName}`
 		},
@@ -177,9 +179,8 @@ document.addEventListener("DOMContentLoaded", function () {
 				chart.options.markers = { size: 4 } 
 				chart.options.tooltip.shared = false
 			}
-
 		}
-	})
+	}).mount("#chartContainer")
 
 	window.soefinding.onRegionChange = function () {
 		// set the data series in each of the vue apps, for the current region

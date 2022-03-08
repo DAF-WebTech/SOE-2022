@@ -82,13 +82,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		options: options3,
 		series: series3,
 		chartactive: false,
-	};
+	}
 
 
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Total places removed, ${years[0]}–${latestYear}`,
 			heading2: () => `Proportion of places removed by Local Government Area (LGA), ${years[0]}–${latestYear}`,
@@ -100,8 +101,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
 			}
-
 		}
-	})
-
+	}).mount("#chartContainer")
 })
