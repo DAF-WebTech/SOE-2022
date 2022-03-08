@@ -15,15 +15,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Riversleigh section of Australian fossil mammal sites World Heritage natural criteria`
 		},
 		methods: {
 			formatter1: val => val,
 		}
-	})
+	}).mount("#chartContainer")
 
 })

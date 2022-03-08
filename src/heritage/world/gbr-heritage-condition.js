@@ -13,14 +13,17 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: series,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return series
+		},
 		methods: {
 			getdialurl1: function () {
 				return soefinding.getDialUrl(this.dial.number)
 			}
 		}
-	})
+	}).mount("#chartContainer")
+
 
 })

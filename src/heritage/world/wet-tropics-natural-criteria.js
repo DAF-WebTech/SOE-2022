@@ -14,16 +14,17 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: false,
 	}
 
-
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => `Wet Tropics of Queensland World Heritage natural criteria`
 		},
 		methods: {
 			formatter1: val => val,
 		}
-	})
+	}).mount("#chartContainer")
+
 
 })
