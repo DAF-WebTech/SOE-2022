@@ -57,9 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.regionNames.forEach(r => soefinding.findingContent[r] = {})
 
 
-	new Vue({
-		el: "#chartContainer",
-		data: soefinding.state,
+	Vue.createApp({
+		components: myComponents,
+		data() {
+			return soefinding.state
+		},
 		computed: {
 			heading1: () => "Number of cultural heritage search requests, by category",
 			heading2: () => `Proportion of cultural heritage search requests by category, ${latestYear}`
@@ -76,14 +78,12 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.markers = { size: 4 } // ignored by column chart
 				this.chart1.options.tooltip.shared = false
 			},
-			formatPercent: function(s, i, series) {
-                const sum = series.reduce((acc, curr) => acc + curr )
-                return (s / sum * 100 ).toFixed(1)
-            }
-
-
+			formatPercent: function (s, i, series) {
+				const sum = series.reduce((acc, curr) => acc + curr)
+				return (s / sum * 100).toFixed(1)
+			}
 		}
-	})
+	}).mount("#chartContainer")
 
 	window.soefinding.onRegionChange = function () {
 
