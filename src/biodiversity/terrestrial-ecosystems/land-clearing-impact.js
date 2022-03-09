@@ -18,16 +18,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	delete options1.xaxis.tickPlacement
 	options1.xaxis.categories = yearKeys.map(y => y.replace("-", "–")) // en dash
 	options1.xaxis.title.text = "Year range"
-	options1.xaxis.labels.formatter = function(val) {
+	options1.xaxis.labels.formatter = function (val) {
 		if (typeof val != "undefined") {
 			const year = Number(val.split("–")[1])
-			console.log(val, year, year%2)
 			return year % 2 ? "" : val
 		}
 	}
 	options1.yaxis.labels.formatter = val => `${val / 1000}K`
 	options1.yaxis.title.text = "Hectares per year"
-	options1.tooltip.y = { formatter: val => val.toLocaleString() } 
+	options1.tooltip.y = { formatter: val => val.toLocaleString() }
 
 	soefinding.state.chart1 = {
 		options: options1,
@@ -107,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
@@ -118,25 +117,13 @@ document.addEventListener("DOMContentLoaded", function () {
 			heading3: () => `Historic woody vegetation clearing in ${soefinding.state.currentRegionName}`,
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString() ?? ""
+			formatter1: val => val?.toLocaleString() ?? "",
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				this.chart3.series = soefinding.findingContent[newRegionName].series3
+			}
 		}
 	}).mount("#chartContainer")
 
-
-
-	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
-
-		// chart 2
-		// the exec function only seems necessary when the x-axis changes, but keeping it here for reference in case i’m wrong
-		//ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-
-		// chart 3
-		//ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
-		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
-
-
-		soefinding.loadFindingHtml()
-	}
 })

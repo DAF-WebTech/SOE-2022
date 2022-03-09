@@ -1,5 +1,6 @@
 "use strict";
 
+
 document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.findingJson.data.sort(function (a, b) {
@@ -97,43 +98,36 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
-	Vue.createApp({
+
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
 		components: myComponents,
 		computed: {
-			heading1: () => `Hectares of broad vegetation groups in protected areas in ${soefinding.state.currentRegionName}, 2017  TODO fix year`,
-			heading2: () => `Proportion of total remnant vegetation in protected areas in ${soefinding.state.currentRegionName}, 2017 TODO fix year`
+			heading1() { return `Hectares of broad vegetation groups in protected areas in ${this.currentRegionName}, 2017  TODO fix year` },
+			heading2() { return `Proportion of total remnant vegetation in protected areas in ${this.currentRegionName}, 2017 TODO fix year` }
 		},
 		methods: {
-			formatter1: val => val.toLocaleString(),
+			formatter1: function (val) {
+				return val.toLocaleString()
+			},
 			formatPercent: function (s) {
 				return (s / soefinding.findingContent[this.currentRegionName].series2Sum * 100).toFixed(1)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newName, oldName) {
+				this.chart1.series = soefinding.findingContent[newName].series1
+				this.chart1.options.xaxis.categories = soefinding.findingContent[newName].groups
+				this.chart2.series = soefinding.findingContent[newName].series2
 			}
 		}
 	}).mount("#chartContainer")
 
 
-	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
-
-		// chart 1
-		ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-
-		// but we also need this for the chart to update
-		ApexCharts.exec("chart1", "updateOptions", {
-			xaxis: { categories: this.findingContent[this.state.currentRegionName].groups }
-		}, true)
-		// this works on the table
-		options1.xaxis.categories = this.findingContent[this.state.currentRegionName].groups
-
-		// chart 2, pie chart, labels stay the same
-		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-
-
-		soefinding.loadFindingHtml()
-	}
 })
+

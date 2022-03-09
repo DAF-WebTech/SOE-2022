@@ -108,81 +108,55 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
 		components: myComponents,
 		computed: {
-			heading1: () => {
+			heading1() {
 				let title = "Percent change in the number of fragmentation classes from previous reporting period"
-				if (soefinding.state.currentRegionName != "Queensland")
-					title += ` in ${soefinding.state.currentRegionName}`
+				if (this.currentRegionName != "Queensland")
+					title += ` in ${this.currentRegionName}`
 				return title
 			},
-			heading2: () => {
+			heading2() {
 				let title = "Density change of fragmentation classes per 1000km²"
-				if (soefinding.state.currentRegionName == "Queensland")
+				if (this.currentRegionName == "Queensland")
 					title += " by region"
 				else
-					title += ` in ${soefinding.state.currentRegionName}`
+					title += ` in ${this.currentRegionName}`
 				title += `, ${series2year}`
 				return title
 			},
-			heading3: () => {
+			heading3() {
 				let title = "Change in the number of fragmentation classes"
-				if (soefinding.state.currentRegionName == "Queensland")
+				if (this.currentRegionName == "Queensland")
 					title += " by region"
 				else
-					title += ` in ${soefinding.state.currentRegionName}`
+					title += ` in ${this.currentRegionName}`
 				title += `, ${series3year}`
 				return title
 			},
 		},
 		methods: {
-			formatter1: val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(4)}`,
-			formatter2: val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(2)}`,
-			formatter3: val => `${val < 0 ? '−' : ''}${Math.abs(val)}`, // a better minus sign
+			formatter1: val => soefinding.convertToUnicodeMinus(val.toFixed(4)),
+			formatter2: val => soefinding.convertToUnicodeMinus(val.toFixed(2)),
+			formatter3: val => soefinding.convertToUnicodeMinus(val),
+
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				this.chart2.options.xaxis.categories = soefinding.findingContent[newRegionName].subregions
+				this.chart2.options.xaxis.labels.trim = newRegionName == "Brigalow Belt"
+				this.chart3.series = soefinding.findingContent[newRegionName].series3
+				this.chart3.options.xaxis.categories = soefinding.findingContent[newRegionName].subregions
+				this.chart3.options.xaxis.labels.trim = newRegionName == "Brigalow Belt"
+			}
+
 		}
 	}).mount("#chartContainer")
 
 
-	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
-
-		// chart 1
-		// the exec function only seems necessary when the x-axis changes, but keeping it here for reference in case i’m wrong
-		//ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-
-
-		// chart 2
-		// the exec function only seems necessary when the x-axis changes, but keeping it here for reference in case i’m wrong
-		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-		ApexCharts.exec("chart2", "updateOptions", {
-			xaxis: {
-				categories: this.findingContent[this.state.currentRegionName].subregions,
-				labels: { trim: soefinding.state.currentRegionName == "Brigalow Belt" }
-			}
-		})
-		options2.xaxis.categories = this.findingContent[this.state.currentRegionName].subregions
-
-		//
-
-		// chart 3
-		// the exec function only seems necessary when the x-axis changes, but keeping it here for reference in case i’m wrong
-		ApexCharts.exec("chart3", "updateSeries", this.findingContent[this.state.currentRegionName].series3)
-		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
-		ApexCharts.exec("chart3", "updateOptions", {
-			xaxis: {
-				categories: this.findingContent[this.state.currentRegionName].subregions,
-				labels: { trim: soefinding.state.currentRegionName == "Brigalow Belt" }
-			}
-		})
-		options3.xaxis.categories = this.findingContent[this.state.currentRegionName].subregions
-
-
-		soefinding.loadFindingHtml()
-	}
 })

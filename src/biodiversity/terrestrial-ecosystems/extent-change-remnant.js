@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	soefinding.state.latestYear = latestYear
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
@@ -205,36 +205,26 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart3.options.chart.stacked = false
 				this.chart3.options.markers = { size: 4 } // ignored by column chart
 				this.chart3.options.tooltip.shared = false
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newName) {
+				this.chart1.options.labels = soefinding.findingContent[newName].labels1
+				this.chart1.series = soefinding.findingContent[newName].series1
+				if (newName != "Queensland") {
+					this.chart2.series = soefinding.findingContent[newName].series2
+					this.chart2.options.xaxis.categories = soefinding.findingContent[newName].labels2
+				}
+				this.chart3.series = soefinding.findingContent[newName].series3
+				// take note!! we update series via the options, which seems to get around the bug 
+				// where it doesn't always repaint properly if the new series has more items
+				ApexCharts.exec("chart3", "updateOptions", { series: soefinding.findingContent[newName].series3 })
 			}
 		}
 	}).mount("#chartContainer")
-
-
-	window.soefinding.onRegionChange = function () {
-
-		// set the data series in each of the vue apps, for the current region
-
-		// chart 1 is the pie chart, shared
-		soefinding.state.chart1.options.labels = this.findingContent[this.state.currentRegionName].labels1
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-
-
-		// chart 2, column, not for qld
-		if (this.state.currentRegionName != "Queensland") {
-			soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-			soefinding.state.chart2.options.xaxis.categories = this.findingContent[this.state.currentRegionName].labels2
-		}
-
-		// chart 3, stacked column, shared
-		// take note!! we update series via the options, which seems to get around the bug
-		// where it errors if the new series has more items
-		ApexCharts.exec("chart3", "updateOptions", { series: this.findingContent[this.state.currentRegionName].series3 })
-		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
-
-
-
-		soefinding.loadFindingHtml();
-	}
 
 
 })

@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
@@ -122,52 +122,26 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => `Extent of regional ecosystems by biodiversity status, ${latestYear}`,
 			heading2: () => `Extent of biodiversity status area, ${latestYear}`,
-			heading3: () => `Trends in extent of remnant vegetation, by biodiversity status in ${soefinding.state.currentRegionName}`,
-			heading4: () => `Proportion of regional ecosystems by biodiversity status in ${soefinding.state.currentRegionName}, ${latestYear}`,
-			heading5: () => `Proportion area of biodiversity status in ${soefinding.state.currentRegionName}, ${latestYear}`
+			heading3() { return `Trends in extent of remnant vegetation, by biodiversity status in ${this.currentRegionName}` },
+			heading4() { return `Proportion of regional ecosystems by biodiversity status in ${this.currentRegionName}, ${latestYear}` },
+			heading5() { return `Proportion area of biodiversity status in ${this.currentRegionName}, ${latestYear}` }
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
 			formatPercent: function (s, i, series) {
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+
+				this.chart3.series = soefinding.findingContent[newRegionName].series3
+				if (newRegionName != "Queensland") {
+					this.chart4.series = soefinding.findingContent[newRegionName].series4 // perhaps not needed ApexCharts.exec("chart4", "render")
+					this.chart5.series = soefinding.findingContent[newRegionName].series5 // perhaps not needed  ApexCharts.exec("chart5", "render")
+				}
 			}
-		},
-		mounted: toggleDisplayDivs
+		}
 	}).mount("#chartContainer")
 
-
-
-	window.soefinding.onRegionChange = function () {
-
-		toggleDisplayDivs()
-
-		// chart 3 is the shared chart
-		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
-
-		if (this.state.currentRegionName != "Queensland") {
-
-			soefinding.state.chart4.series = this.findingContent[this.state.currentRegionName].series4
-			ApexCharts.exec("chart4", "render")
-
-			soefinding.state.chart5.series = this.findingContent[this.state.currentRegionName].series5
-			ApexCharts.exec("chart5", "render")
-		}
-
-
-
-		soefinding.loadFindingHtml()
-	}
-
-
-	function toggleDisplayDivs() {
-		document.querySelector("div.displayQld").style.display = soefinding.state.currentRegionName == "Queensland" ? "block" : "none"
-		document.querySelector("div.displayRegional").style.display = soefinding.state.currentRegionName != "Queensland" ? "block" : "none"
-	}
-
-
-
 })
-
-
-
