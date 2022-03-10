@@ -73,13 +73,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () {
+			heading1() {
 				let retVal = "Treated sewage total nitrogen and phosphorous"
 				if (this.currentRegionName == "Queensland")
 					retVal += " (for SEQ and GBR)"
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					retVal += " in " + this.currentRegionName
 				return retVal
 			},
-			heading2: function () {
+			heading2() {
 				let retVal = "Trends in sewage load"
 				if (this.currentRegionName == "Queensland")
 					retVal += " volumes, by region"
@@ -97,7 +97,18 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				ApexCharts.exec("chart1", "updateSeries", this.chart1.series)
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				ApexCharts.exec("chart2", "updateSeries", this.chart2.series)
+			}
 		}
 	}).mount("#chartContainer")
 
@@ -106,12 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		// set the data series in each of the vue apps, for the current region
 
 		// chart 1
-		ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-
-		// chart 1
-		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
 
 
 		soefinding.loadFindingHtml()

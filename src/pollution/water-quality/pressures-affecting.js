@@ -47,28 +47,27 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.state.series = soefinding.findingContent[soefinding.state.currentRegionName].series
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () {
+			heading1() {
 				return `Pressures identified in ${this.currentRegionName}`
 			}
 		},
 		methods: {
 			formatter1: val => val ?? "",
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.series = soefinding.findingContent[newRegionName].series
+			}
 		}
 	}).mount("#chartContainer")
-
-
-	window.soefinding.onRegionChange = function () {
-
-		soefinding.state.series = this.findingContent[this.state.currentRegionName].series
-
-		soefinding.loadFindingHtml()
-	}
-
 
 })
