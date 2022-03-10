@@ -82,19 +82,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () {
+			heading1() {
 				if (this.currentRegionName == "Queensland")
 					return "Change in number of locations, by site type"
 				else
 					return `Change in number of locations by site type in ${this.currentRegionName} cultural heritage region`
 			},
-			heading2: function () {
+			heading2() {
 				if (this.currentRegionName == "Queensland")
 					return `Proportion of locations by site type, ${latestYear}`
 				else
@@ -116,18 +116,18 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatPercent: function (s, i, series) {
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				this.chart2.options.labels = soefinding.findingContent[newRegionName].series2Labels
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
 			}
 		}
 	}).mount("#chartContainer")
-
-
-	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
-
-		soefinding.state.chart2.options.labels = soefinding.findingContent[soefinding.state.currentRegionName].series2Labels
-		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-
-		soefinding.loadFindingHtml()
-	}
 
 })

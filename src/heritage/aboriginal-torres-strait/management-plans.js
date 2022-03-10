@@ -35,13 +35,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () {
+			heading1() {
 				if (this.currentRegionName == "Queensland")
 					return "Number of management plans registered, by cultural heritage region"
 				else
@@ -57,22 +57,20 @@ document.addEventListener("DOMContentLoaded", function () {
 			onLineRadioClick: function () {
 				this.chart1.options.chart.type = "line"
 				this.chart1.options.chart.stacked = false
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series
+				// ApexCharts.exec("chart1", "updateOptions", {
+				// 	series: this.chart1.series
+				// })
 			}
 		}
 	}).mount("#chartContainer")
 
-
-	window.soefinding.onRegionChange = function () {
-
-
-		ApexCharts.exec("chart1", "updateOptions", {
-			series: soefinding.findingContent[soefinding.state.currentRegionName].series
-		})
-		
-
-		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series
-
-		soefinding.loadFindingHtml()
-	}
 
 })

@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	soefinding.regionNames.forEach(r => soefinding.findingContent[r] = {})
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
@@ -81,18 +81,17 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatPercent: function (s, i, series) {
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefindingContent[newRegionName].series1
+				this.chart2.series = soefindingContent[newRegionName].series2
 			}
 		}
 	}).mount("#chartContainer")
-
-	window.soefinding.onRegionChange = function () {
-
-		soefinding.state.chart1.series = soefindingContent[this.currentRegionName].series1
-		soefinding.state.chart2.series = soefindingContent[this.currentRegionName].series2
-
-
-		soefinding.loadFindingHtml()
-	}
-
 
 })
