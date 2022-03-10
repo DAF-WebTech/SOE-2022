@@ -65,9 +65,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		watch: {
 			currentRegionName(newRegionName) {
 				this.chart1.series = soefinding.findingContent[newRegionName].series
-				// ApexCharts.exec("chart1", "updateOptions", {
-				// 	series: this.chart1.series
-				// })
+				ApexCharts.exec("chart1", "updateOptions", {
+					series: this.chart1.series
+				})
 			}
 		}
 	}).mount("#chartContainer")
