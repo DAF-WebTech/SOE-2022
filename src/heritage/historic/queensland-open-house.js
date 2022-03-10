@@ -150,14 +150,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].app4
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: () => `Heritage places open in ${soefinding.state.currentRegionName}`,
-			heading2: () => `People visiting heritage places in ${soefinding.state.currentRegionName}`
+			heading1() { return `Heritage places open in ${this.currentRegionName}` },
+			heading2() { return `People visiting heritage places in ${this.currentRegionName}` }
 		},
 		methods: {
 			formatter1: function (val) {
@@ -178,37 +178,33 @@ document.addEventListener("DOMContentLoaded", function () {
 				chart.options.chart.stacked = false
 				chart.options.markers = { size: 4 }
 				chart.options.tooltip.shared = false
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				if (this.state.currentRegionName != "Queensland") {
+					// update chart 3
+					this.chart3.series = soefinding.findingContent[newRegionName].app3
+					this.chart3.options.xaxis.categories = soefinding.findingContent[newRegionName].categories
+					// but we also need this for the chart to update
+					ApexCharts.exec("chart3", "updateOptions", {
+						xaxis: { categories: this.chart3.options.xaxis.categories }
+					})
+					// update chart 4
+					this.chart4.series = soefinding.findingContent[newRegionName].app4
+					// this works on the table
+					this.chart4.options.xaxis.categories = soefinding.findingContent[newRegionName].categories
+					// but we also need this for the chart to update
+					ApexCharts.exec("chart4", "updateOptions", {
+						xaxis: { categories: this.chart4.options.xaxis.categories }
+					})
+				}
 			}
 		}
 	}).mount("#chartContainer")
 
-	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
-		if (this.state.currentRegionName != "Queensland") {
-
-			// update chart 3
-			this.state.chart3.series = this.findingContent[this.state.currentRegionName].app3
-
-			// this works on the table
-			soefinding.state.chart3.options.xaxis.categories = this.findingContent[this.state.currentRegionName].categories
-			// but we also need this for the chart to update
-			ApexCharts.exec("chart3", "updateOptions", {
-				xaxis: { categories: this.findingContent[this.state.currentRegionName].categories }
-			})
-
-
-			// update chart 4
-			this.state.chart4.series = this.findingContent[this.state.currentRegionName].app4
-			// this works on the table
-			soefinding.state.chart4.options.xaxis.categories = this.findingContent[this.state.currentRegionName].categories
-			// but we also need this for the chart to update
-			ApexCharts.exec("chart4", "updateOptions", {
-				xaxis: { categories: this.findingContent[this.state.currentRegionName].categories }
-			})
-
-		}
-
-		soefinding.loadFindingHtml();
-	}
 
 })

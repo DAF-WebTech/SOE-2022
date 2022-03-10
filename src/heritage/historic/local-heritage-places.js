@@ -97,33 +97,33 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
 			heading1: () => "Proportion of local heritage places on local heritage registers by local government area, 2020 (TODO fix year)",
-			heading2: function () {
-				return `Local heritage places and areas by planning scheme in ${this.currentRegionName} Local Government Area`
-			},
-			heading3: function () {
-				return `Local heritage places and areas by planning scheme in ${this.currentRegionName}`
-			}
+			heading2() { return `Local heritage places and areas by planning scheme in ${this.currentRegionName} Local Government Area` },
+			heading3() { return `Local heritage places and areas by planning scheme in ${this.currentRegionName}` }
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
 			formatPercent: function (s, i, series) {
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart3.series = soefinding.findingContent[newRegionName].series3
 			}
 		}
 	}).mount("#chartContainer")
 
 
-	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
-		soefinding.loadFindingHtml();
-	}
 
 })

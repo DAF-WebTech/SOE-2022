@@ -57,27 +57,28 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: () => `Number of places on the heritage register in ${soefinding.state.currentRegionName}`,
-			heading2: () => `Number of places entered, removed and merged from the heritage register in ${soefinding.state.currentRegionName}, 2011–2020`
+			heading1() { return `Number of places on the heritage register in ${this.currentRegionName}` },
+			heading2() { return `Number of places entered, removed and merged from the heritage register in ${this.currentRegionName}, 2011–2020 TODO FIX YEAR` }
 		},
 		methods: {
 			formatter1: val => val,
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = this.findingContent[newRegionName].series1
+				this.chart2.series = this.findingContent[newRegionName].series2
+			}
 		}
 	}).mount("#chartContainer")
 
-
-
-
-	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-		soefinding.loadFindingHtml();
-	}
 
 })
