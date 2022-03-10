@@ -52,23 +52,26 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
 		components: myComponents,
 		computed: {
-			heading1: function () { return `Pressures identified in ${this.currentRegionName}` }
+			heading1() { return `Pressures identified in ${this.currentRegionName}` }
 		},
 		methods: {
-			formatter1: val => val?.toLocaleString() ?? ""
+			formatter1: val => val?.toLocaleString() ?? "",
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series
+			}
 		}
 	}).mount("#chartContainer")
 
 
-	soefinding.onRegionChange = function () {
-		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series
-
-		soefinding.loadFindingHtml()
-	}
 })

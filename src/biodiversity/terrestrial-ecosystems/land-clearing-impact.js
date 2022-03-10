@@ -120,6 +120,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val?.toLocaleString() ?? "",
 			updateRegion(newRegionName) {
 				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
 				this.chart2.series = soefinding.findingContent[newRegionName].series2
 				this.chart3.series = soefinding.findingContent[newRegionName].series3
 			}

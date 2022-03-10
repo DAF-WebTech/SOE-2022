@@ -47,28 +47,28 @@ document.addEventListener("DOMContentLoaded", function () {
 	// set subcatchments for current region
 	soefinding.state.subcatchments = soefinding.findingContent[soefinding.state.currentRegionName].subcatchments
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
 		components: myComponents,
 		computed: {
-			heading1: function () { return `Loss of riparian woody vegetation in ${this.currentRegionName}` },
+			heading1() { return `Loss of riparian woody vegetation in ${this.currentRegionName}` },
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				if (newRegionName != "Queensland") {
+					this.chart1.series = soefinding.findingContent[newRegionName].series1
+					this.subcatchments = soefinding.findingContent[newRegionName].subcatchments
+				}
+			}
 		}
 	}).mount("#chartContainer")
 
-
-	window.soefinding.onRegionChange = function () {
-		if (this.state.currentRegionName != "Queensland") {
-			soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-			soefinding.state.subcatchments = this.findingContent[this.state.currentRegionName].subcatchments
-		}
-
-		soefinding.loadFindingHtml()
-	}
-
 })
-

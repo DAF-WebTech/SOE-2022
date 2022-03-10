@@ -157,24 +157,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true
 	}
 
-
 	const YEAR = "TODO YEAR"
 
-
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
 		components: myComponents,
 		computed: {
 			heading1: () => `Estuarine wetlands extent by region, ${YEAR}`,
-			heading2: function () {
-				return `Estuarine wetlands extent in ${this.currentRegionName}, ${YEAR}`
-			},
+			heading2() { return `Estuarine wetlands extent in ${this.currentRegionName}, ${YEAR}` },
 			heading3: () => `Estuarine wetlands percentage of pre-clear extent remaining, ${YEAR}`,
-			heading4: function () {
-				return `Estuarine wetlands percentage of pre-clear extent remaining in ${this.currentRegionName}, ${YEAR}`
-			},
+			heading4() { return `Estuarine wetlands percentage of pre-clear extent remaining in ${this.currentRegionName}, ${YEAR}` },
 			heading5: function () {
 				let retVal = "Trends in change (loss or gain) in estuarine wetlands"
 				if (this.currentRegionName != "Queensland")
@@ -185,42 +179,39 @@ document.addEventListener("DOMContentLoaded", function () {
 		methods: {
 			formatter1: val => val.toLocaleString(),
 			formatter2: val => val.toLocaleString(undefined, { minimumFractionDigits: 1 }),
-			formatter5: val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(2)}`,
+			formatter5: val => soefinding.convertToUnicodeMinus(val.toFixed(2)),
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				if (newRegionName != "Queensland") {
+					this.chart2.series = soefinding.findingContent[newRegionName].series2
+					this.chart4.series = soefinding.findingContent[newRegionName].series4
+				}
+				else {
+					// if you start on a region, and swap to qld
+					// the apex charts can't draw the columns properly
+					// so we manually force it to update
+					this.chart1.options.series = soefinding.findingContent.Queensland.series1
+					ApexCharts.exec("chart1", "updateOptions", this.chart1.options)
+					this.chart3.options.series = this.findingContent.Queensland.series3
+					ApexCharts.exec("chart3", "updateOptions", this.chart3.options)
+
+				}
+
+				this.chart5.series = soefinding.findingContent[newRegionName].series5
+
+				if (newRegionName == "Gulf")
+					this.chart5.options.yaxis.labels.formatter = val => soefinding.convertToUnicodeMinus(val.toFixed(2))
+				else
+					this.chart5.options.yaxis.labels.formatter = val => soefinding.convertToUnicodeMinus(val.toFixed(0))
+
+			}
 		}
 	}).mount("#chartContainer")
 
-
-	soefinding.onRegionChange = function () {
-		console.log("onRegionChange", soefinding.state.currentRegionName)
-
-		if (soefinding.state.currentRegionName != "Queensland") {
-
-			soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-
-			soefinding.state.chart4.series = this.findingContent[this.state.currentRegionName].series4
-		}
-		else {
-			// if you start on a region, and swap to qld
-			// the apex charts can't draw the columns properly
-			// so we manually force it to update
-			options1.series = this.findingContent.Queensland.series1
-			ApexCharts.exec("chart1", "updateOptions", options1)
-			options3.series = this.findingContent.Queensland.series3
-			ApexCharts.exec("chart3", "updateOptions", options3)
-
-		}
-
-		soefinding.state.chart5.series = this.findingContent[this.state.currentRegionName].series5
-
-		if (soefinding.state.currentRegionName == "Gulf")
-			options5.yaxis.labels.formatter = val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(2)}`
-		else
-			options5.yaxis.labels.formatter = val => `${val < 0 ? '−' : ''}${Math.abs(val).toFixed(0)}`
-
-
-
-		soefinding.loadFindingHtml()
-	}
 
 })
 

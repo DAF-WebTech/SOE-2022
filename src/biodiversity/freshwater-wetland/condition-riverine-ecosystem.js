@@ -3,8 +3,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 
-	window.soefinding.onRegionChange = function () {
-		soefinding.loadFindingHtml()
-	}
+	//TODO when we get new data
 
 })

@@ -160,21 +160,19 @@ document.addEventListener("DOMContentLoaded", function () {
 		chartactive: true,
 	}
 
-	const YEAR = "TODO YEAR"
+	const YEAR = "2024 TODO YEAR"
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		data() {
 			return soefinding.state
 		},
 		components: myComponents,
 		computed: {
-			heading1: () => `Freshwater wetland systems extent by region, 2024  ${YEAR}`,
-			heading2: () => `Proportion of freshwater wetland systems extent in ${soefinding.state.currentRegionName}, ${YEAR}`,
+			heading1: () => `Freshwater wetland systems extent by region, ${YEAR}`,
+			heading2() { return `Proportion of freshwater wetland systems extent in ${this.currentRegionName}, ${YEAR}` },
 			heading3: () => `Freshwater wetland systems percentage of pre-clear extent remaining, ${YEAR}`,
-			heading4: () => `Freshwater wetland system percentage of pre-clear extent remaining in ${soefinding.state.currentRegionName}, ${YEAR}`,
-			heading5: function () {
-				return `Trends in change (loss or gain) in freshwater wetland systems in ${this.currentRegionName}`
-			}
+			heading4() { return `Freshwater wetland system percentage of pre-clear extent remaining in ${this.currentRegionName}, ${YEAR}` },
+			heading5() { return `Trends in change (loss or gain) in freshwater wetland systems in ${this.currentRegionName}` }
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
@@ -182,42 +180,21 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter5: val => soefinding.convertToUnicodeMinus(val),
 			formatPercent: function (s) {
 				return (s / soefinding.findingContent[this.currentRegionName].series2Sum * 100).toFixed(1)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				if (newRegionName != "Queensland") {
+					this.chart2.series = soefinding.findingContent[newRegionName].series2
+					this.chart4.series = soefinding.findingContent[newRegionName].series3
+				}
+				this.chart5.series = soefinding.findingContent[newRegionName].series5
 			}
 		}
 	}).mount("#chartContainer")
 
-
-	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
-
-		toggleDisplayDivs()
-
-		// chart 2
-		if (this.vueApp.currentRegionName != "Queensland") {
-			this.vueApp.chart2.series = this.findingContent[this.state.currentRegionName].series2
-			this.vueApp.chart4.series = this.findingContent[this.state.currentRegionName].series3
-		}
-
-
-		this.vueApp.chart5.series = this.findingContent[this.state.currentRegionName].series5
-
-
-
-		soefinding.loadFindingHtml()
-	}
 })
 
-
-function toggleDisplayDivs() {
-	Array.from(document.querySelectorAll("div.displayQld")).forEach(function (d) {
-		d.style.display = soefinding.state.currentRegionName == "Queensland" ? "block" : "none"
-	})
-	Array.from(document.querySelectorAll("div.displayRegional")).forEach(function (d) {
-		d.style.display = soefinding.state.currentRegionName != "Queensland" ? "block" : "none"
-	})
-
-}
-
-window.addEventListener("load", function () {
-	window.setTimeout(toggleDisplayDivs, 1)
-})

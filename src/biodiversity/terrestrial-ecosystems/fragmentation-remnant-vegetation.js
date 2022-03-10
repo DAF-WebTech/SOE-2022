@@ -143,20 +143,29 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => soefinding.convertToUnicodeMinus(val.toFixed(4)),
 			formatter2: val => soefinding.convertToUnicodeMinus(val.toFixed(2)),
 			formatter3: val => soefinding.convertToUnicodeMinus(val),
-
 			updateRegion(newRegionName) {
 				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
 				this.chart1.series = soefinding.findingContent[newRegionName].series1
 				this.chart2.series = soefinding.findingContent[newRegionName].series2
-				this.chart2.options.xaxis.categories = soefinding.findingContent[newRegionName].subregions
-				this.chart2.options.xaxis.labels.trim = newRegionName == "Brigalow Belt"
+				ApexCharts.exec("chart2", "updateOptions", {
+					xaxis: {
+						categories: soefinding.findingContent[newRegionName].subregions,
+						labels: { trim: newRegionName == "Brigalow Belt" }
+					}
+				})
 				this.chart3.series = soefinding.findingContent[newRegionName].series3
-				this.chart3.options.xaxis.categories = soefinding.findingContent[newRegionName].subregions
-				this.chart3.options.xaxis.labels.trim = newRegionName == "Brigalow Belt"
+				ApexCharts.exec("chart3", "updateOptions", {
+					xaxis: {
+						categories: soefinding.findingContent[newRegionName].subregions,
+						labels: { trim: newRegionName == "Brigalow Belt" }
+					}
+				})
 			}
-
 		}
 	}).mount("#chartContainer")
-
 
 })

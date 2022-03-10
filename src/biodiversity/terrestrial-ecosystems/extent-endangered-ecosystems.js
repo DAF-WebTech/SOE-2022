@@ -134,7 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			},
 			updateRegion(newRegionName) {
 				this.currentRegionName = newRegionName
-
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
 				this.chart3.series = soefinding.findingContent[newRegionName].series3
 				if (newRegionName != "Queensland") {
 					this.chart4.series = soefinding.findingContent[newRegionName].series4 // perhaps not needed ApexCharts.exec("chart4", "render")
@@ -142,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 			}
 		}
+
 	}).mount("#chartContainer")
 
 })

@@ -151,18 +151,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	soefinding.state.options4.xaxis.categories = ["Region", "Pre-clear (ha)"]
 
-	soefinding.state.chart2.topleft = "" // hoping they don't want it `${soefinding.biota[0].toUpperCase()}${soefinding.biota.substring(1)} Group`
+	soefinding.state.chart2.topleft = `${soefinding.biota[0].toUpperCase()}${soefinding.biota.substring(1)} Group`
 	soefinding.state.chart2.measure = "Hectares"
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () { return `Area of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat and ${latestYear} remnant habitat by species group` },
-			heading2: function () { return `Proportion of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat that is remnant and non-remnant habitat, ${latestYear}` },
-			heading4: function () { return `Proportion of pre-clear threatened ${this.currentSpecies} habitat by bioregion` }
+			heading1() { return `Area of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat and ${latestYear} remnant habitat by species group` },
+			heading2() { return `Proportion of ${this.currentRegionName} pre-clear threatened ${soefinding.biota} habitat that is remnant and non-remnant habitat, ${latestYear}` },
+			heading4() { return `Proportion of pre-clear threatened ${this.currentSpecies} habitat by bioregion` }
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
@@ -175,24 +175,19 @@ document.addEventListener("DOMContentLoaded", function () {
 					return acc + curr.data[i]
 				}, 0)
 				return sum
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				ApexCharts.exec("chart1", "updateSeries", this.chart1.series)
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				ApexCharts.exec("chart2", "updateSeries", this.chart2.series)
 			}
 		}
 	}).mount("#chartContainer")
-
-
-	window.soefinding.onRegionChange = function () {
-
-		// set the data series in each of the vue apps, for the current region
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-		ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
-
-		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-
-
-
-		soefinding.loadFindingHtml();
-	}
-
 
 })

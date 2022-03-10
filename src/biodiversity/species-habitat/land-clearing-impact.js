@@ -133,41 +133,41 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: () => {
+			heading1() {
 				let retVal = `Proportion of replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
-				if (soefinding.state.currentRegionName != "Queensland") {
+				if (this.currentRegionName != "Queensland") {
 					retVal += " in "
-					if (!soefinding.state.currentRegionName.startsWith("South") && !soefinding.state.currentRegionName.startsWith("Cape"))
+					if (!this.currentRegionName.startsWith("South") && !this.currentRegionName.startsWith("Cape"))
 						retVal += " the "
-					retVal += `${soefinding.state.currentRegionName}`
+					retVal += `${this.currentRegionName}`
 				}
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
-			heading2: () => {
+			heading2() {
 				let retVal = `Trends in replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
-				if (soefinding.state.currentRegionName != "Queensland") {
+				if (this.currentRegionName != "Queensland") {
 					retVal += " in "
-					if (!soefinding.state.currentRegionName.includes("Queensland"))
+					if (!this.currentRegionName.includes("Queensland"))
 						retVal += " the "
-					retVal += `${soefinding.state.currentRegionName}`
+					retVal += `${this.currentRegionName}`
 				}
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
 			},
-			heading3: () => {
+			heading3() {
 				let retVal = `Trend in total replacement landcover (clearing type) in threatened ${soefinding.biota} habitat`
-				if (soefinding.state.currentRegionName != "Queensland") {
+				if (this.currentRegionName != "Queensland") {
 					retVal += " in "
-					if (!soefinding.state.currentRegionName.includes("Queensland"))
+					if (!this.currentRegionName.includes("Queensland"))
 						retVal += " the "
-					retVal += `${soefinding.state.currentRegionName}`
+					retVal += `${this.currentRegionName}`
 				}
 				retVal += `, ${latest.replace("-", "–")}` // en dash
 				return retVal
@@ -177,21 +177,19 @@ document.addEventListener("DOMContentLoaded", function () {
 			formatter1: val => val.toLocaleString(),
 			formatPercent: function (s) {
 				return (s / soefinding.findingContent[this.currentRegionName].series1Sum * 100).toFixed(1)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				this.chart1.options.labels = soefinding.findingContent[newRegionName].labels
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				this.chart3.series = soefinding.findingContent[newRegionName].series3
 			}
 		}
 	}).mount("#chartContainer")
-
-
-	window.soefinding.onRegionChange = function () {
-
-		soefinding.state.chart1.series = this.findingContent[this.state.currentRegionName].series1
-		soefinding.state.chart1.options.labels = this.findingContent[this.state.currentRegionName].labels
-
-		soefinding.state.chart2.series = this.findingContent[this.state.currentRegionName].series2
-
-		soefinding.state.chart3.series = this.findingContent[this.state.currentRegionName].series3
-
-		soefinding.loadFindingHtml();
-	}
 
 })
