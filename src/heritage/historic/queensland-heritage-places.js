@@ -74,8 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		watch: {
 			currentRegionName(newRegionName) {
-				this.chart1.series = this.findingContent[newRegionName].series1
-				this.chart2.series = this.findingContent[newRegionName].series2
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
 			}
 		}
 	}).mount("#chartContainer")

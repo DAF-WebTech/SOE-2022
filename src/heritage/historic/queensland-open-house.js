@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		watch: {
 			currentRegionName(newRegionName) {
-				if (this.state.currentRegionName != "Queensland") {
+				if (newRegionName != "Queensland") {
 					// update chart 3
 					this.chart3.series = soefinding.findingContent[newRegionName].app3
 					this.chart3.options.xaxis.categories = soefinding.findingContent[newRegionName].categories

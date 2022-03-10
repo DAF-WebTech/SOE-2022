@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	//iterate the data and group them in to each series
 	soefinding.findingJson.data.forEach(d => {
+
+		d.LGA = d.LGA.replace("-", "–") // ndash
+
 		// if it has a value in the last column, it goes into the qld pie chart
 		if (d[keys[2]] > 0)
 			localPlaces.push(d)
@@ -123,7 +126,5 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		}
 	}).mount("#chartContainer")
-
-
 
 })
