@@ -34,13 +34,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: () => `Proportion of land by use in ${soefinding.state.currentRegionName}, 2019`
+			heading1() { return `Proportion of land by use in ${this.currentRegionName}, 2019` }
 		},
 		methods: {
 			formatter1: val => val == 0 ? 0 : val.toLocaleString(undefined, { minimumFractionDigits: 2 }),
@@ -65,17 +65,19 @@ document.addEventListener("DOMContentLoaded", function () {
 					default:
 				}
 				return (s / sum * 100).toFixed(decimalPlaces)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].app1;
+
 			}
 		}
 	}).mount("#chartContainer")
 
 
-	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
-		soefinding.state.chart1.series =
-			this.findingContent[this.state.currentRegionName].app1;
-
-		soefinding.loadFindingHtml();
-	}
 
 })

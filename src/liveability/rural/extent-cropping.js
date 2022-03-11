@@ -46,16 +46,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () {
+			heading1() {
 				return `Cropped area (million ha) by season in ${this.currentRegionName}`
 			}
-
 		},
 		methods: {
 			formatter1: val => val?.toFixed(2) ?? "n/a",
@@ -66,15 +65,18 @@ document.addEventListener("DOMContentLoaded", function () {
 				this.chart1.options.chart.type = "line"
 				this.chart1.options.markers = { size: 4 } // ignored by column chart
 				this.chart1.options.tooltip.shared = false
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series
 			}
 		}
 	}).mount("#chartContainer")
 
 
-	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series
-
-		soefinding.loadFindingHtml()
-	}
 
 })

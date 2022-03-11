@@ -143,14 +143,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// chart 4 already done in loop
 
-
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () {
+			heading1() {
 				let retVal = `Rural area growth between ${soefinding.findingContent[this.currentRegionName].series1categories[0]} and ${soefinding.findingContent[this.currentRegionName].series1categories[1]}`
 				if (this.currentRegionName == "Queensland")
 					retVal += "*"
@@ -158,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					retVal += ` in ${this.currentRegionName}`
 				return retVal
 			},
-			heading2: function () {
+			heading2() {
 				let retVal = `Proportion of rural and other areas as at ${soefinding.findingContent[this.currentRegionName].series2LatestYear}`
 				if (this.currentRegionName == "Queensland")
 					retVal += "*"
@@ -185,6 +184,20 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 
 				return ret
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.options.xaxis.categories = soefinding.findingContent[newRegionName].series1categories
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				this.chart2.options.xaxis.categories[1] = soefinding.findingContent[newRegionName].series2LatestYear
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				this.chart3.options.labels[0] = newRegionName + " NRM Region"
+				this.chart3.series = soefinding.findingContent[newRegionName].series3
+				fixMoreInformationLinks()
 			}
 		}
 	}).mount("#chartContainer")
@@ -199,16 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	window.soefinding.onRegionChange = function () {
 
-		soefinding.vueApp.chart1.options.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].series1categories
-		soefinding.vueApp.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
-
-		soefinding.vueApp.chart2.options.xaxis.categories[1] = soefinding.findingContent[soefinding.state.currentRegionName].series2LatestYear
-		soefinding.vueApp.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-
-		soefinding.vueApp.chart3.options.labels[0] = soefinding.state.currentRegionName + " NRM Region"
-		soefinding.vueApp.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
-
-		soefinding.loadFindingHtml(fixMoreInformationLinks)
 
 	}
 
@@ -219,7 +222,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 		if (ul == null) // not in this case, but a reference just in case
 			document.querySelector("div.finding-text-contents").insertAdjacentHTML("beforeend", moreInformationFindingHtml)
-
 	}
 
 })

@@ -96,28 +96,31 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () { return `Production amount of Fruit in ${this.currentRegionName} NRM region` },
-			heading2: function () { return `Production amount of Vegetables in ${this.currentRegionName} NRM region` },
-			heading3: function () { return `Production values in ${this.currentRegionName} NRM region` }
+			heading1() { return `Production amount of Fruit in ${this.currentRegionName} NRM region` },
+			heading2() { return `Production amount of Vegetables in ${this.currentRegionName} NRM region` },
+			heading3() { return `Production values in ${this.currentRegionName} NRM region` }
 		},
 		methods: {
-			formatter1: val => val.toLocaleString()
+			formatter1: val => val.toLocaleString(),
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				this.chart3.series = soefinding.findingContent[newRegionName].series3
+
+			}
 		}
 	}).mount("#chartContainer")
 
-	window.soefinding.onRegionChange = function () {
-
-		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
-		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-		soefinding.state.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
-
-		soefinding.loadFindingHtml()
-	}
 
 })

@@ -71,26 +71,28 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
 			heading1: () => `Mean late dry season ground cover (%), ${latestYear}`,
-			heading2: function () {
+			heading2() {
 				return `Mean late dry season ground cover (%) ${this.currentRegionName == "Queensland" ? "across" : "in"} ${this.currentRegionName}`
 			}
 		},
 		methods: {
-			formatter1: val => val.toFixed(1)
+			formatter1: val => val.toFixed(1),
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+			}
 		}
 	}).mount("#chartContainer")
 
-
-	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-
-		soefinding.loadFindingHtml()
-	}
 })
