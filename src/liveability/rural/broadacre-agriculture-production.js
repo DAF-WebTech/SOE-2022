@@ -128,13 +128,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		data() {
 			return soefinding.state
 		},
-		el: "#chartContainer",
-		data: soefinding.state,
 	}).mount("#chartContainer")
 
 
-	window.soefinding.onRegionChange = function () {
-		soefinding.loadFindingHtml()
-	}
 
 })
