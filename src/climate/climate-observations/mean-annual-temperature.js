@@ -104,42 +104,31 @@ document.addEventListener("DOMContentLoaded", function () {
 	})
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
 			heading1: () => `Annual mean temperature anomaly, base ${yearKeys[0]}–${latestYear}`,
-			heading2: () => `Trend in annual mean temperature, ${soefinding.state.currentRegionName}`,
+			heading2() { return `Trend in annual mean temperature, ${this.currentRegionName}` },
 		},
 		methods: {
 			formatter1: val => val >= 0 ? val.toFixed(2) : `-${Math.abs(val).toFixed(2)}`,
-			formatter2: val => val?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? ""
-
+			formatter2: val => val?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? "",
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				//				if (this.state.currentRegionName != "Queensland")
+				this.chart2.series = soefinding.findingContent[newRegionName].app2;
+			}
 		}
 	}).mount("#chartContainer")
 
 })
 
 
-
-soefinding.onRegionChange = function () {
-
-	const regionInfos = document.querySelectorAll("div.region-info")
-
-	if (this.state.currentRegionName == "Queensland") {
-		// toggle visibility of first region-info, which is for Queensland
-		regionInfos[0].style.display = "block"
-	}
-	else {
-		// toggle visibility of second region-info, which is for the current region
-		regionInfos[0].style.display = "none"
-
-		// set the data series in each of the vue apps, for the current region
-		this.state.chart2.series = this.findingContent[this.state.currentRegionName].app2;
-	}
-
-	soefinding.loadFindingHtml()
-}
 

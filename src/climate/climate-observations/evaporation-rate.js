@@ -90,49 +90,29 @@ document.addEventListener("DOMContentLoaded", function () {
 		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].app2
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
 			heading1: () => `Mean annual pan evaporation, ${soefinding.yearKeys[0]}–${latestYear}`,
-			heading2: () => `Trend in evaporation rate at ${soefinding.state.currentRegionName}`,
+			heading2() { return `Trend in evaporation rate at ${this.currentRegionName}` },
 		},
 		methods: {
-			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1, }) ?? "" }
+			formatter1: function (val) { return val?.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1, }) ?? "" },
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart2.series = soefinding.findingContent[newRegionName].app2
+			}
 		}
 	}).mount("#chartContainer")
-
-	if (soefinding.state.currentRegionName == "Queensland")
-		soefinding.onRegionChange()
 
 })
 
 
-
-soefinding.onRegionChange = function () {
-
-	const regionInfos = document.querySelectorAll("div.region-info")
-
-	if (this.state.currentRegionName == "Queensland") {
-		// toggle visibility of first region-info, which is for Queensland
-		try {
-			regionInfos[0].style.display = "block"
-			regionInfos[1].style.display = "none"
-		} catch (e) {
-			// i don't know why there's only one sometimes
-		}
-	}
-	else {
-		// toggle visibility of second region-info, which is for the current region
-		regionInfos[0].style.display = "none"
-		regionInfos[1].style.display = "block"
-
-		// set the data series in each of the vue apps, for the current region
-		this.state.chart2.series = this.findingContent[this.state.currentRegionName].app2
-	}
-
-	soefinding.loadFindingHtml();
-}
 

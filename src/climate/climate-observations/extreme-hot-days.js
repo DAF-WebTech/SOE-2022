@@ -53,30 +53,27 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () { return `Trend in number of extreme hot days at ${this.currentRegionName}` },
+			heading1() { return `Trend in number of extreme hot days at ${this.currentRegionName}` },
 		},
 		methods: {
-			formatter1: val => val
+			formatter1: val => val,
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].app1
+			}
 		}
 	}).mount("#chartContainer")
 })
 
 
-
-soefinding.onRegionChange = function () {
-
-	const regionInfos = document.querySelectorAll("div.region-info")
-
-	// set the data series in the vue apps, for the current region
-	if (this.state.currentRegionName != "Queensland")
-		this.state.chart1.series = this.findingContent[this.state.currentRegionName].app1;
-
-	soefinding.loadFindingHtml()
-}
 
