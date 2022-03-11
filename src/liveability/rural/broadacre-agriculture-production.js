@@ -122,12 +122,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 	})
 
-
-	Vue.createApp({
-		components: myComponents,
+	window.vueApp = Vue.createApp({
+		components: {
+			apexchart: vueApexcharts
+		},
 		data() {
 			return soefinding.state
 		},
+		methods: {
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		}
 	}).mount("#chartContainer")
 
 
