@@ -96,19 +96,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () {
+			heading1() {
 				if (this.currentRegionName == "Queensland")
 					return `Proportion of dwellings in ${this.year} Queensland census`
 				else
 					return `Number of dwellings in ${this.currentRegionName} in ${this.year} Queensland census`
 			},
-			heading2: function () {
+			heading2() {
 				if (this.currentRegionName == "Queensland")
 					return "Proportion of building approvals in 2016–2019 Queensland"
 				else
@@ -124,22 +124,17 @@ document.addEventListener("DOMContentLoaded", function () {
 				if (s == 0) return 0
 				const sum = series.reduce((acc, curr) => acc + curr)
 				return (s / sum * 100).toFixed(1)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
 			}
 		}
 	}).mount("#chartContainer")
-
-
-	window.soefinding.onRegionChange = function () {
-		// set the data series in each of the vue apps, for the current region
-		// chart 1
-		ApexCharts.exec("chart1", "updateSeries", this.findingContent[this.state.currentRegionName].series1)
-		// table 1
-		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
-
-		// chart 2
-		ApexCharts.exec("chart2", "updateSeries", this.findingContent[this.state.currentRegionName].series2)
-		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-		soefinding.loadFindingHtml()
-	}
 
 })

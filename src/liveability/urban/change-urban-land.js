@@ -125,27 +125,26 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	})
 
-	Vue.createApp({
+
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
-			heading1: function () {
+			heading1() {
 				if (this.currentRegionName == "Queensland")
 					return "Urban area growth between 1999 and 2017*"
 				else
 					return `Urban area growth between 1999 and ${soefinding.findingJson.data[Year_of_current_mapping][this.currentRegionName]} in ${this.currentRegionName} NRM region`
 			},
-			heading2: function () {
+			heading2() {
 				if (this.currentRegionName == "Queensland")
 					return "Proportion of urban and non-urban areas as at 2017*"
 				else
 					return `Proportion of ${this.currentRegionName} NRM region made up of urban and non-urban areas in ${soefinding.findingJson.data[Year_of_current_mapping][this.currentRegionName]}`
 			},
-			heading3: function () {
-				return `Proportion of Queensland made up of urban area in ${this.currentRegionName} NRM region in 2017`
-			}
+			heading3() { return `Proportion of Queensland made up of urban area in ${this.currentRegionName} NRM region in 2017` }
 		},
 		methods: {
 			formatter1: val => val.toLocaleString(),
@@ -177,22 +176,23 @@ document.addEventListener("DOMContentLoaded", function () {
 						decimalPlaces = 4
 				}
 				return (s / sum * 100).toFixed(decimalPlaces)
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart1.options.xaxis.categories = soefinding.findingContent[newRegionName].categories1
+				this.chart1.series = soefinding.findingContent[newRegionName].series1
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				this.chart2.tfoot = soefinding.findingContent[newRegionName].tfoot2
+				this.chart3.options.labels = soefinding.findingContent[newRegionName].labels3
+				this.chart3.series = soefinding.findingContent[newRegionName].series3
+
 			}
 		}
 	}).mount("#chartContainer")
 
-	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart1.options.xaxis.categories = soefinding.findingContent[soefinding.state.currentRegionName].categories1
-		soefinding.state.chart1.series = soefinding.findingContent[soefinding.state.currentRegionName].series1
-
-		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-		soefinding.state.chart2.tfoot = soefinding.findingContent[soefinding.state.currentRegionName].tfoot2
-
-		soefinding.state.chart3.options.labels = soefinding.findingContent[soefinding.state.currentRegionName].labels3
-		soefinding.state.chart3.series = soefinding.findingContent[soefinding.state.currentRegionName].series3
-
-
-		soefinding.loadFindingHtml()
-	}
 
 })

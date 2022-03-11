@@ -148,37 +148,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-	Vue.createApp({
+	window.vueApp = Vue.createApp({
 		components: myComponents,
 		data() {
 			return soefinding.state
 		},
 		computed: {
 			heading1: () => "Mean population-weighted dwelling density for Queensland",
-			heading2: function () {
-				return `Mean population-weighted dwelling density for ${this.currentRegionName}`
-			},
+			heading2() { return `Mean population-weighted dwelling density for ${this.currentRegionName}` },
 			heading3: () => "Change in median lot size in regions for Queensland",
-			heading4: function () {
-				return `Change in median lot size in regions for ${this.currentRegionName}`
-			},
+			heading4() { return `Change in median lot size in regions for ${this.currentRegionName}` },
 			heading5: () => "Change in number of urban lot registrations for Queensland",
-			heading6: function () {
-				return `Change in number of urban lot registrations for ${this.currentRegionName}`
-			},
-
+			heading6() { return `Change in number of urban lot registrations for ${this.currentRegionName}` },
 		},
 		methods: {
 			formatter1: val => val.toFixed(1),
-			formatter4: val => val
+			formatter4: val => val,
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
+			}
+		},
+		watch: {
+			currentRegionName(newRegionName) {
+				this.chart2.series = soefinding.findingContent[newRegionName].series2
+				this.chart4.series = soefinding.findingContent[newRegionName].series4
+				this.chart6.series = soefinding.findingContent[newRegionName].series6
+			}
 		}
 	}).mount("#chartContainer")
 
 
 	window.soefinding.onRegionChange = function () {
-		soefinding.state.chart2.series = soefinding.findingContent[soefinding.state.currentRegionName].series2
-		soefinding.state.chart4.series = soefinding.findingContent[soefinding.state.currentRegionName].series4
-		soefinding.state.chart6.series = soefinding.findingContent[soefinding.state.currentRegionName].series6
 
 
 		soefinding.loadFindingHtml()
