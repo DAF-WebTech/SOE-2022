@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const years_value = year_keys_value.map(yk => header[yk])
 
 	// group by region and subregion
-	soefinding.findingContent = { Queensland: {} }
+	soefinding.findingContent = { Queensland: {}, "Torres Strait": {} }
 	soefinding.state.regionData = {}
 	soefinding.findingJson.data.forEach(d => {
 
@@ -138,9 +138,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 	})
 
-
-	Vue.createApp({
-		components: myComponents,
+	window.vueApp = Vue.createApp({
+		components: {
+			apexchart: vueApexcharts
+		},
 		data() {
 			return soefinding.state
 		},
@@ -152,13 +153,16 @@ document.addEventListener("DOMContentLoaded", function () {
 					return "0"
 				else
 					return val.toLocaleString(undefined, { minimumFractionDigits: 2 })
+			},
+			getRegions() {
+				// gets the relevant object keys and then creates a new object with those properties
+				return Object.keys(this.regionData).filter(r => r == this.currentRegionName && r != 'Torres Strait')
+					.reduce((curr, key) => { return Object.assign(curr, { [key]: this.regionData[key] }) }, {})
+			},
+			updateRegion(newRegionName) {
+				this.currentRegionName = newRegionName
 			}
 		}
 	}).mount("#chartContainer")
-
-
-	window.soefinding.onRegionChange = function () {
-		soefinding.loadFindingHtml()
-	}
 
 })
