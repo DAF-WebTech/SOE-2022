@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => "Interstate commercial and industrial waste received, by waste type",
 			heading2: () => "Trend in total interstate commercial and industrial waste received",
-			heading3: () => `Proportion of interstate commercial and industrial waste received, ${LATEST_YEAR} Not sent to landfill`,
+			heading3: () => `Proportion of interstate commercial and industrial waste received, ${LATEST_YEAR} not sent to landfill`,
 			heading4: () => `Interstate commercial and industrial waste received by landfill and other, ${LATEST_YEAR}`
 		},
 		methods: {

@@ -129,8 +129,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		computed: {
 			heading1: () => "Interstate construction and demolition waste received, by waste type",
 			heading2: () => "Trend in total interstate construction and demolition waste received",
-			heading3: () => "Proportion of interstate construction and demolition waste received, 2018–19 Not sent to landfill",
-			heading4: () => "Interstate constrution and demolition waste received by landfill and other, 2018–2019"
+			heading3: () => "Proportion of interstate construction and demolition waste received, 2018–19 not sent to landfill",
+			heading4: () => "Interstate construction and demolition waste received by landfill and other, 2018–2019"
 		},
 		methods: {
 			formatter1: val => val?.toLocaleString() ?? "",
