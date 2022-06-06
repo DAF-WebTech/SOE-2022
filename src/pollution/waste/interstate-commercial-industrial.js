@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 3. pie, latest, not sent to landfill 
 	//2018-19 Not sent to landfill
-	const LATEST_NOT_SENT = "2018-19 Not sent to landfill"
+	const LATEST_NOT_SENT = "2018-19 not sent to landfill"
 	wasteTypes.sort(function (a, b) {
 		return b[LATEST_NOT_SENT] - a[LATEST_NOT_SENT]
 	})
