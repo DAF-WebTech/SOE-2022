@@ -492,18 +492,22 @@
 		{
 		  "TargetNumber": "12.2",
 		  "Text": "By 2030, achieve the sustainable management and efficient use of natural resources.",
-		  "Findings": [],
+		  "Findings": [
+			"1536669",
+			"1536657"
+		  ],
 		  "ManagementResponses": [
 			"Great Barrier Reef",
 			"Biodiversity",
 			"Pollution",
 			"Liveability",
-			"Circular Economy"
+			"Circular Economy",
+			"Climate Change"
 		  ]
 		},
 		{
 		  "TargetNumber": "12.4",
-		  "Text": "By 2020, achieve the environmentally sound management of chemicals and all wastes throughout their life cycle, in accordance with agreed international frameworks, and significantly reduce their release to air, water and soil in order to minimize their adverse impacts on human health and the environment.",
+		  "Text": "By 2020, achieve the environmentally sound management of chemicals and all wastes throughout their life cycle, in accordance with agreed international frameworks, and significantly reduce their release to air, water and soil in order to minimize their adverse impacts on human health and the environment*. <br> <sub>*Though this target has surpassed its 2020 deadline, monitoring its indicators remains important in measuring Queensland's progress towards sustainable development.</sub>",
 		  "Findings": [
 			"1535445",
 			"1535455",
@@ -522,53 +526,19 @@
 			"1536369",
 			"1536375",
 			"1536381",
-			"1536387",
-			"1536395",
-			"1536403",
-			"1536409",
 			"1536448",
 			"1536454",
 			"1536460",
 			"1536490",
-			"1536498",
-			"1536504",
-			"1536510",
-			"1536516",
-			"1536522",
-			"1536528",
-			"1536534",
-			"1536540",
-			"1536546",
 			"1536552",
 			"1536558",
 			"1536564",
-			"1536570",
-			"1536574",
-			"1536580",
-			"1536586",
-			"1536633",
-			"1536639",
-			"1536645",
-			"1536651",
-			"1536657",
-			"1536663",
-			"1536669",
-			"1536675",
-			"1536921",
-			"1536927",
-			"1536933",
-			"1536939",
-			"1536945",
-			"1536951",
-			"1536957",
-			"1537088"
+			"1536570"
 		  ],
 		  "ManagementResponses": [
 			"Great Barrier Reef",
 			"Biodiversity",
-			"Climate Change",
 			"Pollution",
-			"Liveability",
 			"Circular Economy"
 		  ]
 		},
