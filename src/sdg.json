@@ -604,13 +604,12 @@
 			"1536755",
 			"1536763",
 			"1536773",
-			"1536783"
+			"1536783",
+			"1536633"
 		  ],
 		  "ManagementResponses": [
-			"Great Barrier Reef",
 			"Climate Change",
-			"Climate",
-			"Liveability"
+			"Climate"
 		  ]
 		},
 		{
@@ -668,8 +667,9 @@
 			"1536460",
 			"1536552",
 			"1536558",
-			"1536564"
-		  ],
+			"1536564",
+			"1536442"
+		 ],
 		  "ManagementResponses": [
 			"Great Barrier Reef",
 			"Biodiversity",
@@ -678,38 +678,16 @@
 		},
 		{
 		  "TargetNumber": "14.2",
-		  "Text": "By 2020, sustainably manage and protect marine and coastal ecosystems to avoid significant adverse impacts, including by strengthening their resilience, and take action for their restoration in order to achieve healthy and productive oceans.",
+		  "Text": "By 2020, sustainably manage and protect marine and coastal ecosystems to avoid significant adverse impacts, including by strengthening their resilience, and take action for their restoration in order to achieve healthy and productive oceans*. <br> <sub>*Though this target has surpassed its 2020 deadline, monitoring its indicators remains important in measuring Queensland's progress towards sustainable development.</sub>",
 		  "Findings": [
 			"1535545",
 			"1535551",
 			"1535445",
-			"1535563",
-			"1535569",
 			"1535575",
-			"1535581",
-			"1535599",
-			"1535605",
-			"1535613",
-			"1535619",
-			"1535625",
-			"1535631",
-			"1535639",
 			"1535593",
-			"1535848",
-			"1535880",
-			"1536000",
-			"1536050",
 			"1536056",
-			"1536062",
 			"1536069",
-			"1536075",
-			"1536081",
-			"1536087",
-			"1536442",
 			"1536448",
-			"1536454",
-			"1536460",
-			"1536881",
 			"1535587"
 		  ],
 		  "ManagementResponses": [
@@ -718,40 +696,39 @@
 			"Biodiversity",
 			"Heritage",
 			"Pollution",
-			"Climate",
-			"Liveability"
+			"Climate"
 		  ]
 		},
 		{
 		  "TargetNumber": "14.4",
-		  "Text": "By 2020, effectively regulate harvesting and end overfishing, illegal, unreported and unregulated fishing and destructive fishing practices and implement science-based management plans, in order to restore fish stocks in the shortest time feasible, at least to levels that can produce maximum sustainable yield as determined by their biological characteristics.",
+		  "Text": "By 2020, effectively regulate harvesting and end overfishing, illegal, unreported and unregulated fishing and destructive fishing practices and implement science-based management plans, in order to restore fish stocks in the shortest time feasible, at least to levels that can produce maximum sustainable yield as determined by their biological characteristics*. <br><sub>*Though this target has surpassed its 2020 deadline, monitoring its indicators remains important in measuring Queensland's progress towards sustainable development.</sub>",
 		  "Findings": [
 			"1535581",
 			"1535619",
 			"1536081",
-			"1535587"
+			"1535587",
+			"1535569"
 		  ],
 		  "ManagementResponses": [
-			"Biodiversity",
-			"Liveability"
+			"Biodiversity"
 		  ]
 		},
 		{
 		  "TargetNumber": "14.5",
-		  "Text": "By 2020, conserve at least 10 per cent of coastal and marine areas, consistent with national and international law and based on the best available scientific information.",
+		  "Text": "By 2020, conserve at least 10 per cent of coastal and marine areas, consistent with national and international law and based on the best available scientific information*. <br> <sub>*Though this target has surpassed its 2020 deadline, monitoring its indicators remains important in measuring Queensland's progress towards sustainable development.</sub>",
 		  "Findings": [
 			"1535145",
-			"1535151",
-			"1535157",
 			"1535551",
 			"1535569",
 			"1536050",
-			"1536143"
+			"1536143",
+			"1535157"
 		  ],
 		  "ManagementResponses": [
 			"Biodiversity",
 			"Heritage",
-			"Liveability"
+			"Liveability",
+			"Great Barrier Reef"
 		  ]
 		}
 	  ]
