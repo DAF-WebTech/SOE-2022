@@ -15,7 +15,11 @@
 			"1536749",
 			"1536861",
 			"1536875",
-			"1536881"
+			"1536881",
+			"1536755",
+			"1536763",
+			"1536773"
+
 		  ],
 		  "ManagementResponses": [
 			"Climate Change",
@@ -49,8 +53,22 @@
 		  "ManagementResponses": [
 			"Climate Change",
 			"Climate",
-			"Liveability"
+			"Liveability",
+			"Environmental Economic Accounting",
+			"Biodiversity"
 		  ]
+		},
+		{
+			"TargetNumber": "2.5",
+			"Text": "By 2020, maintain the genetic diversity of seeds, cultivated plants and farmed and domesticated animals and their related wild species, including through soundly managed and diversified seed and plant banks at the national, regional and international levels, and promote access to and fair and equitable sharing of benefits arising from the utilization of genetic resources and associated traditional knowledge, as internationally agreed*.  <br> <sub>* Though this target has surpassed its 2020 deadline, monitoring its indicators remains important in measuring Queensland's progress towards sustainable development.</sub>",
+			"Findings": [
+				"15354859",
+				"1535848"
+			],
+			"ManagementResponses": [
+				"Biodiversity",
+				"Environmental Economic Accounting"
+			]
 		}
 	  ]
 	},
