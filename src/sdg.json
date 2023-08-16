@@ -742,7 +742,7 @@
 	  "Targets": [
 		{
 		  "TargetNumber": "15.1",
-		  "Text": "By 2020, ensure the conservation, restoration and sustainable use of terrestrial and inland freshwater ecosystems and their services, in particular forests, wetlands, mountains and drylands, in line with obligations under international agreements.",
+		  "Text": "By 2020, ensure the conservation, restoration and sustainable use of terrestrial and inland freshwater ecosystems and their services, in particular forests, wetlands, mountains and drylands, in line with obligations under international agreements*. <br> <sub> *Though this target has surpassed its 2020 deadline, monitoring its indicators remains important in measuring Queensland's progress towards sustainable development.</sub>",
 		  "Findings": [
 			"1535139",
 			"1535145",
@@ -794,7 +794,7 @@
 		},
 		{
 		  "TargetNumber": "15.2",
-		  "Text": "By 2020, promote the implementation of sustainable management of all types of forests, halt deforestation, restore degraded forests and substantially increase afforestation and reforestation globally.",
+		  "Text": "By 2020, promote the implementation of sustainable management of all types of forests, halt deforestation, restore degraded forests and substantially increase afforestation and reforestation globally*.  *Though this target has surpassed its 2020 deadline, monitoring its indicators remains important in measuring Queensland's progress towards sustainable development.",
 		  "Findings": [
 			"1535139",
 			"1535145",
@@ -810,7 +810,15 @@
 		{
 		  "TargetNumber": "15.3",
 		  "Text": "By 2030, combat desertification, restore degraded land and soil, including land affected by desertification, drought and floods, and strive to achieve a land degradation-neutral world.",
-		  "Findings": [],
+		  "Findings": [
+			"1536707",
+			"1536717",
+			"1435717",
+			"1435765",
+			"1478655",
+			"1478668",
+			"1452111"
+		  ],
 		  "ManagementResponses": [
 			"Biodiversity",
 			"Pollution",
@@ -838,25 +846,11 @@
 		  "TargetNumber": "15.5",
 		  "Text": "Take urgent and significant action to reduce the degradation of natural habitats, halt the loss of biodiversity and, by 2020, protect and prevent the extinction of threatened species.",
 		  "Findings": [
-			"1535139",
-			"1535145",
-			"1535151",
-			"1535157",
 			"1535177",
 			"1535187",
-			"1535205",
-			"1535197",
-			"1535165",
-			"1535433",
 			"1535439",
 			"1535445",
 			"1535455",
-			"1535461",
-			"1535469",
-			"1535545",
-			"1535551",
-			"1535445",
-			"1535563",
 			"1535828",
 			"1535834",
 			"1535842",
@@ -866,37 +860,19 @@
 			"1535866",
 			"1535874",
 			"1535880",
-			"1535886",
-			"1536097",
-			"1536103",
-			"1536109",
-			"1536115",
-			"1536143",
-			"1536149",
-			"1536153",
-			"1536158",
-			"1536162",
-			"1536166",
-			"1536170",
-			"1536176",
-			"1536180",
-			"1536184",
-			"1536188",
-			"1536192",
-			"1536196",
-			"1536448",
-			"1536454",
-			"1536552",
-			"1536558",
-			"1536564",
-			"1536570",
-			"1536988"
+			"1535886"
 		  ],
 		  "ManagementResponses": [
 			"Biodiversity",
 			"Heritage",
 			"Pollution"
 		  ]
+		},
+		{
+			"TargetNumber": "15.6",
+			"Text":"!INPROGRESS! Promote fair and equitable sharing of the benefits arising from the utilization of genetic resources and promote appropriate access to such resources, as internationally agreed.",
+			"Fidings": [],
+			"ManagementResponses": []
 		},
 		{
 		  "TargetNumber": "15.7",
@@ -912,51 +888,20 @@
 		},
 		{
 		  "TargetNumber": "15.8",
-		  "Text": "By 2020, introduce measures to prevent the introduction and significantly reduce the impact of invasive alien species on land and water ecosystems and control or eradicate the priority species.",
+		  "Text": "By 2020, introduce measures to prevent the introduction and significantly reduce the impact of invasive alien species on land and water ecosystems and control or eradicate the priority species*. <br> <sub>*Though this target has surpassed its 2020 deadline, monitoring its indicators remains important in measuring Queensland's progress towards sustainable development.</sub>",
 		  "Findings": [
 			"1535177",
 			"1535187",
-			"1535455",
 			"1535461",
 			"1535469",
-			"1535563",
 			"1535639",
-			"1535848",
-			"1535880",
 			"1536115",
 			"1536153",
 			"1536184"
 		  ],
 		  "ManagementResponses": [
 			"Biodiversity",
-			"Heritage",
-			"Pollution"
-		  ]
-		},
-		{
-		  "TargetNumber": "15.9",
-		  "Text": "By 2020, integrate ecosystem and biodiversity values into national and local planning, development processes, poverty reduction strategies and accounts.",
-		  "Findings": [
-			"1535145",
-			"1535151",
-			"1535439",
-			"1535551",
-			"1536097",
-			"1536103",
-			"1536121",
-			"1536127",
-			"1536143",
-			"1536149",
-			"1536170",
-			"1536176",
-			"1536957",
-			"1537088"
-		  ],
-		  "ManagementResponses": [
-			"Biodiversity",
-			"Heritage",
-			"Pollution",
-			"Liveability"
+			"Heritage"
 		  ]
 		}
 	  ]
