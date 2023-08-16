@@ -913,20 +913,7 @@
 	  "IconId": "1475176",
 	  "Id": "sdg-16",
 	  "Targets": [
-		{
-		  "TargetNumber": "16.6",
-		  "Text": "Develop effective, accountable and transparent institutions at all levels.",
-		  "Findings": [],
-		  "ManagementResponses": [
-			"Great Barrier Reef",
-			"Climate Change",
-			"Biodiversity",
-			"Heritage",
-			"Pollution",
-			"Climate",
-			"Liveability"
-		  ]
-		}
+
 	  ]
 	},
 	{
@@ -935,50 +922,7 @@
 	  "ImageId": "1460022",
 	  "IconId": "1475177",
 	  "Id": "sdg-17",
-	  "Targets": [
-		{
-		  "TargetNumber": "17.14",
-		  "Text": "Enhance policy coherence for sustainable development.",
-		  "Findings": [],
-		  "ManagementResponses": [
-			"Climate Change",
-			"Liveability",
-			"Environmental Economic Accounting"
-		  ]
-		},
-		{
-		  "TargetNumber": "17.17",
-		  "Text": "Encourage and promote effective public, public–private and civil society partnerships, building on the experience and resourcing strategies of partnerships.",
-		  "Findings": [
-			"1535939",
-			"1535945",
-			"1535951",
-			"1535957",
-			"1535988",
-			"1535994",
-			"1536000",
-			"1536008",
-			"1536014",
-			"1536020",
-			"1536050",
-			"1536097",
-			"1536121",
-			"1536143",
-			"1536170",
-			"1536442"
-		  ],
-		  "ManagementResponses": [
-			"Great Barrier Reef",
-			"Climate Change",
-			"Biodiversity",
-			"Heritage",
-			"Pollution",
-			"Climate",
-			"Liveability",
-			"Environmental Economic Accounting"
-		  ]
-		}
-	  ]
+	  "Targets": [ ]
 	}
   ]
   
