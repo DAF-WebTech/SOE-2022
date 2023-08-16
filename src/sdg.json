@@ -913,7 +913,12 @@
 	  "IconId": "1475176",
 	  "Id": "sdg-16",
 	  "Targets": [
-
+		{
+			"TargetNumber": "PlaceHolder",
+			"Text": "PlaceHolder",
+			"Findings": [],
+			"ManagementResponses": []
+		}
 	  ]
 	},
 	{
@@ -922,7 +927,14 @@
 	  "ImageId": "1460022",
 	  "IconId": "1475177",
 	  "Id": "sdg-17",
-	  "Targets": [ ]
+	  "Targets": [ 
+		{
+			"TargetNumber": "PlaceHolder",
+			"Text": "PlaceHolder",
+			"Findings": [],
+			"ManagementResponses": []
+		}
+	  ]
 	}
   ]
   
