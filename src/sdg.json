@@ -870,8 +870,8 @@
 		},
 		{
 			"TargetNumber": "15.6",
-			"Text":"!INPROGRESS! Promote fair and equitable sharing of the benefits arising from the utilization of genetic resources and promote appropriate access to such resources, as internationally agreed.",
-			"Fidings": [],
+			"Text":"Promote fair and equitable sharing of the benefits arising from the utilization of genetic resources and promote appropriate access to such resources, as internationally agreed.",
+			"Findings": [],
 			"ManagementResponses": []
 		},
 		{
@@ -913,12 +913,7 @@
 	  "IconId": "1475176",
 	  "Id": "sdg-16",
 	  "Targets": [
-		{
-			"TargetNumber": "PlaceHolder",
-			"Text": "PlaceHolder",
-			"Findings": [],
-			"ManagementResponses": []
-		}
+
 	  ]
 	},
 	{
@@ -928,12 +923,7 @@
 	  "IconId": "1475177",
 	  "Id": "sdg-17",
 	  "Targets": [ 
-		{
-			"TargetNumber": "PlaceHolder",
-			"Text": "PlaceHolder",
-			"Findings": [],
-			"ManagementResponses": []
-		}
+
 	  ]
 	}
   ]
