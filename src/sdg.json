@@ -48,7 +48,8 @@
 			"1537076",
 			"1537082",
 			"1537224",
-			"1537106"
+			"1537106",
+			"1535828"
 		  ],
 		  "ManagementResponses": [
 			"Climate Change",
@@ -274,7 +275,7 @@
 			"1536516",
 			"1536522",
 			"1536534",
-			"1536522"
+			"1536540"
 		  ],
 		  "ManagementResponses": [
 			"Climate Change",
@@ -289,7 +290,8 @@
 			"1536008",
 			"1536081",
 			"1536158",
-			"1536188"
+			"1536188",
+			"1536139"
 		  ],
 		  "ManagementResponses": [
 			"Climate Change",
@@ -511,7 +513,7 @@
 		  "Findings": [
 			"1535445",
 			"1535455",
-			"1535445",
+			"1535557",
 			"1535563",
 			"1535599",
 			"1535613",
@@ -528,12 +530,11 @@
 			"1536381",
 			"1536448",
 			"1536454",
-			"1536460",
-			"1536490",
 			"1536552",
 			"1536558",
 			"1536564",
-			"1536570"
+			"1536570",
+			"1535557"
 		  ],
 		  "ManagementResponses": [
 			"Great Barrier Reef",
@@ -570,7 +571,6 @@
 		  "Text": "Strengthen resilience and adaptive capacity to climate-related hazards and natural disasters in all countries.",
 		  "Findings": [
 			"1535605",
-			"1535613",
 			"1536062",
 			"1536069",
 			"1536109",
@@ -589,7 +589,8 @@
 			"Climate Change",
 			"Biodiversity",
 			"Heritage",
-			"Climate"
+			"Climate", 
+			"Liveability"
 		  ]
 		},
 		{
@@ -686,9 +687,9 @@
 			"1535575",
 			"1535593",
 			"1536056",
-			"1536069",
-			"1536448",
-			"1535587"
+			"1536448",	
+			"1535557",
+			"1535569"
 		  ],
 		  "ManagementResponses": [
 			"Great Barrier Reef",
@@ -722,7 +723,7 @@
 			"1535569",
 			"1536050",
 			"1536143",
-			"1535157"
+			"1535545"
 		  ],
 		  "ManagementResponses": [
 			"Biodiversity",
@@ -813,11 +814,12 @@
 		  "Findings": [
 			"1536707",
 			"1536717",
-			"1435717",
 			"1435765",
 			"1478655",
 			"1478668",
-			"1452111"
+			"1452111",
+			"1536723",
+			"1536749"
 		  ],
 		  "ManagementResponses": [
 			"Biodiversity",
@@ -846,11 +848,6 @@
 		  "TargetNumber": "15.5",
 		  "Text": "Take urgent and significant action to reduce the degradation of natural habitats, halt the loss of biodiversity and, by 2020, protect and prevent the extinction of threatened species.",
 		  "Findings": [
-			"1535177",
-			"1535187",
-			"1535439",
-			"1535445",
-			"1535455",
 			"1535828",
 			"1535834",
 			"1535842",
